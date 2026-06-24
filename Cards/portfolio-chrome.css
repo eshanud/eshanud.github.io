@@ -1,0 +1,110 @@
+/* =====================================================
+   Portfolio chrome — shared across all case studies
+   Back-bar (top-right) + "More work" footer
+   ===================================================== */
+:root{
+  --pf-ink:#0A0A0A;
+  --pf-cream:#FAFAF7;
+  --pf-grad:linear-gradient(135deg,#7C3AED,#FF6B6B);
+  --pf-sans:-apple-system,BlinkMacSystemFont,'SF Pro Display','Inter',system-ui,sans-serif;
+}
+
+/* ---------- Back link (outlined pill) ---------- */
+.pf-bar{
+  position:fixed; top:20px; right:24px; z-index:99999;
+  display:inline-flex; align-items:center; gap:8px;
+  padding:9px 18px;
+  text-decoration:none; color:var(--pf-ink);
+  font-family:var(--pf-sans); font-size:14px; font-weight:500; letter-spacing:-.01em;
+  background:rgba(255,255,255,.7);
+  backdrop-filter:blur(14px) saturate(1.4);
+  -webkit-backdrop-filter:blur(14px) saturate(1.4);
+  border:1px solid rgba(10,10,10,.18);
+  border-radius:999px;
+  transition:background .25s ease, color .25s ease, border-color .25s ease;
+}
+.pf-bar .pf-arw{ font-size:16px; line-height:1; transition:transform .3s ease; }
+.pf-bar:hover{ background:var(--pf-ink); color:#fff; border-color:var(--pf-ink); }
+.pf-bar:hover .pf-arw{ transform:translateX(-4px); }
+@media(max-width:600px){ .pf-bar{ top:14px; right:16px; font-size:13px; padding:8px 15px; } }
+
+/* ---------- Footer ---------- */
+.pf-footer{
+  position:relative; overflow:hidden;
+  font-family:var(--pf-sans);
+  background:#0A0A0A; color:#fff;
+  padding:96px 32px 44px;
+}
+.pf-footer *{ box-sizing:border-box; }
+.pf-footer::before{
+  content:''; position:absolute; top:-45%; left:50%; transform:translateX(-50%);
+  width:1000px; height:680px;
+  background:radial-gradient(ellipse at center,rgba(124,58,237,.26),transparent 62%);
+  pointer-events:none;
+}
+.pf-footer::after{
+  content:''; position:absolute; bottom:-35%; right:-8%;
+  width:560px; height:560px;
+  background:radial-gradient(circle,rgba(255,107,107,.14),transparent 66%);
+  pointer-events:none;
+}
+.pf-in{ position:relative; z-index:2; max-width:1100px; margin:0 auto; }
+
+.pf-eb{
+  display:inline-flex; align-items:center; gap:9px;
+  font-size:12px; font-weight:600; letter-spacing:.14em; text-transform:uppercase;
+  color:rgba(255,255,255,.5); margin:0 0 18px;
+}
+.pf-eb::before{ content:''; width:6px; height:6px; border-radius:50%; background:var(--pf-grad); }
+
+.pf-head{
+  font-size:clamp(30px,4.6vw,50px); font-weight:600; letter-spacing:-.045em; line-height:1.04;
+  margin:0 0 52px; max-width:18ch;
+}
+.pf-head .pf-soft{ color:rgba(255,255,255,.38); }
+
+.pf-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-bottom:60px; }
+@media(max-width:760px){ .pf-grid{ grid-template-columns:1fr; } }
+
+.pf-card{
+  position:relative; display:flex; flex-direction:column;
+  padding:26px 24px 22px; min-height:172px;
+  border:1px solid rgba(255,255,255,.12); border-radius:18px;
+  text-decoration:none; color:#fff; overflow:hidden;
+  transition:transform .4s cubic-bezier(.4,0,.2,1), background .4s ease;
+}
+/* gradient border on hover */
+.pf-card::after{
+  content:''; position:absolute; inset:0; border-radius:18px; padding:1px;
+  background:var(--pf-grad);
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+  -webkit-mask-composite:xor; mask-composite:exclude;
+  opacity:0; transition:opacity .4s ease; pointer-events:none;
+}
+.pf-card:hover{ transform:translateY(-5px); background:rgba(255,255,255,.04); }
+.pf-card:hover::after{ opacity:1; }
+.pf-idx{ font-size:12px; font-weight:700; color:rgba(255,255,255,.28); font-variant-numeric:tabular-nums; }
+.pf-cat{ font-size:11px; letter-spacing:.07em; text-transform:uppercase; color:rgba(255,255,255,.42); margin-top:auto; }
+.pf-nm{ font-size:23px; font-weight:600; letter-spacing:-.025em; margin-top:3px; }
+.pf-go{
+  margin-top:14px; display:inline-flex; align-items:center; gap:6px;
+  font-size:13px; color:rgba(255,255,255,.5);
+  transition:gap .3s ease,color .3s ease;
+}
+.pf-card:hover .pf-go{ gap:11px; color:#fff; }
+
+.pf-row{
+  display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:18px;
+  padding-top:34px; border-top:1px solid rgba(255,255,255,.1);
+}
+.pf-home{ display:inline-flex; align-items:center; gap:11px; text-decoration:none; color:#fff; font-size:15px; font-weight:600; letter-spacing:-.01em; }
+.pf-home .pf-mk{ width:31px; height:31px; border-radius:9px; background:var(--pf-grad); display:flex; align-items:center; justify-content:center; color:#fff; font-size:12px; font-weight:800; }
+.pf-social{ display:flex; gap:10px; }
+.pf-social a{
+  display:inline-flex; align-items:center; padding:8px 17px;
+  border:1px solid rgba(255,255,255,.16); border-radius:999px;
+  text-decoration:none; color:rgba(255,255,255,.72); font-size:13px; font-weight:500;
+  transition:all .25s ease;
+}
+.pf-social a:hover{ background:#fff; color:#0A0A0A; border-color:#fff; transform:translateY(-2px); }
+.pf-cp{ width:100%; font-size:12.5px; color:rgba(255,255,255,.32); margin-top:6px; }

@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SimpleCITI — Notifications</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --navy: #0D1B2A; --blue: #1B4F8A; --accent: #2A7FD4; --gold: #C9A84C;
+  --cream: #F7F4EF; --offwhite: #FAFAF8; --mid: #6B7280; --border: #E5E1D8;
+  --text: #1A1A1A; --green: #16A34A; --amber: #D97706; --red: #DC2626; --purple: #7C3AED;
+  --sidebar-w: 220px;
+}
+body { font-family: 'DM Sans', sans-serif; background: var(--offwhite); color: var(--text); font-size: 14px; display: flex; height: 100vh; overflow: hidden; }
+
+.sidebar { width: var(--sidebar-w); background: var(--navy); display: flex; flex-direction: column; flex-shrink: 0; height: 100vh; overflow-y: auto; }
+.sidebar-logo { padding: 24px 20px 20px; border-bottom: 1px solid rgba(255,255,255,0.07); }
+.logo-mark { font-family: 'DM Serif Display', serif; font-size: 20px; color: #fff; letter-spacing: -0.5px; }
+.logo-mark span { color: var(--gold); }
+.logo-sub { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: rgba(255,255,255,0.3); text-transform: uppercase; letter-spacing: 0.15em; margin-top: 3px; }
+.nav-section { padding: 20px 12px 8px; }
+.nav-section-label { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: rgba(255,255,255,0.25); text-transform: uppercase; letter-spacing: 0.15em; padding: 0 8px; margin-bottom: 6px; }
+.nav-item { display: flex; align-items: center; gap: 10px; padding: 9px 10px; border-radius: 7px; color: rgba(255,255,255,0.45); font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.15s; margin-bottom: 2px; text-decoration: none; }
+.nav-item:hover { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.8); }
+.nav-item.active { background: rgba(42,127,212,0.18); color: #fff; }
+.nav-icon { font-size: 15px; width: 18px; text-align: center; flex-shrink: 0; }
+.nav-badge { margin-left: auto; background: var(--accent); color: #fff; font-size: 10px; font-weight: 600; padding: 2px 7px; border-radius: 10px; }
+.nav-badge-red { background: var(--red); }
+.sidebar-footer { margin-top: auto; padding: 16px 12px; border-top: 1px solid rgba(255,255,255,0.07); }
+.user-chip { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 8px; cursor: pointer; }
+.avatar { width: 30px; height: 30px; border-radius: 50%; background: var(--blue); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: #fff; flex-shrink: 0; }
+.user-name { font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.75); }
+.user-role { font-size: 10px; color: rgba(255,255,255,0.3); }
+
+.main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+.topbar { background: #fff; border-bottom: 1px solid var(--border); padding: 0 28px; height: 60px; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
+.topbar-left { display: flex; align-items: center; gap: 16px; }
+.page-title { font-family: 'DM Serif Display', serif; font-size: 20px; color: var(--navy); }
+.breadcrumb { font-size: 12px; color: var(--mid); }
+.topbar-right { display: flex; align-items: center; gap: 10px; }
+.btn { display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px; border-radius: 7px; font-size: 12px; font-weight: 600; cursor: pointer; border: none; }
+.btn-ghost { background: transparent; color: var(--mid); border: 1px solid var(--border); }
+.icon-btn { width: 34px; height: 34px; border-radius: 7px; border: 1px solid var(--accent); background: rgba(42,127,212,0.06); display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 15px; color: var(--accent); position: relative; }
+.notif-dot { position: absolute; top: 6px; right: 6px; width: 7px; height: 7px; background: var(--red); border-radius: 50%; border: 1.5px solid #fff; }
+
+.content { flex: 1; overflow-y: auto; padding: 28px; }
+
+/* PAGE HEADER */
+.page-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }
+.page-header-left h1 { font-family: 'DM Serif Display', serif; font-size: 24px; color: var(--navy); margin-bottom: 4px; }
+.page-header-left p { font-size: 13px; color: var(--mid); }
+.page-header-right { display: flex; gap: 8px; }
+
+/* FILTER TABS */
+.notif-tabs { display: flex; gap: 0; border-bottom: 1px solid var(--border); margin-bottom: 24px; }
+.notif-tab { padding: 10px 18px; font-size: 12px; font-weight: 600; color: var(--mid); cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.15s; display: flex; align-items: center; gap: 7px; }
+.notif-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+.tab-count { font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 10px; }
+.tab-count-red { background: #FEE2E2; color: var(--red); }
+.tab-count-amber { background: #FEF3C7; color: var(--amber); }
+.tab-count-blue { background: rgba(42,127,212,0.1); color: var(--accent); }
+.tab-count-gray { background: var(--cream); color: var(--mid); }
+
+/* NOTIFICATION GROUPS */
+.notif-group { margin-bottom: 28px; }
+.notif-group-label { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--mid); text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+
+/* NOTIFICATION CARD */
+.notif-card { background: #fff; border: 1px solid var(--border); border-radius: 10px; padding: 16px 18px; margin-bottom: 8px; display: flex; gap: 14px; align-items: flex-start; cursor: pointer; transition: all 0.15s; position: relative; }
+.notif-card:hover { border-color: #ccc; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+.notif-card.unread { border-left: 3px solid var(--accent); }
+.notif-card.unread-red { border-left: 3px solid var(--red); }
+.notif-card.unread-amber { border-left: 3px solid var(--amber); }
+.notif-card.read { opacity: 0.65; }
+
+/* ICON BADGE */
+.notif-icon { width: 36px; height: 36px; border-radius: 9px; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+.icon-red { background: #FEE2E2; }
+.icon-amber { background: #FEF3C7; }
+.icon-blue { background: rgba(42,127,212,0.1); }
+.icon-green { background: #D1FAE5; }
+.icon-gray { background: var(--cream); }
+
+.notif-body { flex: 1; min-width: 0; }
+.notif-title { font-size: 13px; font-weight: 600; color: var(--navy); margin-bottom: 3px; }
+.notif-desc { font-size: 12px; color: var(--mid); line-height: 1.5; margin-bottom: 8px; }
+.notif-meta { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.notif-deal { font-size: 11px; font-weight: 600; color: var(--accent); background: rgba(42,127,212,0.08); padding: 2px 8px; border-radius: 4px; }
+.notif-time { font-size: 11px; color: var(--mid); }
+.notif-unread-dot { position: absolute; top: 18px; right: 18px; width: 7px; height: 7px; border-radius: 50%; background: var(--accent); }
+.notif-unread-dot.red { background: var(--red); }
+.notif-unread-dot.amber { background: var(--amber); }
+
+/* CTA buttons inline */
+.notif-actions { display: flex; gap: 6px; margin-top: 10px; }
+.notif-btn { padding: 5px 12px; border-radius: 6px; font-size: 11px; font-weight: 600; cursor: pointer; border: none; }
+.notif-btn-primary { background: var(--accent); color: #fff; }
+.notif-btn-outline { background: #fff; color: var(--mid); border: 1px solid var(--border); }
+.notif-btn-danger { background: #FEE2E2; color: #991B1B; }
+
+/* PILL */
+.pill { display: inline-flex; align-items: center; gap: 5px; padding: 3px 9px; border-radius: 20px; font-size: 10px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; }
+.pill-dot { width: 5px; height: 5px; border-radius: 50%; }
+.pill-underwriting { background: #FEF3C7; color: #B45309; }
+.pill-underwriting .pill-dot { background: #D97706; }
+.pill-closing { background: #EDE9FE; color: #5B21B6; }
+.pill-closing .pill-dot { background: #7C3AED; }
+.pill-approved { background: #D1FAE5; color: #065F46; }
+.pill-approved .pill-dot { background: #16A34A; }
+
+/* EMPTY STATE for "no more" */
+.all-clear { text-align: center; padding: 40px 20px; background: #fff; border: 1px solid var(--border); border-radius: 10px; }
+.all-clear-icon { font-size: 32px; margin-bottom: 12px; }
+.all-clear-title { font-family: 'DM Serif Display', serif; font-size: 16px; color: var(--navy); margin-bottom: 6px; }
+.all-clear-sub { font-size: 13px; color: var(--mid); }
+
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+</style>
+</head>
+<body>
+
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-mark">Simple<span>CITI</span></div>
+    <div class="logo-sub">CRE Lending Platform</div>
+  </div>
+  <div class="nav-section">
+    <div class="nav-section-label">Main</div>
+    <a class="nav-item" href="#"><span class="nav-icon">⬡</span> Pipeline<span class="nav-badge">34</span></a>
+    <a class="nav-item" href="#"><span class="nav-icon">◈</span> Deals</a>
+    <a class="nav-item" href="#"><span class="nav-icon">⊞</span> Underwriting<span class="nav-badge" style="background:#D97706;">8</span></a>
+    <a class="nav-item" href="#"><span class="nav-icon">◎</span> Portfolio</a>
+  </div>
+  <div class="nav-section">
+    <div class="nav-section-label">Tools</div>
+    <a class="nav-item" href="#"><span class="nav-icon">⊟</span> Reports</a>
+    <a class="nav-item active" href="#"><span class="nav-icon">◷</span> Activity Log<span class="nav-badge nav-badge-red">5</span></a>
+    <a class="nav-item" href="#"><span class="nav-icon">⊕</span> Intake Form</a>
+  </div>
+  <div class="nav-section">
+    <div class="nav-section-label">Admin</div>
+    <a class="nav-item" href="#"><span class="nav-icon">⊙</span> Settings</a>
+  </div>
+  <div class="sidebar-footer">
+    <div class="user-chip">
+      <div class="avatar">JR</div>
+      <div><div class="user-name">James R.</div><div class="user-role">Senior Loan Officer</div></div>
+    </div>
+  </div>
+</aside>
+
+<div class="main">
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="page-title">Alerts & Activity</div>
+      <div class="breadcrumb">5 unread · Updated just now</div>
+    </div>
+    <div class="topbar-right">
+      <button class="btn btn-ghost" style="font-size:11px;">✓ Mark all read</button>
+      <button class="btn btn-ghost" style="font-size:11px;">⚙ Preferences</button>
+      <div class="icon-btn">🔔<span class="notif-dot"></span></div>
+    </div>
+  </div>
+
+  <div class="content">
+    <div class="page-header">
+      <div class="page-header-left">
+        <h1>Alerts & Activity</h1>
+        <p>Blockers, deadlines, and deal updates across your pipeline</p>
+      </div>
+    </div>
+
+    <div class="notif-tabs">
+      <div class="notif-tab active">All <span class="tab-count tab-count-red">5</span></div>
+      <div class="notif-tab">Blockers <span class="tab-count tab-count-red">2</span></div>
+      <div class="notif-tab">Deadlines <span class="tab-count tab-count-amber">2</span></div>
+      <div class="notif-tab">LTV Flags <span class="tab-count tab-count-red">1</span></div>
+      <div class="notif-tab">Updates <span class="tab-count tab-count-blue">3</span></div>
+      <div class="notif-tab">Read <span class="tab-count tab-count-gray">12</span></div>
+    </div>
+
+    <!-- CRITICAL -->
+    <div class="notif-group">
+      <div class="notif-group-label">Critical — Requires immediate action</div>
+
+      <div class="notif-card unread-red">
+        <div class="notif-icon icon-red">✕</div>
+        <div class="notif-body">
+          <div class="notif-title">Missing document blocking approval</div>
+          <div class="notif-desc">Phase I Environmental Site Assessment has not been submitted. This is a required document — Meridian Flats cannot proceed to Credit Review until it is received.</div>
+          <div class="notif-meta">
+            <span class="notif-deal">Meridian Flats</span>
+            <span class="pill pill-underwriting"><span class="pill-dot"></span>Underwriting</span>
+            <span class="notif-time">Flagged 2 hours ago</span>
+          </div>
+          <div class="notif-actions">
+            <button class="notif-btn notif-btn-primary">View Deal →</button>
+            <button class="notif-btn notif-btn-outline">Request from Borrower</button>
+          </div>
+        </div>
+        <div class="notif-unread-dot red"></div>
+      </div>
+
+      <div class="notif-card unread-red">
+        <div class="notif-icon icon-red">🔴</div>
+        <div class="notif-body">
+          <div class="notif-title">LTV breach — above 75% threshold</div>
+          <div class="notif-desc">Lakeview Commons LTV is currently at 76.2%, exceeding the 75% maximum threshold. Review the capital structure or flag for committee escalation.</div>
+          <div class="notif-meta">
+            <span class="notif-deal">Lakeview Commons</span>
+            <span class="pill pill-underwriting"><span class="pill-dot"></span>Underwriting</span>
+            <span class="notif-time">Detected today, 9:14am</span>
+          </div>
+          <div class="notif-actions">
+            <button class="notif-btn notif-btn-danger">Escalate to Committee</button>
+            <button class="notif-btn notif-btn-outline">Review Capital Stack</button>
+          </div>
+        </div>
+        <div class="notif-unread-dot red"></div>
+      </div>
+    </div>
+
+    <!-- DEADLINES -->
+    <div class="notif-group">
+      <div class="notif-group-label">Upcoming Deadlines — Action needed this week</div>
+
+      <div class="notif-card unread-amber">
+        <div class="notif-icon icon-amber">⚠</div>
+        <div class="notif-body">
+          <div class="notif-title">Target close in 11 days — docs still pending</div>
+          <div class="notif-desc">Meridian Flats is scheduled to close Mar 15. Two documents are still pending and one is missing. At current pace, this timeline is at risk.</div>
+          <div class="notif-meta">
+            <span class="notif-deal">Meridian Flats</span>
+            <span class="notif-time">Close: Mar 15, 2026</span>
+          </div>
+          <div class="notif-actions">
+            <button class="notif-btn notif-btn-primary">View Checklist →</button>
+            <button class="notif-btn notif-btn-outline">Adjust Close Date</button>
+          </div>
+        </div>
+        <div class="notif-unread-dot amber"></div>
+      </div>
+
+      <div class="notif-card unread-amber">
+        <div class="notif-icon icon-amber">⏰</div>
+        <div class="notif-body">
+          <div class="notif-title">Closing in 8 days — final docs required</div>
+          <div class="notif-desc">Pinecrest Townhomes closing is Mar 12. Insurance certificate has not been received. Confirm with borrower's counsel before end of week.</div>
+          <div class="notif-meta">
+            <span class="notif-deal">Pinecrest Townhomes</span>
+            <span class="pill pill-closing"><span class="pill-dot"></span>Closing</span>
+            <span class="notif-time">Close: Mar 12, 2026</span>
+          </div>
+          <div class="notif-actions">
+            <button class="notif-btn notif-btn-primary">View Deal →</button>
+          </div>
+        </div>
+        <div class="notif-unread-dot amber"></div>
+      </div>
+    </div>
+
+    <!-- UPDATES -->
+    <div class="notif-group">
+      <div class="notif-group-label">Recent Updates — Pipeline activity</div>
+
+      <div class="notif-card unread">
+        <div class="notif-icon icon-green">✓</div>
+        <div class="notif-body">
+          <div class="notif-title">Deal approved — ready to move to closing</div>
+          <div class="notif-desc">Westfield Logistics Hub has been approved by the credit committee. Term sheet issued. Awaiting borrower acceptance to proceed to closing stage.</div>
+          <div class="notif-meta">
+            <span class="notif-deal">Westfield Logistics Hub</span>
+            <span class="pill pill-approved"><span class="pill-dot"></span>Approved</span>
+            <span class="notif-time">Yesterday, 4:31pm</span>
+          </div>
+          <div class="notif-actions">
+            <button class="notif-btn notif-btn-primary">Move to Closing →</button>
+            <button class="notif-btn notif-btn-outline">View Approval</button>
+          </div>
+        </div>
+        <div class="notif-unread-dot"></div>
+      </div>
+
+      <div class="notif-card read">
+        <div class="notif-icon icon-blue">📄</div>
+        <div class="notif-body">
+          <div class="notif-title">Document uploaded — Appraisal Report received</div>
+          <div class="notif-desc">Sarah K. uploaded the Appraisal Report for Vantage Industrial Park. Appraised value: $23,000,000. LTV recalculated at 63%.</div>
+          <div class="notif-meta">
+            <span class="notif-deal">Vantage Industrial Park</span>
+            <span class="notif-time">Mar 2, 2026 · 11:07am</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="notif-card read">
+        <div class="notif-icon icon-gray">👤</div>
+        <div class="notif-body">
+          <div class="notif-title">Deal assigned to Sarah K.</div>
+          <div class="notif-desc">Elmwood Residences has been reassigned from David C. to Sarah K. for underwriting review.</div>
+          <div class="notif-meta">
+            <span class="notif-deal">Elmwood Residences</span>
+            <span class="notif-time">Mar 1, 2026 · 2:45pm</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>

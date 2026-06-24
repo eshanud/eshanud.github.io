@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>SimpleCITI — Portfolio Performance</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+*, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+:root {
+  --navy:#0D1B2A; --blue:#1B4F8A; --accent:#2A7FD4; --gold:#C9A84C;
+  --cream:#F7F4EF; --offwhite:#FAFAF8; --mid:#6B7280; --border:#E5E1D8;
+  --text:#1A1A1A; --green:#16A34A; --amber:#D97706; --red:#DC2626; --purple:#7C3AED;
+}
+body { font-family:'DM Sans',sans-serif; background:var(--offwhite); color:var(--text); font-size:14px; display:flex; height:100vh; overflow:hidden; }
+
+.sidebar { width:220px; background:var(--navy); display:flex; flex-direction:column; flex-shrink:0; height:100vh; overflow-y:auto; }
+.sidebar-logo { padding:24px 20px 20px; border-bottom:1px solid rgba(255,255,255,0.07); }
+.logo-mark { font-family:'DM Serif Display',serif; font-size:20px; color:#fff; }
+.logo-mark span { color:var(--gold); }
+.logo-sub { font-family:'JetBrains Mono',monospace; font-size:9px; color:rgba(255,255,255,0.3); text-transform:uppercase; letter-spacing:0.15em; margin-top:3px; }
+.nav-section { padding:20px 12px 8px; }
+.nav-section-label { font-family:'JetBrains Mono',monospace; font-size:9px; color:rgba(255,255,255,0.25); text-transform:uppercase; letter-spacing:0.15em; padding:0 8px; margin-bottom:6px; }
+.nav-item { display:flex; align-items:center; gap:10px; padding:9px 10px; border-radius:7px; color:rgba(255,255,255,0.45); font-size:13px; font-weight:500; cursor:pointer; margin-bottom:2px; text-decoration:none; }
+.nav-item:hover { background:rgba(255,255,255,0.06); color:rgba(255,255,255,0.8); }
+.nav-item.active { background:rgba(42,127,212,0.18); color:#fff; }
+.nav-badge { margin-left:auto; background:var(--accent); color:#fff; font-size:10px; font-weight:600; padding:2px 7px; border-radius:10px; }
+.sidebar-footer { margin-top:auto; padding:16px 12px; border-top:1px solid rgba(255,255,255,0.07); }
+.user-chip { display:flex; align-items:center; gap:10px; padding:8px 10px; }
+.avatar { width:30px; height:30px; border-radius:50%; background:#7C3AED; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; color:#fff; }
+.user-name { font-size:12px; font-weight:600; color:rgba(255,255,255,0.75); }
+.user-role { font-size:10px; color:rgba(255,255,255,0.3); }
+
+.main { flex:1; display:flex; flex-direction:column; overflow:hidden; }
+.topbar { background:#fff; border-bottom:1px solid var(--border); padding:0 28px; height:60px; display:flex; align-items:center; justify-content:space-between; flex-shrink:0; }
+.page-title { font-family:'DM Serif Display',serif; font-size:20px; color:var(--navy); }
+.topbar-right { display:flex; align-items:center; gap:10px; }
+.select-box { padding:6px 10px; border:1px solid var(--border); border-radius:6px; font-size:12px; color:var(--mid); background:#fff; outline:none; font-family:'DM Sans',sans-serif; cursor:pointer; }
+.btn { display:inline-flex; align-items:center; gap:6px; padding:7px 14px; border-radius:7px; font-size:12px; font-weight:600; cursor:pointer; border:none; font-family:'DM Sans',sans-serif; }
+.btn-ghost { background:transparent; color:var(--mid); border:1px solid var(--border); }
+
+.content { flex:1; overflow-y:auto; padding:24px 28px; }
+
+/* KPI 6-col */
+.kpi-row { display:grid; grid-template-columns:repeat(6,1fr); gap:12px; margin-bottom:20px; }
+.kpi-card { background:var(--navy); border-radius:10px; padding:18px 16px; position:relative; overflow:hidden; animation:fadeUp 0.4s ease both; }
+.kpi-card:nth-child(1){animation-delay:0.03s}
+.kpi-card:nth-child(2){animation-delay:0.06s}
+.kpi-card:nth-child(3){animation-delay:0.09s}
+.kpi-card:nth-child(4){animation-delay:0.12s}
+.kpi-card:nth-child(5){animation-delay:0.15s}
+.kpi-card:nth-child(6){animation-delay:0.18s}
+.kpi-card::after { content:''; position:absolute; top:-30px; right:-30px; width:80px; height:80px; background:radial-gradient(circle,rgba(42,127,212,0.2),transparent 70%); }
+.kpi-label { font-size:9px; font-weight:600; color:rgba(255,255,255,0.38); text-transform:uppercase; letter-spacing:0.12em; margin-bottom:8px; }
+.kpi-value { font-family:'JetBrains Mono',monospace; font-size:20px; color:#fff; font-weight:500; line-height:1; margin-bottom:8px; }
+.kpi-delta { display:inline-flex; align-items:center; gap:3px; font-size:10px; font-weight:600; padding:2px 7px; border-radius:20px; }
+.delta-up { background:rgba(22,163,74,0.2); color:#4ade80; }
+.delta-neutral { background:rgba(255,255,255,0.08); color:rgba(255,255,255,0.4); }
+.delta-warn { background:rgba(217,119,6,0.2); color:#fbbf24; }
+
+/* CHARTS ROW */
+.charts-row { display:grid; grid-template-columns:1fr 1.6fr; gap:16px; margin-bottom:20px; }
+.card { background:#fff; border-radius:12px; border:1px solid var(--border); overflow:hidden; animation:fadeUp 0.4s ease both; }
+.card-header { padding:14px 18px; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; }
+.card-title { font-family:'DM Serif Display',serif; font-size:15px; color:var(--navy); }
+.card-label { font-family:'JetBrains Mono',monospace; font-size:9px; color:var(--accent); text-transform:uppercase; letter-spacing:0.15em; }
+.card-body { padding:18px; }
+
+/* STAGE BAR CHART */
+.stage-bar-item { display:flex; align-items:center; gap:12px; margin-bottom:12px; }
+.stage-bar-item:last-child { margin-bottom:0; }
+.stage-bar-label { font-size:12px; color:var(--mid); min-width:90px; }
+.stage-bar-track { flex:1; height:20px; background:var(--cream); border-radius:4px; overflow:hidden; position:relative; }
+.stage-bar-fill { height:100%; border-radius:4px; display:flex; align-items:center; padding-left:8px; font-size:10px; font-weight:700; color:#fff; }
+.stage-bar-count { font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--mid); min-width:30px; text-align:right; }
+
+/* BAR CHART */
+.bar-chart { display:flex; align-items:flex-end; gap:6px; height:140px; padding-bottom:24px; position:relative; }
+.bar-chart::before {
+  content:''; position:absolute; left:0; right:0; bottom:24px; height:1px; background:var(--border);
+}
+.bar-col { flex:1; display:flex; flex-direction:column; align-items:center; gap:4px; }
+.bar-rect { width:100%; border-radius:4px 4px 0 0; transition:opacity 0.2s; cursor:pointer; }
+.bar-rect:hover { opacity:0.8; }
+.bar-month { font-family:'JetBrains Mono',monospace; font-size:9px; color:var(--mid); }
+.bar-chart-yaxis { position:absolute; left:0; top:0; bottom:24px; display:flex; flex-direction:column; justify-content:space-between; }
+.yaxis-label { font-family:'JetBrains Mono',monospace; font-size:9px; color:var(--mid); }
+
+/* BOTTOM 3-COL */
+.bottom-row { display:grid; grid-template-columns:1fr 1.2fr 1fr; gap:16px; }
+
+/* PROPERTY TYPE BREAKDOWN */
+.pt-item { display:flex; align-items:center; gap:12px; padding:10px 0; border-bottom:1px solid var(--border); }
+.pt-item:last-child { border-bottom:none; }
+.pt-bar-wrap { flex:1; }
+.pt-label-row { display:flex; justify-content:space-between; margin-bottom:4px; }
+.pt-name { font-size:12px; color:var(--navy); font-weight:500; }
+.pt-pct { font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--mid); }
+.pt-bar { height:4px; background:var(--cream); border-radius:2px; overflow:hidden; }
+.pt-fill { height:100%; border-radius:2px; }
+.pt-dot { width:10px; height:10px; border-radius:50%; flex-shrink:0; }
+
+/* TOP DEALS */
+.deal-row { display:flex; align-items:center; justify-content:space-between; padding:9px 0; border-bottom:1px solid var(--border); }
+.deal-row:last-child { border-bottom:none; }
+.deal-row-name { font-size:12px; font-weight:600; color:var(--navy); }
+.deal-row-type { font-size:10px; color:var(--mid); }
+.deal-row-amt { font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--navy); }
+
+/* OFFICER TABLE */
+.officer-row { display:flex; align-items:center; gap:10px; padding:8px 0; border-bottom:1px solid var(--border); }
+.officer-row:last-child { border-bottom:none; }
+.av-sm { width:26px; height:26px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:9px; font-weight:700; color:#fff; flex-shrink:0; }
+.officer-info { flex:1; }
+.officer-row-name { font-size:12px; font-weight:600; color:var(--navy); }
+.officer-row-deals { font-size:10px; color:var(--mid); }
+.officer-volume { font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--navy); }
+
+@keyframes fadeUp { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+::-webkit-scrollbar { width:5px; }
+::-webkit-scrollbar-thumb { background:var(--border); border-radius:10px; }
+</style>
+</head>
+<body>
+
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-mark">Simple<span>CITI</span></div>
+    <div class="logo-sub">CRE Lending Platform</div>
+  </div>
+  <div class="nav-section">
+    <div class="nav-section-label">Main</div>
+    <a class="nav-item" href="#">⬡&nbsp;&nbsp; Pipeline <span class="nav-badge">34</span></a>
+    <a class="nav-item" href="#">◈&nbsp;&nbsp; Deals</a>
+    <a class="nav-item" href="#">⊞&nbsp;&nbsp; Underwriting <span class="nav-badge" style="background:#D97706;">8</span></a>
+    <a class="nav-item active" href="#">◎&nbsp;&nbsp; Portfolio</a>
+  </div>
+  <div class="nav-section">
+    <div class="nav-section-label">Tools</div>
+    <a class="nav-item" href="#">⊟&nbsp;&nbsp; Reports</a>
+    <a class="nav-item" href="#">◷&nbsp;&nbsp; Activity Log</a>
+    <a class="nav-item" href="#">⊕&nbsp;&nbsp; Intake Form</a>
+  </div>
+  <div class="nav-section">
+    <div class="nav-section-label">Admin</div>
+    <a class="nav-item" href="#"><span class="nav-icon">⊙</span> Settings</a>
+  </div>
+  <div class="sidebar-footer">
+    <div class="user-chip">
+      <div class="avatar">MR</div>
+      <div><div class="user-name">M. Rodriguez</div><div class="user-role">Portfolio Director</div></div>
+    </div>
+  </div>
+</aside>
+
+<div class="main">
+  <div class="topbar">
+    <div style="display:flex;align-items:center;gap:14px;">
+      <div class="page-title">Portfolio Performance</div>
+      <span style="font-size:12px;color:var(--mid);">Q1 2026 · Updated today</span>
+    </div>
+    <div class="topbar-right">
+      <select class="select-box"><option>Q1 2026</option><option>Q4 2025</option><option>YTD 2026</option></select>
+      <button class="btn btn-ghost">⬇ Export Report</button>
+    </div>
+  </div>
+
+  <div class="content">
+    <!-- KPI 6-WIDE -->
+    <div class="kpi-row">
+      <div class="kpi-card">
+        <div class="kpi-label">Total Loan Book</div>
+        <div class="kpi-value">$142.6M</div>
+        <span class="kpi-delta delta-up">↑ +$8.4M</span>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Active Deals</div>
+        <div class="kpi-value">34</div>
+        <span class="kpi-delta delta-up">↑ 6 new</span>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Closed YTD</div>
+        <div class="kpi-value">18</div>
+        <span class="kpi-delta delta-neutral">$62.1M vol.</span>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Avg. LTV</div>
+        <div class="kpi-value">67.4%</div>
+        <span class="kpi-delta delta-neutral">Below 75% max</span>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Avg. DSCR</div>
+        <div class="kpi-value">1.38</div>
+        <span class="kpi-delta delta-up">Above 1.25 min</span>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Monthly Originations</div>
+        <div class="kpi-value">$11.2M</div>
+        <span class="kpi-delta delta-warn">↓ vs $13.1M</span>
+      </div>
+    </div>
+
+    <!-- CHARTS ROW -->
+    <div class="charts-row">
+      <!-- PIPELINE BY STAGE -->
+      <div class="card" style="animation-delay:0.2s">
+        <div class="card-header">
+          <span class="card-title">Pipeline by Stage</span>
+          <span class="card-label">34 Active</span>
+        </div>
+        <div class="card-body">
+          <div class="stage-bar-item">
+            <span class="stage-bar-label">Intake</span>
+            <div class="stage-bar-track">
+              <div class="stage-bar-fill" style="width:24%;background:#9CA3AF;">4</div>
+            </div>
+            <span class="stage-bar-count">4</span>
+          </div>
+          <div class="stage-bar-item">
+            <span class="stage-bar-label">Underwriting</span>
+            <div class="stage-bar-track">
+              <div class="stage-bar-fill" style="width:47%;background:var(--amber);">8</div>
+            </div>
+            <span class="stage-bar-count">8 <span style="color:var(--amber);font-size:9px;">↑</span></span>
+          </div>
+          <div class="stage-bar-item">
+            <span class="stage-bar-label">Approved</span>
+            <div class="stage-bar-track">
+              <div class="stage-bar-fill" style="width:35%;background:var(--green);">6</div>
+            </div>
+            <span class="stage-bar-count">6</span>
+          </div>
+          <div class="stage-bar-item">
+            <span class="stage-bar-label">Closing</span>
+            <div class="stage-bar-track">
+              <div class="stage-bar-fill" style="width:29%;background:var(--purple);">5</div>
+            </div>
+            <span class="stage-bar-count">5</span>
+          </div>
+          <div class="stage-bar-item">
+            <span class="stage-bar-label">Closed</span>
+            <div class="stage-bar-track">
+              <div class="stage-bar-fill" style="width:65%;background:#6B7280;">11</div>
+            </div>
+            <span class="stage-bar-count">11</span>
+          </div>
+          <!-- threshold line note -->
+          <div style="margin-top:16px; padding:10px 12px; background:rgba(217,119,6,0.07); border-radius:7px; border:1px solid rgba(217,119,6,0.15);">
+            <span style="font-size:11px; color:#92400E;">⚠ Underwriting stage is the highest active count — most likely bottleneck.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- MONTHLY ORIGINATIONS -->
+      <div class="card" style="animation-delay:0.25s">
+        <div class="card-header">
+          <span class="card-title">Monthly Origination Volume</span>
+          <span class="card-label">Last 12 Months · $M</span>
+        </div>
+        <div class="card-body">
+          <div style="position:relative;">
+            <!-- Y-axis labels -->
+            <div style="display:flex;flex-direction:column;justify-content:space-between;height:140px;position:absolute;left:0;top:0;bottom:24px;">
+              <span style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--mid);">$20M</span>
+              <span style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--mid);">$15M</span>
+              <span style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--mid);">$10M</span>
+              <span style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--mid);">$5M</span>
+            </div>
+            <div style="margin-left:32px;">
+              <!-- Grid lines -->
+              <div style="position:relative;height:116px;border-bottom:1px solid var(--border);">
+                <div style="position:absolute;top:0;left:0;right:0;height:1px;background:var(--border);opacity:0.5;"></div>
+                <div style="position:absolute;top:25%;left:0;right:0;height:1px;background:var(--border);opacity:0.5;"></div>
+                <div style="position:absolute;top:50%;left:0;right:0;height:1px;background:var(--border);opacity:0.5;"></div>
+                <div style="position:absolute;top:75%;left:0;right:0;height:1px;background:var(--border);opacity:0.5;"></div>
+                <!-- bars -->
+                <div style="display:flex;align-items:flex-end;gap:5px;height:100%;padding:0 4px;">
+                  <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;height:100%;justify-content:flex-end;">
+                    <div style="width:100%;background:var(--border);border-radius:3px 3px 0 0;height:45%;"></div>
+                  </div>
+                  <div style="flex:1;display:flex;flex-direction:column;align-items:center;height:100%;justify-content:flex-end;">
+                    <div style="width:100%;background:var(--border);border-radius:3px 3px 0 0;height:55%;"></div>
+                  </div>
+                  <div style="flex:1;display:flex;flex-direction:column;align-items:center;height:100%;justify-content:flex-end;">
+                    <div style="width:100%;background:var(--border);border-radius:3px 3px 0 0;height:60%;"></div>
+                  </div>
+                  <div style="flex:1;display:flex;flex-direction:column;align-items:center;height:100%;justify-content:flex-end;">
+                    <div style="width:100%;background:var(--border);border-radius:3px 3px 0 0;height:40%;"></div>
+                  </div>
+                  <div style="flex:1;display:flex;flex-direction:column;align-items:center;height:100%;justify-content:flex-end;">
+                    <div style="width:100%;background:var(--border);border-radius:3px 3px 0 0;height:70%;"></div>
+                  </div>
+                  <div style="flex:1;display:flex;flex-direction:column;align-items:center;height:100%;justify-content:flex-end;">
+                    <div style="width:100%;background:var(--border);border-radius:3px 3px 0 0;height:80%;"></div>
+                  </div>
+                  <div style="flex:1;display:flex;flex-direction:column;align-items:center;height:100%;justify-content:flex-end;">
+                    <div style="width:100%;background:var(--border);border-radius:3px 3px 0 0;height:65%;"></div>
+                  </div>
+                  <div style="flex:1;display:flex;flex-direction:column;align-items:center;height:100%;justify-content:flex-end;">
+                    <div style="width:100%;background:var(--border);border-radius:3px 3px 0 0;height:90%;"></div>
+                  </div>
+                  <div style="flex:1;display:flex;flex-direction:column;align-items:center;height:100%;justify-content:flex-end;">
+                    <div style="width:100%;background:var(--border);border-radius:3px 3px 0 0;height:75%;"></div>
+                  </div>
+                  <div style="flex:1;display:flex;flex-direction:column;align-items:center;height:100%;justify-content:flex-end;">
+                    <div style="width:100%;background:var(--border);border-radius:3px 3px 0 0;height:85%;"></div>
+                  </div>
+                  <div style="flex:1;display:flex;flex-direction:column;align-items:center;height:100%;justify-content:flex-end;">
+                    <div style="width:100%;background:var(--border);border-radius:3px 3px 0 0;height:82%;"></div>
+                  </div>
+                  <!-- Current month highlighted -->
+                  <div style="flex:1;display:flex;flex-direction:column;align-items:center;height:100%;justify-content:flex-end;">
+                    <div style="width:100%;background:var(--accent);border-radius:3px 3px 0 0;height:70%;box-shadow:0 0 8px rgba(42,127,212,0.4);"></div>
+                  </div>
+                </div>
+              </div>
+              <!-- Month labels -->
+              <div style="display:flex;gap:5px;padding:6px 4px 0;">
+                <div style="flex:1;text-align:center;font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--mid);">M</div>
+                <div style="flex:1;text-align:center;font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--mid);">A</div>
+                <div style="flex:1;text-align:center;font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--mid);">M</div>
+                <div style="flex:1;text-align:center;font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--mid);">J</div>
+                <div style="flex:1;text-align:center;font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--mid);">J</div>
+                <div style="flex:1;text-align:center;font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--mid);">A</div>
+                <div style="flex:1;text-align:center;font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--mid);">S</div>
+                <div style="flex:1;text-align:center;font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--mid);">O</div>
+                <div style="flex:1;text-align:center;font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--mid);">N</div>
+                <div style="flex:1;text-align:center;font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--mid);">D</div>
+                <div style="flex:1;text-align:center;font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--mid);">J</div>
+                <div style="flex:1;text-align:center;font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--accent);font-weight:700;">F</div>
+              </div>
+            </div>
+          </div>
+          <div style="margin-top:12px;display:flex;gap:16px;">
+            <div>
+              <div style="font-size:10px;color:var(--mid);margin-bottom:2px;">This Month</div>
+              <div style="font-family:'JetBrains Mono',monospace;font-size:16px;color:var(--accent);font-weight:500;">$11.2M</div>
+            </div>
+            <div>
+              <div style="font-size:10px;color:var(--mid);margin-bottom:2px;">12-Mo Avg</div>
+              <div style="font-family:'JetBrains Mono',monospace;font-size:16px;color:var(--navy);font-weight:500;">$13.8M</div>
+            </div>
+            <div>
+              <div style="font-size:10px;color:var(--mid);margin-bottom:2px;">Peak Month</div>
+              <div style="font-family:'JetBrains Mono',monospace;font-size:16px;color:var(--navy);font-weight:500;">$18.4M</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BOTTOM 3-COL -->
+    <div class="bottom-row">
+      <!-- PROPERTY TYPE BREAKDOWN -->
+      <div class="card" style="animation-delay:0.3s">
+        <div class="card-header">
+          <span class="card-title">By Property Type</span>
+          <span class="card-label">Portfolio Mix</span>
+        </div>
+        <div class="card-body">
+          <div class="pt-item">
+            <div class="pt-bar-wrap">
+              <div class="pt-label-row"><span class="pt-name">Multifamily</span><span class="pt-pct">38%</span></div>
+              <div class="pt-bar"><div class="pt-fill" style="width:38%;background:var(--accent);"></div></div>
+            </div>
+          </div>
+          <div class="pt-item">
+            <div class="pt-bar-wrap">
+              <div class="pt-label-row"><span class="pt-name">Industrial</span><span class="pt-pct">24%</span></div>
+              <div class="pt-bar"><div class="pt-fill" style="width:24%;background:var(--blue);"></div></div>
+            </div>
+          </div>
+          <div class="pt-item">
+            <div class="pt-bar-wrap">
+              <div class="pt-label-row"><span class="pt-name">Office</span><span class="pt-pct">17%</span></div>
+              <div class="pt-bar"><div class="pt-fill" style="width:17%;background:var(--purple);"></div></div>
+            </div>
+          </div>
+          <div class="pt-item">
+            <div class="pt-bar-wrap">
+              <div class="pt-label-row"><span class="pt-name">Mixed-Use</span><span class="pt-pct">14%</span></div>
+              <div class="pt-bar"><div class="pt-fill" style="width:14%;background:var(--gold);"></div></div>
+            </div>
+          </div>
+          <div class="pt-item">
+            <div class="pt-bar-wrap">
+              <div class="pt-label-row"><span class="pt-name">Residential</span><span class="pt-pct">7%</span></div>
+              <div class="pt-bar"><div class="pt-fill" style="width:7%;background:var(--green);"></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TOP DEALS -->
+      <div class="card" style="animation-delay:0.35s">
+        <div class="card-header">
+          <span class="card-title">Top Deals by Value</span>
+          <span class="card-label">Active Only</span>
+        </div>
+        <div class="card-body">
+          <div class="deal-row">
+            <div><div class="deal-row-name">Westfield Logistics Hub</div><div class="deal-row-type">Industrial · Approved</div></div>
+            <span class="deal-row-amt">$18.2M</span>
+          </div>
+          <div class="deal-row">
+            <div><div class="deal-row-name">Vantage Industrial Park</div><div class="deal-row-type">Industrial · Underwriting</div></div>
+            <span class="deal-row-amt">$14.5M</span>
+          </div>
+          <div class="deal-row">
+            <div><div class="deal-row-name">Lakeview Commons</div><div class="deal-row-type">Mixed-Use · Underwriting</div></div>
+            <span class="deal-row-amt">$9.1M</span>
+          </div>
+          <div class="deal-row">
+            <div><div class="deal-row-name">Meridian Flats</div><div class="deal-row-type">Multifamily · Underwriting</div></div>
+            <span class="deal-row-amt">$8.9M</span>
+          </div>
+          <div class="deal-row">
+            <div><div class="deal-row-name">Sunrise Office Plaza</div><div class="deal-row-type">Office · Intake</div></div>
+            <span class="deal-row-amt">$7.8M</span>
+          </div>
+          <div class="deal-row">
+            <div><div class="deal-row-name">Harbor Cold Storage</div><div class="deal-row-type">Industrial · Approved</div></div>
+            <span class="deal-row-amt">$6.3M</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- OFFICER PERFORMANCE -->
+      <div class="card" style="animation-delay:0.4s">
+        <div class="card-header">
+          <span class="card-title">Officer Performance</span>
+          <span class="card-label">Q1 2026</span>
+        </div>
+        <div class="card-body">
+          <div class="officer-row">
+            <div class="av-sm" style="background:var(--blue);">SK</div>
+            <div class="officer-info">
+              <div class="officer-row-name">Sarah K.</div>
+              <div class="officer-row-deals">11 deals · Avg LTV 64%</div>
+            </div>
+            <span class="officer-volume">$38.4M</span>
+          </div>
+          <div class="officer-row">
+            <div class="av-sm" style="background:#7C3AED;">PM</div>
+            <div class="officer-info">
+              <div class="officer-row-name">Priya M.</div>
+              <div class="officer-row-deals">9 deals · Avg LTV 68%</div>
+            </div>
+            <span class="officer-volume">$31.2M</span>
+          </div>
+          <div class="officer-row">
+            <div class="av-sm" style="background:var(--green);">JR</div>
+            <div class="officer-info">
+              <div class="officer-row-name">James R.</div>
+              <div class="officer-row-deals">8 deals · Avg LTV 70%</div>
+            </div>
+            <span class="officer-volume">$24.6M</span>
+          </div>
+          <div class="officer-row">
+            <div class="av-sm" style="background:#9a7b32;">DC</div>
+            <div class="officer-info">
+              <div class="officer-row-name">David C.</div>
+              <div class="officer-row-deals">6 deals · Avg LTV 72%</div>
+            </div>
+            <span class="officer-volume">$18.1M</span>
+          </div>
+          <!-- Volume bar visual -->
+          <div style="margin-top:14px; padding-top:14px; border-top:1px solid var(--border);">
+            <div style="font-size:10px;color:var(--mid);margin-bottom:8px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;">Volume Share</div>
+            <div style="height:8px; border-radius:4px; overflow:hidden; display:flex;">
+              <div style="width:35%;background:var(--blue);"></div>
+              <div style="width:28%;background:#7C3AED;"></div>
+              <div style="width:22%;background:var(--green);"></div>
+              <div style="width:15%;background:#9a7b32;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

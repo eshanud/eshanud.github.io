@@ -1,0 +1,1156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SimpleCITI — Design System</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  /* ── BRAND TOKENS ── */
+  --navy:    #0D1B2A;
+  --blue:    #1B4F8A;
+  --accent:  #2A7FD4;
+  --gold:    #C9A84C;
+  --cream:   #F7F4EF;
+  --offwhite:#FAFAF8;
+  --mid:     #6B7280;
+  --border:  #E5E1D8;
+  --text:    #1A1A1A;
+  --green:   #16A34A;
+  --amber:   #D97706;
+  --red:     #DC2626;
+  --purple:  #7C3AED;
+  /* ── DOC TOKENS ── */
+  --doc-bg:  #F4F2EE;
+  --doc-surface: #ffffff;
+  --doc-border: #E5E1D8;
+}
+html { scroll-behavior: smooth; }
+body { font-family: 'DM Sans', sans-serif; background: var(--doc-bg); color: var(--text); font-size: 14px; -webkit-font-smoothing: antialiased; }
+
+/* ══════════════════════════════
+   MAIN
+══════════════════════════════ */
+.main { width: 100%; }
+
+/* ── HEADER ── */
+.ds-header { background: var(--navy); padding: 52px 60px 44px; position: relative; overflow: hidden; }
+.ds-header::before { content: ''; position: absolute; top: -60px; right: -80px; width: 400px; height: 400px; border: 1px solid rgba(201,168,76,0.09); border-radius: 50%; pointer-events: none; }
+.ds-header::after { content: ''; position: absolute; bottom: -80px; left: 40px; width: 280px; height: 280px; border: 1px solid rgba(42,127,212,0.08); border-radius: 50%; pointer-events: none; }
+.ds-header-inner { position: relative; max-width: 880px; }
+.ds-kicker { display: flex; align-items: center; gap: 10px; margin-bottom: 18px; }
+.ds-kicker-line { width: 24px; height: 1px; background: var(--gold); }
+.ds-kicker span { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--gold); letter-spacing: 0.14em; text-transform: uppercase; }
+.ds-header h1 { font-family: 'DM Serif Display', serif; font-size: 38px; color: #fff; font-weight: 400; margin-bottom: 10px; line-height: 1.1; }
+.ds-header h1 em { font-style: italic; color: var(--gold); }
+.ds-header p { font-size: 14px; color: rgba(255,255,255,0.48); max-width: 520px; line-height: 1.7; margin-bottom: 28px; }
+.ds-header-meta { display: flex; gap: 24px; flex-wrap: wrap; padding-top: 24px; border-top: 1px solid rgba(255,255,255,0.07); }
+.ds-meta-item { display: flex; flex-direction: column; gap: 3px; }
+.ds-meta-lbl { font-size: 9px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.22); }
+.ds-meta-val { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: rgba(255,255,255,0.65); }
+
+/* ── SECTION ── */
+.ds-section { padding: 52px 60px; border-bottom: 1px solid var(--doc-border); max-width: 1100px; }
+.ds-section:last-child { border-bottom: none; }
+.ds-section-label { display: flex; align-items: center; gap: 10px; margin-bottom: 22px; }
+.ds-section-num { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--gold); }
+.ds-section-name { font-size: 9px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--mid); }
+.ds-section-line { flex: 1; height: 1px; background: var(--doc-border); }
+.ds-section h2 { font-family: 'DM Serif Display', serif; font-size: 24px; color: var(--navy); font-weight: 400; margin-bottom: 8px; }
+.ds-section > p, .ds-section-inner > p { font-size: 13px; color: var(--mid); line-height: 1.7; margin-bottom: 28px; }
+
+/* ── SUBSECTION ── */
+.ds-sub { margin-top: 36px; }
+.ds-sub h3 { font-size: 12px; font-weight: 700; color: var(--navy); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 1px solid var(--doc-border); }
+
+/* ── TOKEN GRID ── */
+.token-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 12px; margin-bottom: 8px; }
+.token-card { background: var(--doc-surface); border: 1px solid var(--doc-border); border-radius: 8px; overflow: hidden; }
+.token-swatch { height: 52px; }
+.token-info { padding: 10px 12px; }
+.token-name { font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 500; color: var(--navy); margin-bottom: 2px; }
+.token-hex { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--mid); }
+.token-role { font-size: 10px; color: var(--mid); margin-top: 3px; }
+
+/* ── SPACING TOKENS ── */
+.spacing-row { display: flex; align-items: center; gap: 16px; margin-bottom: 10px; }
+.spacing-bar { background: var(--accent); border-radius: 3px; height: 14px; flex-shrink: 0; }
+.spacing-label { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--navy); min-width: 60px; }
+.spacing-desc { font-size: 12px; color: var(--mid); }
+
+/* ── RADIUS TOKENS ── */
+.radius-grid { display: flex; gap: 16px; flex-wrap: wrap; }
+.radius-card { background: var(--doc-surface); border: 1px solid var(--doc-border); display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 16px 20px; }
+.radius-swatch { width: 52px; height: 52px; background: var(--navy); }
+.radius-label { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--navy); }
+.radius-val { font-size: 10px; color: var(--mid); }
+
+/* ══════════════════════════════
+   TYPOGRAPHY
+══════════════════════════════ */
+.type-specimen { background: var(--doc-surface); border: 1px solid var(--doc-border); border-radius: 10px; padding: 24px 28px; margin-bottom: 12px; display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; }
+.type-specimen-preview { flex: 1; }
+.type-specimen-meta { flex-shrink: 0; text-align: right; }
+.type-meta-row { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--mid); display: block; margin-bottom: 3px; }
+.type-meta-row strong { color: var(--navy); }
+.font-preview-serif { font-family: 'DM Serif Display', serif; }
+.font-preview-sans { font-family: 'DM Sans', sans-serif; }
+.font-preview-mono { font-family: 'JetBrains Mono', monospace; }
+
+/* ══════════════════════════════
+   COMPONENTS — BUTTONS
+══════════════════════════════ */
+.component-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
+.component-label { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--mid); min-width: 80px; }
+.c-card { background: var(--doc-surface); border: 1px solid var(--doc-border); border-radius: 10px; padding: 20px 24px; margin-bottom: 12px; }
+.c-card-label { font-family: 'JetBrains Mono', monospace; font-size: 9px; font-weight: 600; color: var(--accent); text-transform: uppercase; letter-spacing: 0.14em; margin-bottom: 14px; }
+
+/* buttons */
+.btn { display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px; border-radius: 7px; font-size: 12px; font-weight: 600; cursor: pointer; border: none; transition: all 0.15s; font-family: 'DM Sans', sans-serif; }
+.btn-primary { background: var(--accent); color: #fff; }
+.btn-primary:hover { background: #2270bb; }
+.btn-secondary { background: var(--navy); color: #fff; }
+.btn-ghost { background: transparent; color: var(--mid); border: 1px solid var(--border); }
+.btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+.btn-danger { background: rgba(220,38,38,0.1); color: var(--red); border: 1px solid rgba(220,38,38,0.2); }
+.btn-success { background: rgba(22,163,74,0.1); color: var(--green); border: 1px solid rgba(22,163,74,0.2); }
+.btn-text { background: transparent; color: var(--mid); border: none; font-size: 12px; font-weight: 500; cursor: pointer; font-family: 'DM Sans', sans-serif; }
+.btn-sm { padding: 5px 10px; font-size: 11px; border-radius: 6px; }
+.btn-lg { padding: 11px 22px; font-size: 14px; border-radius: 8px; }
+.btn-icon { width: 32px; height: 32px; padding: 0; border-radius: 7px; justify-content: center; }
+
+/* badges */
+.badge { display: inline-flex; align-items: center; gap: 4px; padding: 3px 9px; border-radius: 20px; font-size: 10px; font-weight: 700; letter-spacing: 0.06em; white-space: nowrap; }
+.badge-blue { background: rgba(42,127,212,0.12); color: var(--accent); }
+.badge-green { background: #D1FAE5; color: #065F46; }
+.badge-amber { background: #FEF3C7; color: #B45309; }
+.badge-red { background: #FEE2E2; color: #991B1B; }
+.badge-purple { background: #EDE9FE; color: #5B21B6; }
+.badge-gray { background: #F3F4F6; color: #6B7280; }
+.badge-navy { background: var(--navy); color: rgba(255,255,255,0.8); }
+
+/* stage pills */
+.pill { display: inline-flex; align-items: center; gap: 5px; padding: 4px 10px; border-radius: 20px; font-size: 10px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; }
+.pill-dot { width: 5px; height: 5px; border-radius: 50%; }
+.pill-intake { background: #F3F4F6; color: #6B7280; }
+.pill-intake .pill-dot { background: #9CA3AF; }
+.pill-underwriting { background: #FEF3C7; color: #B45309; }
+.pill-underwriting .pill-dot { background: #D97706; }
+.pill-approved { background: #D1FAE5; color: #065F46; }
+.pill-approved .pill-dot { background: #16A34A; }
+.pill-closing { background: #EDE9FE; color: #5B21B6; }
+.pill-closing .pill-dot { background: #7C3AED; }
+.pill-closed { background: #F3F4F6; color: #9CA3AF; }
+.pill-closed .pill-dot { background: #D1D5DB; }
+.pill-flagged { background: #FEE2E2; color: #991B1B; }
+.pill-flagged .pill-dot { background: #DC2626; }
+
+/* inputs */
+.form-group { display: flex; flex-direction: column; gap: 5px; max-width: 280px; }
+.form-label { font-size: 11px; font-weight: 600; color: var(--navy); text-transform: uppercase; letter-spacing: 0.07em; }
+.req { color: var(--red); margin-left: 2px; }
+.form-input { padding: 9px 13px; border: 1.5px solid var(--border); border-radius: 8px; font-size: 13px; color: var(--text); background: #fff; outline: none; font-family: 'DM Sans', sans-serif; transition: border-color 0.15s; }
+.form-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(42,127,212,0.1); }
+.form-input.error { border-color: var(--red); }
+.form-input.success { border-color: var(--green); }
+.form-input::placeholder { color: #C4C0BA; }
+.form-select { padding: 9px 13px; border: 1.5px solid var(--border); border-radius: 8px; font-size: 13px; color: var(--text); background: #fff; outline: none; font-family: 'DM Sans', sans-serif; cursor: pointer; appearance: none; }
+.form-hint { font-size: 11px; color: var(--mid); }
+.form-error { font-size: 11px; color: var(--red); }
+.input-prefix { display: flex; align-items: center; border: 1.5px solid var(--border); border-radius: 8px; overflow: hidden; background: #fff; max-width: 280px; }
+.input-prefix-label { padding: 9px 12px; background: var(--cream); border-right: 1.5px solid var(--border); font-size: 13px; font-weight: 600; color: var(--mid); flex-shrink: 0; }
+.input-prefix input { flex: 1; padding: 9px 13px; border: none; outline: none; font-size: 13px; font-family: 'DM Sans', sans-serif; }
+
+/* search box */
+.search-box { display: flex; align-items: center; gap: 8px; background: var(--cream); border: 1px solid var(--border); border-radius: 7px; padding: 7px 13px; width: 220px; }
+.search-box input { background: none; border: none; outline: none; font-size: 12px; color: var(--text); width: 100%; font-family: 'DM Sans', sans-serif; }
+.search-box input::placeholder { color: var(--mid); }
+
+/* select box */
+.select-box { padding: 6px 10px; border: 1px solid var(--border); border-radius: 6px; font-size: 12px; color: var(--mid); background: #fff; outline: none; font-family: 'DM Sans', sans-serif; cursor: pointer; }
+
+/* ── KPI CARDS ── */
+.kpi-demo { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+.kpi-card { background: var(--navy); border-radius: 10px; padding: 20px; position: relative; overflow: hidden; }
+.kpi-card::after { content: ''; position: absolute; top: -30px; right: -30px; width: 90px; height: 90px; background: radial-gradient(circle, rgba(42,127,212,0.2), transparent 70%); }
+.kpi-label { font-size: 10px; font-weight: 600; color: rgba(255,255,255,0.38); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 10px; }
+.kpi-value { font-family: 'JetBrains Mono', monospace; font-size: 26px; color: #fff; font-weight: 500; line-height: 1; margin-bottom: 10px; }
+.kpi-delta { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 600; padding: 3px 8px; border-radius: 20px; }
+.delta-up { background: rgba(22,163,74,0.2); color: #4ade80; }
+.delta-neutral { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.4); }
+.delta-warn { background: rgba(217,119,6,0.2); color: #fbbf24; }
+.delta-down { background: rgba(220,38,38,0.2); color: #f87171; }
+
+/* ── CONTENT CARD ── */
+.card { background: #fff; border-radius: 12px; border: 1px solid var(--border); overflow: hidden; }
+.card-header { padding: 14px 18px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+.card-title { font-family: 'DM Serif Display', serif; font-size: 15px; color: var(--navy); }
+.card-label-tag { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--accent); text-transform: uppercase; letter-spacing: 0.15em; }
+.card-body { padding: 18px; }
+
+/* ── TABLE ── */
+.table-demo { background: #fff; border-radius: 10px; border: 1px solid var(--border); overflow: hidden; }
+.table-demo table { width: 100%; border-collapse: collapse; }
+.table-demo thead tr { background: var(--navy); }
+.table-demo thead th { padding: 11px 14px; text-align: left; font-size: 10px; font-weight: 600; color: rgba(255,255,255,0.45); text-transform: uppercase; letter-spacing: 0.1em; }
+.table-demo tbody tr { border-bottom: 1px solid var(--border); transition: background 0.12s; }
+.table-demo tbody tr:last-child { border-bottom: none; }
+.table-demo tbody tr:hover { background: rgba(42,127,212,0.03); }
+.table-demo tbody tr.selected { background: rgba(42,127,212,0.06); border-left: 3px solid var(--accent); }
+.table-demo td { padding: 12px 14px; }
+.deal-name { font-weight: 600; color: var(--navy); font-size: 13px; }
+.deal-sub { font-size: 11px; color: var(--mid); margin-top: 1px; }
+.prop-type { font-size: 11px; color: var(--mid); background: var(--cream); padding: 3px 8px; border-radius: 4px; display: inline-block; }
+.loan-amt { font-family: 'JetBrains Mono', monospace; font-size: 13px; color: var(--navy); font-weight: 500; }
+.ltv-cell { display: flex; align-items: center; gap: 8px; }
+.ltv-num { font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 500; }
+.ltv-normal { color: var(--navy); }
+.ltv-warn { color: var(--amber); }
+.ltv-danger { color: var(--red); font-weight: 600; }
+.ltv-bar { width: 40px; height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; }
+.ltv-fill { height: 100%; border-radius: 2px; }
+.officer { display: flex; align-items: center; gap: 7px; }
+.av-sm { width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 700; color: #fff; flex-shrink: 0; }
+.av-blue { background: var(--blue); }
+.av-accent { background: var(--accent); }
+.av-gold { background: #9a7b32; }
+.av-green { background: var(--green); }
+.av-purple { background: var(--purple); }
+.officer-name { font-size: 12px; color: var(--mid); }
+.close-date { font-size: 12px; color: var(--mid); }
+.close-date.soon { color: var(--amber); font-weight: 600; }
+
+/* ── STEPPER ── */
+.stepper-demo { background: #fff; border: 1px solid var(--border); border-radius: 10px; padding: 18px 24px; display: flex; align-items: center; gap: 0; }
+.step { display: flex; align-items: center; gap: 8px; }
+.step-num { width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; flex-shrink: 0; }
+.step-done .step-num { background: var(--green); color: #fff; }
+.step-active .step-num { background: var(--accent); color: #fff; box-shadow: 0 0 0 4px rgba(42,127,212,0.15); }
+.step-pending .step-num { background: var(--border); color: var(--mid); }
+.step-label { font-size: 12px; font-weight: 500; }
+.step-sublabel { font-size: 10px; margin-top: 1px; }
+.step-done .step-label { color: var(--green); }
+.step-done .step-sublabel { color: rgba(22,163,74,0.6); }
+.step-active .step-label { color: var(--accent); font-weight: 600; }
+.step-active .step-sublabel { color: rgba(42,127,212,0.65); }
+.step-pending .step-label { color: var(--mid); }
+.step-pending .step-sublabel { color: rgba(107,114,128,0.55); }
+.step-connector { flex: 1; height: 2px; background: var(--border); margin: 0 14px; max-width: 48px; }
+.step-connector.done { background: var(--green); }
+
+/* ── FILTER CHIPS ── */
+.filter-chip { padding: 5px 12px; border-radius: 20px; font-size: 11px; font-weight: 600; cursor: pointer; border: 1px solid var(--border); background: #fff; color: var(--mid); transition: all 0.15s; display: inline-flex; }
+.filter-chip:hover { border-color: var(--accent); color: var(--accent); }
+.filter-chip.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+/* ── AVATAR ── */
+.avatar-demo { display: flex; align-items: center; gap: 12px; }
+.av { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: #fff; }
+.av-lg { width: 44px; height: 44px; font-size: 14px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; color: #fff; }
+.av-sm2 { width: 26px; height: 26px; font-size: 9px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; color: #fff; }
+
+/* ── CAP STACK ── */
+.cap-bar { height: 32px; border-radius: 6px; overflow: hidden; display: flex; margin-bottom: 10px; }
+.cap-seg { display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; color: rgba(255,255,255,0.85); letter-spacing: 0.05em; }
+.cap-senior { background: var(--blue); }
+.cap-mezz { background: var(--accent); }
+.cap-equity { background: var(--gold); }
+.cap-legend { display: flex; gap: 16px; }
+.cap-legend-item { display: flex; align-items: center; gap: 7px; font-size: 11px; color: var(--mid); }
+.cap-dot { width: 8px; height: 8px; border-radius: 2px; flex-shrink: 0; }
+
+/* ── LTV GAUGE ── */
+.ltv-gauge-wrap { max-width: 280px; }
+.ltv-gauge-track { height: 8px; background: var(--border); border-radius: 4px; overflow: hidden; margin-bottom: 6px; position: relative; }
+.ltv-gauge-fill { height: 100%; border-radius: 4px; }
+.ltv-gauge-fill.safe { background: var(--green); }
+.ltv-gauge-fill.warn { background: var(--amber); }
+.ltv-gauge-fill.danger { background: var(--red); }
+.ltv-gauge-labels { display: flex; justify-content: space-between; font-size: 10px; color: var(--mid); }
+.ltv-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 6px; }
+.ltv-big { font-family: 'JetBrains Mono', monospace; font-size: 20px; font-weight: 500; }
+.ltv-big.safe { color: var(--green); }
+.ltv-big.warn { color: var(--amber); }
+.ltv-big.danger { color: var(--red); }
+.ltv-threshold { font-size: 11px; color: var(--mid); }
+
+/* ── DOC CHECKLIST ── */
+.doc-list { display: flex; flex-direction: column; gap: 7px; max-width: 300px; }
+.doc-item { display: flex; align-items: center; gap: 9px; font-size: 12px; }
+.doc-icon { font-size: 13px; width: 18px; text-align: center; flex-shrink: 0; }
+.doc-name { flex: 1; color: var(--text); }
+.doc-tag { font-size: 10px; font-weight: 600; padding: 2px 7px; border-radius: 4px; }
+.doc-done { background: #D1FAE5; color: #065F46; }
+.doc-pending { background: #FEF3C7; color: #B45309; }
+.doc-missing { background: #FEE2E2; color: #991B1B; }
+
+/* ── SIDEBAR COMPONENT ── */
+.sidebar-demo { background: var(--navy); border-radius: 10px; width: 200px; overflow: hidden; padding-bottom: 12px; }
+.sd-logo { padding: 16px 14px 14px; border-bottom: 1px solid rgba(255,255,255,0.07); }
+.sd-logo-mark { font-family: 'DM Serif Display', serif; font-size: 16px; color: #fff; }
+.sd-logo-mark span { color: var(--gold); }
+.sd-logo-sub { font-family: 'JetBrains Mono', monospace; font-size: 8px; color: rgba(255,255,255,0.28); text-transform: uppercase; letter-spacing: 0.14em; margin-top: 2px; }
+.sd-section { padding: 14px 10px 6px; }
+.sd-label { font-family: 'JetBrains Mono', monospace; font-size: 8px; color: rgba(255,255,255,0.22); text-transform: uppercase; letter-spacing: 0.14em; padding: 0 6px; margin-bottom: 4px; display: block; }
+.sd-item { display: flex; align-items: center; gap: 8px; padding: 7px 8px; border-radius: 6px; color: rgba(255,255,255,0.42); font-size: 12px; font-weight: 500; margin-bottom: 1px; }
+.sd-item.active { background: rgba(42,127,212,0.18); color: #fff; }
+.sd-item:hover { background: rgba(255,255,255,0.05); color: rgba(255,255,255,0.72); }
+.sd-badge { margin-left: auto; background: var(--accent); color: #fff; font-size: 9px; font-weight: 600; padding: 1px 6px; border-radius: 8px; }
+
+/* ── NOTIFICATION ITEM ── */
+.notif-item { background: #fff; border: 1px solid var(--border); border-radius: 9px; padding: 14px 16px; display: flex; gap: 12px; align-items: flex-start; margin-bottom: 8px; position: relative; }
+.notif-item.crit { border-left: 3px solid var(--red); }
+.notif-item.warn { border-left: 3px solid var(--amber); }
+.notif-item.info { border-left: 3px solid var(--accent); }
+.notif-icon-wrap { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; }
+.ni-red { background: #FEE2E2; }
+.ni-amber { background: #FEF3C7; }
+.ni-blue { background: rgba(42,127,212,0.1); }
+.ni-green { background: #D1FAE5; }
+.notif-title { font-size: 12px; font-weight: 600; color: var(--navy); margin-bottom: 3px; }
+.notif-desc { font-size: 11px; color: var(--mid); line-height: 1.5; margin-bottom: 6px; }
+.notif-dot-badge { position: absolute; top: 14px; right: 14px; width: 7px; height: 7px; border-radius: 50%; }
+.nd-red { background: var(--red); }
+.nd-amber { background: var(--amber); }
+.nd-blue { background: var(--accent); }
+
+/* ── ICON BTN ── */
+.icon-btn { width: 34px; height: 34px; border-radius: 7px; border: 1px solid var(--border); background: #fff; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 15px; color: var(--mid); position: relative; }
+.notif-dot-pos { position: absolute; top: 5px; right: 5px; width: 7px; height: 7px; background: var(--red); border-radius: 50%; border: 1.5px solid #fff; }
+
+/* ── PROGRESS BAR ── */
+.progress-wrap { max-width: 280px; }
+.progress-header { display: flex; justify-content: space-between; margin-bottom: 5px; }
+.progress-label { font-size: 11px; font-weight: 600; color: var(--navy); }
+.progress-val { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--mid); }
+.progress-track { height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; }
+.progress-fill { height: 100%; border-radius: 3px; }
+.pf-green { background: var(--green); }
+.pf-amber { background: var(--amber); }
+.pf-red { background: var(--red); }
+.pf-blue { background: var(--accent); }
+
+/* ── PATTERNS ── */
+.do-dont { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px; }
+.do-card { background: rgba(22,163,74,0.04); border: 1px solid rgba(22,163,74,0.2); border-radius: 9px; padding: 16px; }
+.dont-card { background: rgba(220,38,38,0.04); border: 1px solid rgba(220,38,38,0.2); border-radius: 9px; padding: 16px; }
+.dd-label { font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 8px; }
+.do-card .dd-label { color: var(--green); }
+.dont-card .dd-label { color: var(--red); }
+.dd-text { font-size: 12px; color: var(--mid); line-height: 1.6; }
+
+/* ── CODE BLOCK ── */
+.code-block { background: var(--navy); border-radius: 8px; padding: 16px 18px; margin: 12px 0; overflow-x: auto; }
+.code-block code { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: rgba(255,255,255,0.75); line-height: 1.7; white-space: pre; display: block; }
+.code-block code .tok-key { color: var(--gold); }
+.code-block code .tok-val { color: #7dd3fc; }
+.code-block code .tok-comment { color: rgba(255,255,255,0.3); }
+
+/* ── DIVIDER ── */
+.divider { height: 1px; background: var(--doc-border); margin: 20px 0; }
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════
+     MAIN
+══════════════════════════════ -->
+<div class="main">
+
+<!-- HEADER -->
+<div class="ds-header">
+  <div class="ds-header-inner">
+    <div class="ds-kicker">
+      <div class="ds-kicker-line"></div>
+      <span>Design System · v1.0</span>
+    </div>
+    <h1>Simple<em>CITI</em><br>Design System</h1>
+    <p>The complete visual language for the CRE Lending Pipeline platform. Tokens, components, and patterns used across all 7 screens — built for consistency, scanability, and institutional credibility.</p>
+    <div class="ds-header-meta">
+      <div class="ds-meta-item"><span class="ds-meta-lbl">Version</span><span class="ds-meta-val">1.0.0</span></div>
+      <div class="ds-meta-item"><span class="ds-meta-lbl">Screens</span><span class="ds-meta-val">7 screens</span></div>
+      <div class="ds-meta-item"><span class="ds-meta-lbl">Fonts</span><span class="ds-meta-val">DM Serif Display · DM Sans · JetBrains Mono</span></div>
+      <div class="ds-meta-item"><span class="ds-meta-lbl">Tool</span><span class="ds-meta-val">Figma</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ 01 COLOR TOKENS ══ -->
+<div class="ds-section" id="colors">
+  <div class="ds-section-label"><span class="ds-section-num">01</span><span class="ds-section-name">Color Tokens</span><div class="ds-section-line"></div></div>
+  <h2>Color Tokens</h2>
+  <p>Eight semantic color tokens used across all screens. Navy is the primary brand surface — used for the sidebar, table headers, and KPI cards. Accent blue handles all interactive states. Gold is reserved for brand moments and highlights only.</p>
+
+  <div class="ds-sub">
+    <h3>Brand & Surface</h3>
+    <div class="token-grid">
+      <div class="token-card"><div class="token-swatch" style="background:#0D1B2A"></div><div class="token-info"><div class="token-name">--navy</div><div class="token-hex">#0D1B2A</div><div class="token-role">Sidebar, headers, KPI bg</div></div></div>
+      <div class="token-card"><div class="token-swatch" style="background:#1B4F8A"></div><div class="token-info"><div class="token-name">--blue</div><div class="token-hex">#1B4F8A</div><div class="token-role">Senior debt, avatars</div></div></div>
+      <div class="token-card"><div class="token-swatch" style="background:#2A7FD4"></div><div class="token-info"><div class="token-name">--accent</div><div class="token-hex">#2A7FD4</div><div class="token-role">CTAs, links, active states</div></div></div>
+      <div class="token-card"><div class="token-swatch" style="background:#C9A84C"></div><div class="token-info"><div class="token-name">--gold</div><div class="token-hex">#C9A84C</div><div class="token-role">Logo, highlights, equity</div></div></div>
+      <div class="token-card"><div class="token-swatch" style="background:#F7F4EF"></div><div class="token-info"><div class="token-name">--cream</div><div class="token-hex">#F7F4EF</div><div class="token-role">Property type tags, inputs bg</div></div></div>
+      <div class="token-card"><div class="token-swatch" style="background:#FAFAF8; border:1px solid #E5E1D8;"></div><div class="token-info"><div class="token-name">--offwhite</div><div class="token-hex">#FAFAF8</div><div class="token-role">Page background</div></div></div>
+      <div class="token-card"><div class="token-swatch" style="background:#E5E1D8"></div><div class="token-info"><div class="token-name">--border</div><div class="token-hex">#E5E1D8</div><div class="token-role">All dividers and borders</div></div></div>
+      <div class="token-card"><div class="token-swatch" style="background:#6B7280"></div><div class="token-info"><div class="token-name">--mid</div><div class="token-hex">#6B7280</div><div class="token-role">Secondary text, labels</div></div></div>
+    </div>
+  </div>
+
+  <div class="ds-sub">
+    <h3>Semantic / Status</h3>
+    <div class="token-grid">
+      <div class="token-card"><div class="token-swatch" style="background:#16A34A"></div><div class="token-info"><div class="token-name">--green</div><div class="token-hex">#16A34A</div><div class="token-role">Approved, clear, done</div></div></div>
+      <div class="token-card"><div class="token-swatch" style="background:#D97706"></div><div class="token-info"><div class="token-name">--amber</div><div class="token-hex">#D97706</div><div class="token-role">Underwriting, caution, pending</div></div></div>
+      <div class="token-card"><div class="token-swatch" style="background:#DC2626"></div><div class="token-info"><div class="token-name">--red</div><div class="token-hex">#DC2626</div><div class="token-role">Flagged, LTV breach, missing</div></div></div>
+      <div class="token-card"><div class="token-swatch" style="background:#7C3AED"></div><div class="token-info"><div class="token-name">--purple</div><div class="token-hex">#7C3AED</div><div class="token-role">Closing stage</div></div></div>
+      <div class="token-card"><div class="token-swatch" style="background:#1A1A1A"></div><div class="token-info"><div class="token-name">--text</div><div class="token-hex">#1A1A1A</div><div class="token-role">Primary body text</div></div></div>
+    </div>
+  </div>
+
+  <div class="ds-sub">
+    <h3>CSS Variables</h3>
+    <div class="code-block"><code><span class="tok-comment">/* SimpleCITI — Root Tokens */</span>
+<span class="tok-key">:root</span> {
+  <span class="tok-key">--navy</span>:    <span class="tok-val">#0D1B2A</span>;
+  <span class="tok-key">--blue</span>:    <span class="tok-val">#1B4F8A</span>;
+  <span class="tok-key">--accent</span>:  <span class="tok-val">#2A7FD4</span>;
+  <span class="tok-key">--gold</span>:    <span class="tok-val">#C9A84C</span>;
+  <span class="tok-key">--cream</span>:   <span class="tok-val">#F7F4EF</span>;
+  <span class="tok-key">--offwhite</span>:<span class="tok-val">#FAFAF8</span>;
+  <span class="tok-key">--mid</span>:     <span class="tok-val">#6B7280</span>;
+  <span class="tok-key">--border</span>:  <span class="tok-val">#E5E1D8</span>;
+  <span class="tok-key">--text</span>:    <span class="tok-val">#1A1A1A</span>;
+  <span class="tok-key">--green</span>:   <span class="tok-val">#16A34A</span>;
+  <span class="tok-key">--amber</span>:   <span class="tok-val">#D97706</span>;
+  <span class="tok-key">--red</span>:     <span class="tok-val">#DC2626</span>;
+  <span class="tok-key">--purple</span>:  <span class="tok-val">#7C3AED</span>;
+}</code></div>
+  </div>
+</div>
+
+<!-- ══ 02 TYPOGRAPHY ══ -->
+<div class="ds-section" id="typography">
+  <div class="ds-section-label"><span class="ds-section-num">02</span><span class="ds-section-name">Typography</span><div class="ds-section-line"></div></div>
+  <h2>Typography</h2>
+  <p>Three typefaces, each with a specific role. The pairing is deliberate — serif display for hierarchy and brand moments, sans for all UI copy, mono for numbers and data. Monospaced numerals are a trust signal in financial software.</p>
+
+  <div class="type-specimen">
+    <div class="type-specimen-preview">
+      <div class="font-preview-serif" style="font-size:32px;color:var(--navy);line-height:1.1;margin-bottom:6px;font-weight:400;">DM Serif Display</div>
+      <div class="font-preview-serif" style="font-size:16px;color:var(--mid);font-style:italic;">The pipeline moves fast. Decisions faster.</div>
+    </div>
+    <div class="type-specimen-meta">
+      <span class="type-meta-row"><strong>DM Serif Display</strong></span>
+      <span class="type-meta-row">Page titles · Deal names</span>
+      <span class="type-meta-row">Card headers · Pull quotes</span>
+      <span class="type-meta-row">Weight: 400 regular / italic</span>
+    </div>
+  </div>
+
+  <div class="type-specimen">
+    <div class="type-specimen-preview">
+      <div class="font-preview-sans" style="font-size:24px;font-weight:600;color:var(--navy);margin-bottom:6px;">DM Sans SemiBold</div>
+      <div class="font-preview-sans" style="font-size:14px;font-weight:400;color:var(--mid);margin-bottom:4px;">Regular body text for labels, descriptions, and UI copy across all screens.</div>
+      <div class="font-preview-sans" style="font-size:12px;font-weight:500;color:var(--mid);">500 Medium — nav items, filter chips, button labels</div>
+    </div>
+    <div class="type-specimen-meta">
+      <span class="type-meta-row"><strong>DM Sans</strong></span>
+      <span class="type-meta-row">All UI text · Labels · Buttons</span>
+      <span class="type-meta-row">Body copy · Nav items</span>
+      <span class="type-meta-row">Weights: 300, 400, 500, 600</span>
+    </div>
+  </div>
+
+  <div class="type-specimen">
+    <div class="type-specimen-preview">
+      <div class="font-preview-mono" style="font-size:22px;font-weight:500;color:var(--navy);margin-bottom:6px;">$8,900,000</div>
+      <div class="font-preview-mono" style="font-size:14px;color:var(--mid);margin-bottom:4px;">68.0%  ·  1.42  ·  6.85%</div>
+      <div class="font-preview-mono" style="font-size:10px;color:var(--accent);text-transform:uppercase;letter-spacing:0.15em;">SECTION LABEL · MONO CAPS</div>
+    </div>
+    <div class="type-specimen-meta">
+      <span class="type-meta-row"><strong>JetBrains Mono</strong></span>
+      <span class="type-meta-row">All financial figures · LTV</span>
+      <span class="type-meta-row">Section labels · Mono tags</span>
+      <span class="type-meta-row">Weights: 400, 500</span>
+    </div>
+  </div>
+
+  <div class="ds-sub">
+    <h3>Type Scale</h3>
+    <div class="c-card">
+      <div style="border-bottom:1px solid var(--border);padding-bottom:14px;margin-bottom:14px;"><span style="font-family:'DM Serif Display',serif;font-size:28px;color:var(--navy);">Page Title — DM Serif 28px</span><div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--mid);margin-top:4px;">DM Serif Display · 28px · 400 · Used: Topbar page titles</div></div>
+      <div style="border-bottom:1px solid var(--border);padding-bottom:14px;margin-bottom:14px;"><span style="font-family:'DM Serif Display',serif;font-size:20px;color:var(--navy);">Deal Title — DM Serif 20px</span><div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--mid);margin-top:4px;">DM Serif Display · 20px · 400 · Used: Deal headers, card titles</div></div>
+      <div style="border-bottom:1px solid var(--border);padding-bottom:14px;margin-bottom:14px;"><span style="font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;color:var(--navy);">Section Heading — DM Sans 14px 600</span><div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--mid);margin-top:4px;">DM Sans · 14px · 600 · Used: Form section titles, card sub-heads</div></div>
+      <div style="border-bottom:1px solid var(--border);padding-bottom:14px;margin-bottom:14px;"><span style="font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;color:var(--navy);">Body Emphasis — DM Sans 13px 600</span><div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--mid);margin-top:4px;">DM Sans · 13px · 600 · Used: Deal names, table strong text</div></div>
+      <div style="border-bottom:1px solid var(--border);padding-bottom:14px;margin-bottom:14px;"><span style="font-family:'DM Sans',sans-serif;font-size:13px;color:var(--mid);">Body Regular — DM Sans 13px 400</span><div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--mid);margin-top:4px;">DM Sans · 13px · 400 · Used: Descriptions, meta text</div></div>
+      <div style="border-bottom:1px solid var(--border);padding-bottom:14px;margin-bottom:14px;"><span style="font-family:'DM Sans',sans-serif;font-size:12px;color:var(--mid);">Small / Label — DM Sans 12px 500</span><div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--mid);margin-top:4px;">DM Sans · 12px · 500 · Used: Nav items, filter chips, officer names</div></div>
+      <div style="border-bottom:1px solid var(--border);padding-bottom:14px;margin-bottom:14px;"><span style="font-family:'JetBrains Mono',monospace;font-size:26px;font-weight:500;color:var(--navy);">$142.6M</span><div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--mid);margin-top:4px;">JetBrains Mono · 26px · 500 · Used: KPI values</div></div>
+      <div><span style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--accent);text-transform:uppercase;letter-spacing:0.15em;">SECTION LABEL · MONO CAPS</span><div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--mid);margin-top:4px;">JetBrains Mono · 9px · 600 · uppercase · 0.15em tracking · Used: Sidebar labels, card tags</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ 03 SPACING & RADIUS ══ -->
+<div class="ds-section" id="spacing">
+  <div class="ds-section-label"><span class="ds-section-num">03</span><span class="ds-section-name">Spacing & Radius</span><div class="ds-section-line"></div></div>
+  <h2>Spacing & Border Radius</h2>
+  <p>An 8pt base grid. All spacing values are multiples of 4px or 8px. Border radius follows a consistent pattern — 6–7px for small interactive elements, 8–10px for inputs and chips, 12px for cards and panels.</p>
+
+  <div class="ds-sub">
+    <h3>Spacing Scale</h3>
+    <div class="c-card">
+      <div class="spacing-row"><div class="spacing-bar" style="width:4px"></div><span class="spacing-label">4px</span><span class="spacing-desc">Icon gaps, tight component spacing</span></div>
+      <div class="spacing-row"><div class="spacing-bar" style="width:6px"></div><span class="spacing-label">6px</span><span class="spacing-desc">Form group gaps, pill padding V</span></div>
+      <div class="spacing-row"><div class="spacing-bar" style="width:8px"></div><span class="spacing-label">8px</span><span class="spacing-desc">Inline element gaps, badge padding</span></div>
+      <div class="spacing-row"><div class="spacing-bar" style="width:10px"></div><span class="spacing-label">10px</span><span class="spacing-desc">Nav item padding, button padding H</span></div>
+      <div class="spacing-row"><div class="spacing-bar" style="width:12px"></div><span class="spacing-label">12px</span><span class="spacing-desc">Card grid gap, small sections</span></div>
+      <div class="spacing-row"><div class="spacing-bar" style="width:14px"></div><span class="spacing-label">14px</span><span class="spacing-desc">KPI card grid gap, table cell padding H</span></div>
+      <div class="spacing-row"><div class="spacing-bar" style="width:16px"></div><span class="spacing-label">16px</span><span class="spacing-desc">Panel section padding, form group V gap</span></div>
+      <div class="spacing-row"><div class="spacing-bar" style="width:20px"></div><span class="spacing-label">20px</span><span class="spacing-desc">Panel header padding, sidebar section padding</span></div>
+      <div class="spacing-row"><div class="spacing-bar" style="width:24px"></div><span class="spacing-label">24px</span><span class="spacing-desc">Content area padding, card body padding</span></div>
+      <div class="spacing-row"><div class="spacing-bar" style="width:28px"></div><span class="spacing-label">28px</span><span class="spacing-desc">Topbar / header padding H</span></div>
+      <div class="spacing-row"><div class="spacing-bar" style="width:40px"></div><span class="spacing-label">40px</span><span class="spacing-desc">Form content padding, section max-width margin</span></div>
+    </div>
+  </div>
+
+  <div class="ds-sub">
+    <h3>Border Radius</h3>
+    <div class="radius-grid">
+      <div class="radius-card"><div class="radius-swatch" style="border-radius:4px"></div><div class="radius-label">4px</div><div class="radius-val">Property type tags</div></div>
+      <div class="radius-card"><div class="radius-swatch" style="border-radius:6px"></div><div class="radius-label">6px</div><div class="radius-val">Back buttons, small btns</div></div>
+      <div class="radius-card"><div class="radius-swatch" style="border-radius:7px"></div><div class="radius-label">7px</div><div class="radius-val">Buttons, nav items</div></div>
+      <div class="radius-card"><div class="radius-swatch" style="border-radius:8px"></div><div class="radius-label">8px</div><div class="radius-val">Form inputs, select boxes</div></div>
+      <div class="radius-card"><div class="radius-swatch" style="border-radius:10px"></div><div class="radius-label">10px</div><div class="radius-val">KPI cards, filter chips</div></div>
+      <div class="radius-card"><div class="radius-swatch" style="border-radius:12px"></div><div class="radius-label">12px</div><div class="radius-val">Main cards, table wrap</div></div>
+      <div class="radius-card"><div class="radius-swatch" style="border-radius:20px"></div><div class="radius-label">20px</div><div class="radius-val">Pills, badges, chips</div></div>
+      <div class="radius-card"><div class="radius-swatch" style="border-radius:50%"></div><div class="radius-label">50%</div><div class="radius-val">Avatars, step numbers</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ 04 BUTTONS ══ -->
+<div class="ds-section" id="buttons">
+  <div class="ds-section-label"><span class="ds-section-num">04</span><span class="ds-section-name">Buttons</span><div class="ds-section-line"></div></div>
+  <h2>Buttons</h2>
+  <p>Five button variants. Primary is the single strongest action on any screen — used sparingly. Ghost handles secondary actions. Danger and Success are semantic, used in context-specific situations only.</p>
+
+  <div class="c-card">
+    <div class="c-card-label">Variants</div>
+    <div class="component-row">
+      <span class="component-label">Primary</span>
+      <button class="btn btn-primary">+ New Deal</button>
+      <button class="btn btn-primary">Submit for Approval →</button>
+    </div>
+    <div class="component-row">
+      <span class="component-label">Secondary</span>
+      <button class="btn btn-secondary">Save Draft 💾</button>
+    </div>
+    <div class="component-row">
+      <span class="component-label">Ghost</span>
+      <button class="btn btn-ghost">⬇ Export</button>
+      <button class="btn btn-ghost">⊟ Columns</button>
+      <button class="btn btn-ghost">⚙ Preferences</button>
+    </div>
+    <div class="component-row">
+      <span class="component-label">Danger</span>
+      <button class="btn btn-danger">⚑ Flag Deal</button>
+      <button class="btn btn-danger">Escalate to Committee</button>
+    </div>
+    <div class="component-row">
+      <span class="component-label">Success</span>
+      <button class="btn btn-success">✓ Approve</button>
+    </div>
+    <div class="component-row">
+      <span class="component-label">Text</span>
+      <button class="btn-text">Cancel</button>
+      <button class="btn-text">← Pipeline</button>
+    </div>
+    <div class="divider"></div>
+    <div class="c-card-label">Sizes</div>
+    <div class="component-row" style="align-items:center;">
+      <span class="component-label">Small</span>
+      <button class="btn btn-primary btn-sm">+ Add</button>
+      <button class="btn btn-ghost btn-sm">Export</button>
+    </div>
+    <div class="component-row" style="align-items:center;">
+      <span class="component-label">Default</span>
+      <button class="btn btn-primary">+ New Deal</button>
+      <button class="btn btn-ghost">Export</button>
+    </div>
+    <div class="component-row" style="align-items:center;">
+      <span class="component-label">Large</span>
+      <button class="btn btn-primary btn-lg">⊕ Add your first deal</button>
+    </div>
+    <div class="divider"></div>
+    <div class="c-card-label">Icon Button</div>
+    <div class="component-row">
+      <div class="icon-btn">🔔<div class="notif-dot-pos"></div></div>
+      <div class="icon-btn" style="border-color:var(--accent);color:var(--accent);">🔔</div>
+      <div class="icon-btn">⌕</div>
+      <div class="icon-btn">⬇</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ 05 BADGES & PILLS ══ -->
+<div class="ds-section" id="badges">
+  <div class="ds-section-label"><span class="ds-section-num">05</span><span class="ds-section-name">Badges & Pills</span><div class="ds-section-line"></div></div>
+  <h2>Badges & Stage Pills</h2>
+  <p>Badges are used for counts and status indicators. Stage pills are a specific pattern for deal lifecycle states — each stage has a fixed color mapped to its operational meaning.</p>
+
+  <div class="c-card" style="margin-bottom:12px;">
+    <div class="c-card-label">General Badges</div>
+    <div class="component-row" style="flex-wrap:wrap;">
+      <span class="badge badge-blue">34 active</span>
+      <span class="badge badge-green">Approved</span>
+      <span class="badge badge-amber">Underwriting</span>
+      <span class="badge badge-red">Flagged</span>
+      <span class="badge badge-purple">Closing</span>
+      <span class="badge badge-gray">Closed</span>
+      <span class="badge badge-navy">Q1 2026</span>
+    </div>
+    <div class="divider"></div>
+    <div class="c-card-label">Nav Badges</div>
+    <div class="component-row">
+      <span style="font-size:12px;color:var(--mid);">Pipeline</span><span class="badge badge-blue">34</span>
+      <span style="font-size:12px;color:var(--mid);">Underwriting</span><span style="background:var(--amber);color:#fff;font-size:10px;font-weight:600;padding:2px 7px;border-radius:10px;">8</span>
+      <span style="font-size:12px;color:var(--mid);">Alerts</span><span style="background:var(--red);color:#fff;font-size:10px;font-weight:600;padding:2px 7px;border-radius:10px;">5</span>
+    </div>
+  </div>
+
+  <div class="c-card">
+    <div class="c-card-label">Stage Pills — Deal Lifecycle</div>
+    <div class="component-row" style="flex-wrap:wrap;gap:10px;">
+      <span class="pill pill-intake"><span class="pill-dot"></span>Intake</span>
+      <span class="pill pill-underwriting"><span class="pill-dot"></span>Underwriting</span>
+      <span class="pill pill-approved"><span class="pill-dot"></span>Approved</span>
+      <span class="pill pill-closing"><span class="pill-dot"></span>Closing</span>
+      <span class="pill pill-closed"><span class="pill-dot"></span>Closed</span>
+      <span class="pill pill-flagged"><span class="pill-dot"></span>Flagged</span>
+    </div>
+    <div class="divider"></div>
+    <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--mid);line-height:1.8;">
+      Intake → Gray (neutral, no action needed)<br>
+      Underwriting → Amber (active, attention warranted)<br>
+      Approved → Green (positive, moving forward)<br>
+      Closing → Purple (final stage, high priority)<br>
+      Closed → Gray muted (complete, de-emphasized)<br>
+      Flagged → Red (blocker, immediate action required)
+    </div>
+  </div>
+</div>
+
+<!-- ══ 06 INPUTS ══ -->
+<div class="ds-section" id="inputs">
+  <div class="ds-section-label"><span class="ds-section-num">06</span><span class="ds-section-name">Form Inputs</span><div class="ds-section-line"></div></div>
+  <h2>Form Inputs</h2>
+  <p>Used across the Deal Intake Form. Labels are uppercase 11px with tracking. Inputs have a 1.5px border that turns accent blue on focus with a soft glow. Error and success states use semantic color borders.</p>
+
+  <div class="c-card">
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px;flex-wrap:wrap;">
+      <div class="form-group">
+        <label class="form-label">Default<span class="req">*</span></label>
+        <input class="form-input" placeholder="Enter value" type="text"/>
+        <span class="form-hint">Helper text goes here</span>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Focused</label>
+        <input class="form-input" style="border-color:var(--accent);box-shadow:0 0 0 3px rgba(42,127,212,0.1);" value="142 Units · Brooklyn, NY" type="text"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Error State</label>
+        <input class="form-input error" value="Invalid LTV" type="text"/>
+        <span class="form-error">LTV exceeds 75% threshold</span>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Success State</label>
+        <input class="form-input success" value="68.0%" type="text"/>
+        <span style="font-size:11px;color:var(--green);">Within acceptable range ✓</span>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Select</label>
+        <select class="form-select"><option>Multifamily</option><option>Industrial</option><option>Office</option><option>Mixed-Use</option></select>
+      </div>
+      <div class="form-group" style="max-width:100%;">
+        <label class="form-label">Prefix Input</label>
+        <div class="input-prefix">
+          <span class="input-prefix-label">$</span>
+          <input placeholder="8,900,000" type="text"/>
+        </div>
+      </div>
+    </div>
+    <div class="divider"></div>
+    <div class="c-card-label">Search & Select Controls</div>
+    <div class="component-row">
+      <div class="search-box"><span style="color:var(--mid);font-size:13px;">⌕</span><input placeholder="Search deals..."/></div>
+      <select class="select-box"><option>All Officers</option><option>James R.</option><option>Sarah K.</option></select>
+      <select class="select-box"><option>All Property Types</option><option>Multifamily</option></select>
+    </div>
+    <div class="divider"></div>
+    <div class="c-card-label">Filter Chips</div>
+    <div class="component-row">
+      <span class="filter-chip active">All</span>
+      <span class="filter-chip">Intake</span>
+      <span class="filter-chip">Underwriting</span>
+      <span class="filter-chip">Approved</span>
+      <span class="filter-chip">Closing</span>
+    </div>
+  </div>
+</div>
+
+<!-- ══ 07 KPI CARDS ══ -->
+<div class="ds-section" id="kpi">
+  <div class="ds-section-label"><span class="ds-section-num">07</span><span class="ds-section-name">KPI Cards</span><div class="ds-section-line"></div></div>
+  <h2>KPI Cards</h2>
+  <p>Navy background with a subtle radial glow. JetBrains Mono for the value — always large, always monospaced. Delta chips use semantic backgrounds: green for positive, amber for caution, muted white for neutral, red for negative.</p>
+
+  <div class="kpi-demo">
+    <div class="kpi-card"><div class="kpi-label">Total Pipeline Value</div><div class="kpi-value">$142.6M</div><span class="kpi-delta delta-up">↑ +$8.4M vs Q4</span></div>
+    <div class="kpi-card"><div class="kpi-label">Active Deals</div><div class="kpi-value">34</div><span class="kpi-delta delta-up">↑ 6 new this month</span></div>
+    <div class="kpi-card"><div class="kpi-label">Avg. Portfolio LTV</div><div class="kpi-value">67.4%</div><span class="kpi-delta delta-neutral">Within threshold</span></div>
+    <div class="kpi-card"><div class="kpi-label">Closing This Month</div><div class="kpi-value">6</div><span class="kpi-delta delta-warn">⚠ 2 docs pending</span></div>
+  </div>
+
+  <div class="c-card" style="margin-top:12px;">
+    <div class="c-card-label">Delta Variants</div>
+    <div class="component-row">
+      <span class="kpi-delta delta-up">↑ +$8.4M vs Q4</span>
+      <span class="kpi-delta delta-neutral">Within threshold</span>
+      <span class="kpi-delta delta-warn">⚠ 2 docs pending</span>
+      <span class="kpi-delta delta-down">↓ vs $13.1M last month</span>
+    </div>
+  </div>
+</div>
+
+<!-- ══ 08 CONTENT CARDS ══ -->
+<div class="ds-section" id="cards">
+  <div class="ds-section-label"><span class="ds-section-num">08</span><span class="ds-section-name">Content Cards</span><div class="ds-section-line"></div></div>
+  <h2>Content Cards</h2>
+  <p>White background, 1px border, 12px border radius. Used for the three-column underwriting layout, portfolio charts, and panel sections. Card headers use DM Serif Display for the title and JetBrains Mono caps for the label tag.</p>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">Financial Metrics</span>
+        <span class="card-label-tag">Deal Analysis</span>
+      </div>
+      <div class="card-body" style="display:flex;flex-direction:column;gap:8px;">
+        <div style="display:flex;justify-content:space-between;font-size:12px;"><span style="color:var(--mid);">Loan Amount</span><span style="font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:500;">$8,900,000</span></div>
+        <div style="display:flex;justify-content:space-between;font-size:12px;"><span style="color:var(--mid);">Interest Rate</span><span style="font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:500;">6.85% Fixed</span></div>
+        <div style="display:flex;justify-content:space-between;font-size:12px;"><span style="color:var(--mid);">DSCR</span><span style="font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:500;color:var(--green);">1.42 ✓</span></div>
+        <div style="display:flex;justify-content:space-between;font-size:12px;"><span style="color:var(--mid);">Credit Score</span><span style="font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:500;">724</span></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">Risk Assessment</span>
+        <span class="badge badge-amber">1 Caution</span>
+      </div>
+      <div class="card-body" style="display:flex;flex-direction:column;gap:8px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;font-size:12px;"><span style="color:var(--mid);">LTV Within Range</span><span class="badge badge-green">✓ Clear</span></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;font-size:12px;"><span style="color:var(--mid);">DSCR Above Min</span><span class="badge badge-green">✓ Clear</span></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;font-size:12px;"><span style="color:var(--mid);">Environmental Report</span><span class="badge badge-amber">⚠ Pending</span></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;font-size:12px;"><span style="color:var(--mid);">Phase I ESA</span><span class="badge badge-red">✕ Missing</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ 09 TABLE ══ -->
+<div class="ds-section" id="table">
+  <div class="ds-section-label"><span class="ds-section-num">09</span><span class="ds-section-name">Data Table</span><div class="ds-section-line"></div></div>
+  <h2>Data Table</h2>
+  <p>The core interface pattern. Navy header row with muted uppercase column labels. White rows with a subtle hover state. Selected row gets a 3px left accent border in --accent blue. LTV column uses inline mini bars for quick visual scanning.</p>
+
+  <div class="table-demo">
+    <table>
+      <thead>
+        <tr>
+          <th>Deal Name</th>
+          <th>Property Type</th>
+          <th style="text-align:right;">Loan Amount</th>
+          <th style="text-align:right;">LTV</th>
+          <th style="text-align:center;">Stage</th>
+          <th>Officer</th>
+          <th>Close Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="selected">
+          <td><div class="deal-name">Meridian Flats</div><div class="deal-sub">142 Units · Brooklyn, NY</div></td>
+          <td><span class="prop-type">Multifamily</span></td>
+          <td style="text-align:right;"><span class="loan-amt">$8,900,000</span></td>
+          <td style="text-align:right;"><div class="ltv-cell" style="justify-content:flex-end;"><div class="ltv-bar"><div class="ltv-fill" style="width:68%;background:var(--green)"></div></div><span class="ltv-num ltv-normal">68%</span></div></td>
+          <td style="text-align:center;"><span class="pill pill-underwriting"><span class="pill-dot"></span>Underwriting</span></td>
+          <td><div class="officer"><div class="av-sm av-blue">SK</div><span class="officer-name">Sarah K.</span></div></td>
+          <td><span class="close-date soon">Mar 15 ⚠</span></td>
+        </tr>
+        <tr>
+          <td><div class="deal-name">Vantage Industrial Park</div><div class="deal-sub">220,000 SF · Newark, NJ</div></td>
+          <td><span class="prop-type">Industrial</span></td>
+          <td style="text-align:right;"><span class="loan-amt">$14,500,000</span></td>
+          <td style="text-align:right;"><div class="ltv-cell" style="justify-content:flex-end;"><div class="ltv-bar"><div class="ltv-fill" style="width:63%;background:var(--green)"></div></div><span class="ltv-num ltv-normal">63%</span></div></td>
+          <td style="text-align:center;"><span class="pill pill-underwriting"><span class="pill-dot"></span>Underwriting</span></td>
+          <td><div class="officer"><div class="av-sm av-blue">SK</div><span class="officer-name">Sarah K.</span></div></td>
+          <td><span class="close-date">Apr 02</span></td>
+        </tr>
+        <tr>
+          <td><div class="deal-name">Lakeview Commons</div><div class="deal-sub">Mixed retail · Hoboken, NJ</div></td>
+          <td><span class="prop-type">Mixed-Use</span></td>
+          <td style="text-align:right;"><span class="loan-amt">$9,100,000</span></td>
+          <td style="text-align:right;"><div class="ltv-cell" style="justify-content:flex-end;"><div class="ltv-bar"><div class="ltv-fill" style="width:76%;background:var(--red)"></div></div><span class="ltv-num ltv-danger">76% 🔴</span></div></td>
+          <td style="text-align:center;"><span class="pill pill-flagged"><span class="pill-dot"></span>Flagged</span></td>
+          <td><div class="officer"><div class="av-sm av-accent">DC</div><span class="officer-name">David C.</span></div></td>
+          <td><span class="close-date">Apr 18</span></td>
+        </tr>
+        <tr>
+          <td><div class="deal-name">Pinecrest Townhomes</div><div class="deal-sub">32 Units · Montclair, NJ</div></td>
+          <td><span class="prop-type">Residential</span></td>
+          <td style="text-align:right;"><span class="loan-amt">$4,900,000</span></td>
+          <td style="text-align:right;"><div class="ltv-cell" style="justify-content:flex-end;"><div class="ltv-bar"><div class="ltv-fill" style="width:71%;background:var(--amber)"></div></div><span class="ltv-num ltv-warn">71%</span></div></td>
+          <td style="text-align:center;"><span class="pill pill-closing"><span class="pill-dot"></span>Closing</span></td>
+          <td><div class="officer"><div class="av-sm av-green">JR</div><span class="officer-name">James R.</span></div></td>
+          <td><span class="close-date soon">Mar 12 ⚠</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ══ 10 STEPPER ══ -->
+<div class="ds-section" id="stepper">
+  <div class="ds-section-label"><span class="ds-section-num">10</span><span class="ds-section-name">Stepper</span><div class="ds-section-line"></div></div>
+  <h2>Stepper</h2>
+  <p>Used in both the Intake Form (4-step) and the Underwriting screen (5-stage deal lifecycle). Three states: done (green), active (accent blue with glow ring), pending (gray). Connectors turn green as steps complete.</p>
+
+  <div class="c-card">
+    <div class="c-card-label">Intake Form Stepper — Step 2 of 4 Active</div>
+    <div class="stepper-demo">
+      <div class="step step-done"><div class="step-num">✓</div><div><div class="step-label">Property Info</div><div class="step-sublabel">Completed</div></div></div>
+      <div class="step-connector done"></div>
+      <div class="step step-active"><div class="step-num">2</div><div><div class="step-label">Loan Details</div><div class="step-sublabel">In Progress</div></div></div>
+      <div class="step-connector"></div>
+      <div class="step step-pending"><div class="step-num">3</div><div><div class="step-label">Borrower Info</div><div class="step-sublabel">Not started</div></div></div>
+      <div class="step-connector"></div>
+      <div class="step step-pending"><div class="step-num">4</div><div><div class="step-label">Documents</div><div class="step-sublabel">Not started</div></div></div>
+    </div>
+    <div class="c-card-label" style="margin-top:16px;">Deal Lifecycle Stepper — Underwriting Active</div>
+    <div class="stepper-demo">
+      <div class="step step-done"><div class="step-num" style="width:22px;height:22px;font-size:10px;">✓</div><div><div class="step-label" style="font-size:12px;">Intake</div></div></div>
+      <div class="step-connector done" style="width:32px;max-width:32px;margin:0 14px;"></div>
+      <div class="step step-active"><div class="step-num" style="width:22px;height:22px;font-size:10px;">2</div><div><div class="step-label" style="font-size:12px;">Underwriting</div></div></div>
+      <div class="step-connector" style="width:32px;max-width:32px;margin:0 14px;"></div>
+      <div class="step step-pending"><div class="step-num" style="width:22px;height:22px;font-size:10px;">3</div><div><div class="step-label" style="font-size:12px;">Approval</div></div></div>
+      <div class="step-connector" style="width:32px;max-width:32px;margin:0 14px;"></div>
+      <div class="step step-pending"><div class="step-num" style="width:22px;height:22px;font-size:10px;">4</div><div><div class="step-label" style="font-size:12px;">Closing</div></div></div>
+      <div class="step-connector" style="width:32px;max-width:32px;margin:0 14px;"></div>
+      <div class="step step-pending"><div class="step-num" style="width:22px;height:22px;font-size:10px;">5</div><div><div class="step-label" style="font-size:12px;">Closed</div></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ 11 AVATARS ══ -->
+<div class="ds-section" id="avatars">
+  <div class="ds-section-label"><span class="ds-section-num">11</span><span class="ds-section-name">Avatars</span><div class="ds-section-line"></div></div>
+  <h2>Avatars</h2>
+  <p>Initials-based avatars with officer-specific color assignments. Each officer has a consistent color across all screens — Sarah K. is always --blue, David C. is always --accent, Priya M. is always --gold, James R. is always --green.</p>
+
+  <div class="c-card">
+    <div class="c-card-label">Officer Color Map</div>
+    <div style="display:flex;flex-direction:column;gap:14px;">
+      <div class="component-row">
+        <div class="av av-lg" style="background:var(--blue);">SK</div>
+        <div><div style="font-size:13px;font-weight:600;color:var(--navy);">Sarah K.</div><div style="font-size:11px;color:var(--mid);">--blue · #1B4F8A · Loan Officer</div></div>
+      </div>
+      <div class="component-row">
+        <div class="av av-lg" style="background:var(--accent);">DC</div>
+        <div><div style="font-size:13px;font-weight:600;color:var(--navy);">David C.</div><div style="font-size:11px;color:var(--mid);">--accent · #2A7FD4 · Loan Officer</div></div>
+      </div>
+      <div class="component-row">
+        <div class="av av-lg" style="background:#9a7b32;">PM</div>
+        <div><div style="font-size:13px;font-weight:600;color:var(--navy);">Priya M.</div><div style="font-size:11px;color:var(--mid);">Gold dark · #9a7b32 · Loan Officer</div></div>
+      </div>
+      <div class="component-row">
+        <div class="av av-lg" style="background:var(--green);">JR</div>
+        <div><div style="font-size:13px;font-weight:600;color:var(--navy);">James R.</div><div style="font-size:11px;color:var(--mid);">--green · #16A34A · Senior Loan Officer</div></div>
+      </div>
+      <div class="component-row">
+        <div class="av av-lg" style="background:var(--purple);">MR</div>
+        <div><div style="font-size:13px;font-weight:600;color:var(--navy);">M. Rodriguez</div><div style="font-size:11px;color:var(--mid);">--purple · #7C3AED · Portfolio Director</div></div>
+      </div>
+    </div>
+    <div class="divider"></div>
+    <div class="c-card-label">Sizes</div>
+    <div class="component-row" style="align-items:center;">
+      <div class="av-sm2" style="background:var(--blue);">SK</div>
+      <span style="font-size:11px;color:var(--mid);">sm — 24×24 · table rows</span>
+    </div>
+    <div class="component-row" style="align-items:center;">
+      <div class="av" style="background:var(--blue);">SK</div>
+      <span style="font-size:11px;color:var(--mid);">md — 30×30 · sidebar footer</span>
+    </div>
+    <div class="component-row" style="align-items:center;">
+      <div class="av av-lg" style="background:var(--blue);">SK</div>
+      <span style="font-size:11px;color:var(--mid);">lg — 44×44 · panel headers, profile views</span>
+    </div>
+  </div>
+</div>
+
+<!-- ══ 12 PROGRESS ══ -->
+<div class="ds-section" id="progress">
+  <div class="ds-section-label"><span class="ds-section-num">12</span><span class="ds-section-name">Progress</span><div class="ds-section-line"></div></div>
+  <h2>Progress Bars</h2>
+  <p>Used in the side panel document checklist. Color maps to completion status — green for healthy progress, amber for partial, red for at-risk. Height is 5–6px, always with rounded ends.</p>
+
+  <div class="c-card">
+    <div style="display:flex;flex-direction:column;gap:18px;">
+      <div class="progress-wrap">
+        <div class="progress-header"><span class="progress-label">Documents Complete</span><span class="progress-val">5 / 8</span></div>
+        <div class="progress-track"><div class="progress-fill pf-green" style="width:62.5%"></div></div>
+        <div style="font-size:10px;color:var(--mid);margin-top:4px;">62.5% · 1 missing blocker</div>
+      </div>
+      <div class="progress-wrap">
+        <div class="progress-header"><span class="progress-label">Portfolio LTV Health</span><span class="progress-val">67.4%</span></div>
+        <div class="progress-track"><div class="progress-fill pf-amber" style="width:67.4%"></div></div>
+        <div style="font-size:10px;color:var(--mid);margin-top:4px;">Approaching threshold — monitor closely</div>
+      </div>
+      <div class="progress-wrap">
+        <div class="progress-header"><span class="progress-label">LTV Breach</span><span class="progress-val" style="color:var(--red);">76%</span></div>
+        <div class="progress-track"><div class="progress-fill pf-red" style="width:76%"></div></div>
+        <div style="font-size:10px;color:var(--red);margin-top:4px;">Above 75% threshold — escalate</div>
+      </div>
+      <div class="progress-wrap">
+        <div class="progress-header"><span class="progress-label">Origination Volume</span><span class="progress-val">$11.2M</span></div>
+        <div class="progress-track"><div class="progress-fill pf-blue" style="width:72%"></div></div>
+        <div style="font-size:10px;color:var(--mid);margin-top:4px;">72% of $15.5M quarterly target</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ 13 NOTIFICATIONS ══ -->
+<div class="ds-section" id="notifications">
+  <div class="ds-section-label"><span class="ds-section-num">13</span><span class="ds-section-name">Notifications</span><div class="ds-section-line"></div></div>
+  <h2>Notification Items</h2>
+  <p>Three severity tiers, each with a left border accent and a colored icon container. Critical (red) → Deadline warning (amber) → Informational (blue). Unread items show a small dot badge in the top-right corner.</p>
+
+  <div class="notif-item crit">
+    <div class="notif-icon-wrap ni-red">✕</div>
+    <div style="flex:1;">
+      <div class="notif-title">Missing document blocking approval — Phase I ESA</div>
+      <div class="notif-desc">Required before Credit Review. Meridian Flats cannot proceed until received.</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px;">
+        <span class="badge badge-red">Meridian Flats</span>
+        <span class="pill pill-underwriting" style="font-size:9px;"><span class="pill-dot"></span>Underwriting</span>
+        <span style="font-size:11px;color:var(--mid);">Flagged 2 hours ago</span>
+      </div>
+    </div>
+    <div class="notif-dot-badge nd-red"></div>
+  </div>
+
+  <div class="notif-item warn">
+    <div class="notif-icon-wrap ni-amber">⚠</div>
+    <div style="flex:1;">
+      <div class="notif-title">Target close in 11 days — docs still pending</div>
+      <div class="notif-desc">Meridian Flats scheduled for Mar 15. Two documents pending, one missing.</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px;">
+        <span class="badge badge-amber">Deadline</span>
+        <span style="font-size:11px;color:var(--mid);">Close: Mar 15, 2026</span>
+      </div>
+    </div>
+    <div class="notif-dot-badge nd-amber"></div>
+  </div>
+
+  <div class="notif-item info">
+    <div class="notif-icon-wrap ni-green">✓</div>
+    <div style="flex:1;">
+      <div class="notif-title">Deal approved — ready to move to closing</div>
+      <div class="notif-desc">Westfield Logistics Hub approved by credit committee. Term sheet issued.</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px;">
+        <span class="badge badge-green">Approved</span>
+        <span style="font-size:11px;color:var(--mid);">Yesterday, 4:31pm</span>
+      </div>
+    </div>
+    <div class="notif-dot-badge nd-blue"></div>
+  </div>
+</div>
+
+<!-- ══ SIDEBAR COMPONENT ══ -->
+<div class="ds-section" id="sidebar-comp">
+  <div class="ds-section-label"><span class="ds-section-num">P1</span><span class="ds-section-name">Pattern — Sidebar Nav</span><div class="ds-section-line"></div></div>
+  <h2>Sidebar Navigation</h2>
+  <p>Fixed 220px sidebar on navy background. Three sections: Main (deal screens), Tools (reports, activity, intake), Admin (settings). Active state uses a semi-transparent accent blue background. Badge counts on nav items signal pending work without forcing navigation.</p>
+
+  <div style="display:flex;gap:24px;align-items:flex-start;flex-wrap:wrap;">
+    <div class="sidebar-demo">
+      <div class="sd-logo"><div class="sd-logo-mark">Simple<span>CITI</span></div><div class="sd-logo-sub">CRE Lending Platform</div></div>
+      <div class="sd-section">
+        <span class="sd-label">Main</span>
+        <div class="sd-item active"><span>⬡</span> Pipeline <span class="sd-badge">34</span></div>
+        <div class="sd-item"><span>◈</span> Deals</div>
+        <div class="sd-item"><span>⊞</span> Underwriting <span class="sd-badge" style="background:var(--amber);">8</span></div>
+        <div class="sd-item"><span>◎</span> Portfolio</div>
+      </div>
+      <div class="sd-section">
+        <span class="sd-label">Tools</span>
+        <div class="sd-item"><span>⊟</span> Reports</div>
+        <div class="sd-item"><span>◷</span> Activity Log <span class="sd-badge" style="background:var(--red);">5</span></div>
+        <div class="sd-item"><span>⊕</span> Intake Form</div>
+      </div>
+    </div>
+    <div style="flex:1;min-width:200px;">
+      <div class="c-card">
+        <div class="c-card-label">Sidebar Specs</div>
+        <div style="display:flex;flex-direction:column;gap:8px;font-size:12px;color:var(--mid);">
+          <div style="display:flex;justify-content:space-between;"><span>Width</span><span style="font-family:'JetBrains Mono',monospace;color:var(--navy);">220px fixed</span></div>
+          <div style="display:flex;justify-content:space-between;"><span>Background</span><span style="font-family:'JetBrains Mono',monospace;color:var(--navy);">--navy</span></div>
+          <div style="display:flex;justify-content:space-between;"><span>Active state bg</span><span style="font-family:'JetBrains Mono',monospace;color:var(--navy);">accent 18% opacity</span></div>
+          <div style="display:flex;justify-content:space-between;"><span>Item padding</span><span style="font-family:'JetBrains Mono',monospace;color:var(--navy);">9px 10px</span></div>
+          <div style="display:flex;justify-content:space-between;"><span>Item border-radius</span><span style="font-family:'JetBrains Mono',monospace;color:var(--navy);">7px</span></div>
+          <div style="display:flex;justify-content:space-between;"><span>Section label</span><span style="font-family:'JetBrains Mono',monospace;color:var(--navy);">Mono 9px caps</span></div>
+          <div style="display:flex;justify-content:space-between;"><span>Dividers</span><span style="font-family:'JetBrains Mono',monospace;color:var(--navy);">white 7% opacity</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ LTV GAUGE ══ -->
+<div class="ds-section" id="ltv">
+  <div class="ds-section-label"><span class="ds-section-num">P2</span><span class="ds-section-name">Pattern — LTV Gauge</span><div class="ds-section-line"></div></div>
+  <h2>LTV Gauge</h2>
+  <p>A domain-specific pattern. LTV (Loan-to-Value ratio) is the primary risk signal in CRE lending — it appears in the table, the side panel, and the underwriting screen. Three states: safe (&lt;70%), warning (70–74%), danger (75%+).</p>
+
+  <div class="c-card">
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:24px;">
+      <div class="ltv-gauge-wrap">
+        <div class="c-card-label">Safe — &lt; 70%</div>
+        <div class="ltv-header"><span class="ltv-big safe">68.0%</span><span class="ltv-threshold">75% max</span></div>
+        <div class="ltv-gauge-track"><div class="ltv-gauge-fill safe" style="width:68%"></div></div>
+        <div class="ltv-gauge-labels"><span>0%</span><span>75%</span><span>100%</span></div>
+        <div style="margin-top:8px;"><span class="badge badge-green">✓ Within threshold</span></div>
+      </div>
+      <div class="ltv-gauge-wrap">
+        <div class="c-card-label">Warning — 70–74%</div>
+        <div class="ltv-header"><span class="ltv-big warn">71.0%</span><span class="ltv-threshold">75% max</span></div>
+        <div class="ltv-gauge-track"><div class="ltv-gauge-fill warn" style="width:71%"></div></div>
+        <div class="ltv-gauge-labels"><span>0%</span><span>75%</span><span>100%</span></div>
+        <div style="margin-top:8px;"><span class="badge badge-amber">⚠ Monitor closely</span></div>
+      </div>
+      <div class="ltv-gauge-wrap">
+        <div class="c-card-label">Danger — &gt; 75%</div>
+        <div class="ltv-header"><span class="ltv-big danger">76.2%</span><span class="ltv-threshold">75% max</span></div>
+        <div class="ltv-gauge-track"><div class="ltv-gauge-fill danger" style="width:76.2%"></div></div>
+        <div class="ltv-gauge-labels"><span>0%</span><span>75%</span><span>100%</span></div>
+        <div style="margin-top:8px;"><span class="badge badge-red">🔴 Breach — escalate</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ CAP STACK ══ -->
+<div class="ds-section" id="capstack">
+  <div class="ds-section-label"><span class="ds-section-num">P3</span><span class="ds-section-name">Pattern — Capital Stack</span><div class="ds-section-line"></div></div>
+  <h2>Capital Stack</h2>
+  <p>A proportional horizontal bar visualizing the three-part capital structure of a CRE deal. Senior Debt in --blue, Mezzanine in --accent, Equity in --gold. Percentages are always shown as text inside each segment when wide enough.</p>
+
+  <div class="c-card">
+    <div class="c-card-label">Meridian Flats — $8,900,000</div>
+    <div class="cap-bar">
+      <div class="cap-seg cap-senior" style="width:72%;">72% Senior</div>
+      <div class="cap-seg cap-mezz" style="width:10%;">10%</div>
+      <div class="cap-seg cap-equity" style="width:18%;">18% Eq.</div>
+    </div>
+    <div class="cap-legend">
+      <div class="cap-legend-item"><div class="cap-dot" style="background:var(--blue)"></div>Senior Debt — $6,408,000 · 72%</div>
+      <div class="cap-legend-item"><div class="cap-dot" style="background:var(--accent)"></div>Mezzanine — $890,000 · 10%</div>
+      <div class="cap-legend-item"><div class="cap-dot" style="background:var(--gold)"></div>Equity — $1,602,000 · 18%</div>
+    </div>
+    <div class="divider"></div>
+    <div class="c-card-label">Color Key</div>
+    <div style="display:flex;gap:16px;">
+      <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--mid);"><div style="width:14px;height:14px;border-radius:3px;background:var(--blue)"></div>Senior Debt · --blue</div>
+      <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--mid);"><div style="width:14px;height:14px;border-radius:3px;background:var(--accent)"></div>Mezzanine · --accent</div>
+      <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--mid);"><div style="width:14px;height:14px;border-radius:3px;background:var(--gold)"></div>Equity · --gold</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ DOC CHECKLIST ══ -->
+<div class="ds-section" id="doclist">
+  <div class="ds-section-label"><span class="ds-section-num">P4</span><span class="ds-section-name">Pattern — Document Checklist</span><div class="ds-section-line"></div></div>
+  <h2>Document Checklist</h2>
+  <p>Used in the side panel and the underwriting screen. Three document states: Done (green), Pending (amber), Missing (red). Missing is always highlighted in red text — it's the blocker that stalls deals most frequently.</p>
+
+  <div class="c-card" style="max-width:360px;">
+    <div class="c-card-label">Meridian Flats — 5 of 8 Complete</div>
+    <div style="margin-bottom:14px;">
+      <div style="height:5px;background:var(--border);border-radius:3px;overflow:hidden;margin-bottom:5px;"><div style="height:100%;width:62.5%;background:var(--green);border-radius:3px;"></div></div>
+      <div style="font-size:11px;color:var(--mid);">5 of 8 documents complete · <span style="color:var(--red);font-weight:600;">1 missing blocker</span></div>
+    </div>
+    <div class="doc-list">
+      <div class="doc-item"><span class="doc-icon">✓</span><span class="doc-name">Appraisal Report</span><span class="doc-tag doc-done">Done</span></div>
+      <div class="doc-item"><span class="doc-icon">✓</span><span class="doc-name">Title Search</span><span class="doc-tag doc-done">Done</span></div>
+      <div class="doc-item"><span class="doc-icon">✓</span><span class="doc-name">Borrower Financials</span><span class="doc-tag doc-done">Done</span></div>
+      <div class="doc-item"><span class="doc-icon">✓</span><span class="doc-name">Rent Roll</span><span class="doc-tag doc-done">Done</span></div>
+      <div class="doc-item"><span class="doc-icon">⏳</span><span class="doc-name">Environmental Report</span><span class="doc-tag doc-pending">Pending</span></div>
+      <div class="doc-item"><span class="doc-icon">⏳</span><span class="doc-name">Loan Agreement Draft</span><span class="doc-tag doc-pending">Pending</span></div>
+      <div class="doc-item"><span class="doc-icon">✕</span><span class="doc-name" style="color:var(--red);font-weight:600;">Phase I ESA</span><span class="doc-tag doc-missing">Missing</span></div>
+      <div class="doc-item"><span class="doc-icon">✓</span><span class="doc-name">Borrower Entity Docs</span><span class="doc-tag doc-done">Done</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ DO / DON'T ══ -->
+<div class="ds-section" id="dodont">
+  <div class="ds-section-label"><span class="ds-section-num">P5</span><span class="ds-section-name">Do / Don't</span><div class="ds-section-line"></div></div>
+  <h2>Usage Guidelines</h2>
+  <p>Key rules for maintaining visual and functional consistency across SimpleCITI screens.</p>
+
+  <div class="do-dont">
+    <div class="do-card"><div class="dd-label">✓ Do</div><div class="dd-text">Use --navy for all sidebar, table header, and KPI card backgrounds. It's the primary brand surface.</div></div>
+    <div class="dont-card"><div class="dd-label">✕ Don't</div><div class="dd-text">Use navy for content cards or panels. White (#fff) is always the surface for interactive content areas.</div></div>
+  </div>
+  <div class="do-dont">
+    <div class="do-card"><div class="dd-label">✓ Do</div><div class="dd-text">Use JetBrains Mono for ALL financial figures — LTV, loan amounts, DSCR, interest rates. Every number a loan officer acts on.</div></div>
+    <div class="dont-card"><div class="dd-label">✕ Don't</div><div class="dd-text">Mix DM Sans and JetBrains Mono for the same type of data. Monospaced numerals are a deliberate trust signal — be consistent.</div></div>
+  </div>
+  <div class="do-dont">
+    <div class="do-card"><div class="dd-label">✓ Do</div><div class="dd-text">Use the stage pill system consistently. Each stage has one fixed color — never use amber for Approved or green for Underwriting.</div></div>
+    <div class="dont-card"><div class="dd-label">✕ Don't</div><div class="dd-text">Create new pill colors for edge cases. Use the Flagged (red) pill for any deal with a blocker, regardless of its current stage.</div></div>
+  </div>
+  <div class="do-dont">
+    <div class="do-card"><div class="dd-label">✓ Do</div><div class="dd-text">Use --gold sparingly — logo, the CITI mark, key highlights, and equity in the capital stack. It's a brand accent, not a general purpose color.</div></div>
+    <div class="dont-card"><div class="dd-label">✕ Don't</div><div class="dd-text">Use gold for interactive elements, buttons, or status indicators. Those roles belong to --accent blue and the semantic colors.</div></div>
+  </div>
+  <div class="do-dont">
+    <div class="do-card"><div class="dd-label">✓ Do</div><div class="dd-text">Surface LTV at row level in the pipeline table. It must be visible without a click — it's the first metric a loan officer checks.</div></div>
+    <div class="dont-card"><div class="dd-label">✕ Don't</div><div class="dd-text">Hide LTV or any primary risk signal behind a drill-down. If it requires a click to find, it's creating overhead — not reducing it.</div></div>
+  </div>
+</div>
+
+</div><!-- end main -->
+
+<script>
+const links = document.querySelectorAll('.sn-link');
+const sections = document.querySelectorAll('.ds-section[id]');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      links.forEach(l => l.classList.remove('active'));
+      const a = document.querySelector(`.sn-link[href="#${e.target.id}"]`);
+      if (a) a.classList.add('active');
+    }
+  });
+}, { threshold: 0.2, rootMargin: '0px 0px -55% 0px' });
+sections.forEach(s => observer.observe(s));
+</script>
+
+</body>
+</html>

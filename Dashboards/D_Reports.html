@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>SimpleCITI — Reports</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --navy: #0D1B2A; --blue: #1B4F8A; --accent: #2A7FD4; --gold: #C9A84C;
+  --cream: #F7F4EF; --offwhite: #FAFAF8; --mid: #6B7280; --border: #E5E1D8;
+  --text: #1A1A1A; --green: #16A34A; --amber: #D97706; --red: #DC2626; --purple: #7C3AED;
+  --sidebar-w: 220px;
+}
+body { font-family: 'DM Sans', sans-serif; background: var(--offwhite); color: var(--text); font-size: 14px; display: flex; height: 100vh; overflow: hidden; }
+
+/* SIDEBAR */
+.sidebar {
+  width: var(--sidebar-w); background: var(--navy); display: flex; flex-direction: column;
+  flex-shrink: 0; height: 100vh; overflow-y: auto;
+}
+.sidebar-logo { padding: 24px 20px 20px; border-bottom: 1px solid rgba(255,255,255,0.07); }
+.logo-mark { font-family: 'DM Serif Display', serif; font-size: 20px; color: #fff; letter-spacing: -0.5px; }
+.logo-mark span { color: var(--gold); }
+.logo-sub { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: rgba(255,255,255,0.3); text-transform: uppercase; letter-spacing: 0.15em; margin-top: 3px; }
+
+.nav-section { padding: 20px 12px 8px; }
+.nav-section-label { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: rgba(255,255,255,0.25); text-transform: uppercase; letter-spacing: 0.15em; padding: 0 8px; margin-bottom: 6px; }
+.nav-item {
+  display: flex; align-items: center; gap: 10px; padding: 9px 10px; border-radius: 7px;
+  color: rgba(255,255,255,0.45); font-size: 13px; font-weight: 500; cursor: pointer;
+  transition: all 0.15s; margin-bottom: 2px; text-decoration: none;
+}
+.nav-item:hover { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.8); }
+.nav-item.active { background: rgba(42,127,212,0.18); color: #fff; }
+.nav-item.active .nav-icon { color: var(--accent); }
+.nav-icon { font-size: 15px; width: 18px; text-align: center; flex-shrink: 0; }
+.nav-badge { margin-left: auto; background: var(--accent); color: #fff; font-size: 10px; font-weight: 600; padding: 2px 7px; border-radius: 10px; }
+
+.sidebar-footer { margin-top: auto; padding: 16px 12px; border-top: 1px solid rgba(255,255,255,0.07); }
+.user-chip { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 8px; cursor: pointer; }
+.user-chip:hover { background: rgba(255,255,255,0.06); }
+.avatar { width: 30px; height: 30px; border-radius: 50%; background: var(--purple); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: #fff; flex-shrink: 0; }
+.user-name { font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.75); }
+.user-role { font-size: 10px; color: rgba(255,255,255,0.3); }
+
+/* MAIN */
+.main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+
+/* TOPBAR */
+.topbar {
+  background: #fff; border-bottom: 1px solid var(--border);
+  padding: 0 28px; height: 60px; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0;
+}
+.topbar-left { display: flex; align-items: center; gap: 16px; }
+.page-title { font-family: 'DM Serif Display', serif; font-size: 20px; color: var(--navy); }
+.breadcrumb { font-size: 12px; color: var(--mid); }
+.topbar-right { display: flex; align-items: center; gap: 10px; }
+.btn {
+  display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px; border-radius: 7px;
+  font-size: 12px; font-weight: 600; cursor: pointer; border: none; transition: all 0.15s;
+}
+.btn-primary { background: var(--accent); color: #fff; }
+.btn-primary:hover { background: #2270bb; }
+.btn-ghost { background: transparent; color: var(--mid); border: 1px solid var(--border); }
+.btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+
+/* CONTENT */
+.content { flex: 1; overflow-y: auto; padding: 24px 28px; }
+
+/* TWO-COL LAYOUT */
+.two-col { display: grid; grid-template-columns: 1fr 340px; gap: 20px; align-items: start; }
+
+/* SECTION HEADER */
+.section-header { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+.section-title { font-family: 'DM Serif Display', serif; font-size: 17px; color: var(--navy); }
+.section-badge { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--mid); background: var(--cream); border: 1px solid var(--border); padding: 2px 9px; border-radius: 10px; }
+
+/* REPORT CARDS */
+.report-list { display: flex; flex-direction: column; gap: 10px; animation: fadeUp 0.4s ease both; }
+.report-card {
+  background: #fff; border: 1px solid var(--border); border-radius: 10px;
+  padding: 16px 18px; display: flex; align-items: center; gap: 14px;
+  transition: border-color 0.15s, box-shadow 0.15s; cursor: pointer;
+}
+.report-card:hover { border-color: var(--accent); box-shadow: 0 2px 12px rgba(42,127,212,0.08); }
+.report-icon { font-size: 22px; width: 40px; height: 40px; border-radius: 8px; background: var(--cream); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.report-info { flex: 1; min-width: 0; }
+.report-name { font-weight: 600; font-size: 13px; color: var(--navy); margin-bottom: 3px; }
+.report-desc { font-size: 12px; color: var(--mid); line-height: 1.4; }
+.report-meta { display: flex; align-items: center; gap: 6px; margin-top: 5px; }
+.report-last { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--mid); }
+.report-last-today { color: var(--green); font-weight: 600; }
+.report-actions { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+.btn-generate {
+  padding: 6px 13px; border-radius: 7px; font-size: 11px; font-weight: 600;
+  border: 1px solid var(--border); background: #fff; color: var(--mid);
+  cursor: pointer; white-space: nowrap; font-family: 'DM Sans', sans-serif;
+  transition: all 0.15s;
+}
+.btn-generate:hover { border-color: var(--accent); color: var(--accent); }
+
+/* SIDEBAR CARDS */
+.sidebar-card { border-radius: 10px; overflow: hidden; margin-bottom: 14px; animation: fadeUp 0.4s 0.15s ease both; }
+.sidebar-card-navy { background: var(--navy); }
+.sidebar-card-white { background: #fff; border: 1px solid var(--border); }
+
+.sc-header { padding: 14px 16px 12px; display: flex; align-items: center; justify-content: space-between; }
+.sc-title-navy { font-family: 'DM Serif Display', serif; font-size: 14px; color: #fff; }
+.sc-title { font-family: 'DM Serif Display', serif; font-size: 14px; color: var(--navy); }
+.sc-add { font-size: 11px; color: var(--accent); cursor: pointer; font-weight: 600; }
+.sc-add-dark { font-size: 11px; color: rgba(255,255,255,0.4); cursor: pointer; font-weight: 600; transition: color 0.15s; }
+.sc-add-dark:hover { color: rgba(255,255,255,0.7); }
+
+/* SCHEDULED ITEMS */
+.sched-list { padding: 0 16px 14px; display: flex; flex-direction: column; gap: 1px; }
+.sched-item {
+  display: flex; align-items: center; gap: 10px; padding: 10px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.sched-item:last-child { border-bottom: none; }
+.sched-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+.sched-dot-green { background: #4ade80; }
+.sched-dot-amber { background: #fbbf24; }
+.sched-info { flex: 1; min-width: 0; }
+.sched-name { font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.85); }
+.sched-freq { font-size: 10px; color: rgba(255,255,255,0.35); margin-top: 2px; }
+.sched-status { font-size: 10px; font-weight: 600; }
+.sched-status-active { color: #4ade80; }
+.sched-status-paused { color: #fbbf24; }
+.sched-add { display: flex; align-items: center; gap: 6px; padding: 10px 16px 14px; font-size: 11px; color: rgba(255,255,255,0.4); cursor: pointer; font-weight: 600; transition: color 0.15s; }
+.sched-add:hover { color: rgba(255,255,255,0.7); }
+
+/* RECENT LIST */
+.recent-list { padding: 0 16px 14px; display: flex; flex-direction: column; gap: 1px; }
+.recent-item {
+  display: flex; align-items: center; gap: 10px; padding: 9px 0;
+  border-bottom: 1px solid var(--border);
+}
+.recent-item:last-child { border-bottom: none; }
+.recent-icon { font-size: 15px; flex-shrink: 0; }
+.recent-info { flex: 1; min-width: 0; }
+.recent-name { font-size: 12px; font-weight: 600; color: var(--navy); }
+.recent-meta { font-size: 10px; color: var(--mid); margin-top: 2px; }
+.recent-dl { font-size: 14px; color: var(--mid); cursor: pointer; padding: 3px 6px; border-radius: 5px; border: 1px solid var(--border); background: #fff; transition: all 0.12s; }
+.recent-dl:hover { border-color: var(--accent); color: var(--accent); }
+
+/* AV */
+.av-xs { width: 18px; height: 18px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 8px; font-weight: 700; color: #fff; vertical-align: middle; }
+
+@keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+/* SCROLLBAR */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-mark">Simple<span>CITI</span></div>
+    <div class="logo-sub">CRE Lending Platform</div>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-section-label">Main</div>
+    <a class="nav-item" href="#">
+      <span class="nav-icon">⬡</span> Pipeline
+      <span class="nav-badge">34</span>
+    </a>
+    <a class="nav-item" href="#">
+      <span class="nav-icon">◈</span> Deals
+      <span class="nav-badge" style="background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.35);">12</span>
+    </a>
+    <a class="nav-item" href="#">
+      <span class="nav-icon">⊞</span> Underwriting
+      <span class="nav-badge" style="background:#D97706;">8</span>
+    </a>
+    <a class="nav-item" href="#">
+      <span class="nav-icon">◎</span> Portfolio
+    </a>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-section-label">Tools</div>
+    <a class="nav-item active" href="#">
+      <span class="nav-icon">⊟</span> Reports
+    </a>
+    <a class="nav-item" href="#">
+      <span class="nav-icon">◷</span> Activity Log
+    </a>
+    <a class="nav-item" href="#">
+      <span class="nav-icon">⊕</span> Intake Form
+    </a>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-section-label">Admin</div>
+    <a class="nav-item" href="#">
+      <span class="nav-icon">⊙</span> Settings
+    </a>
+  </div>
+
+  <div class="sidebar-footer">
+    <div class="user-chip">
+      <div class="avatar">MR</div>
+      <div>
+        <div class="user-name">M. Rodriguez</div>
+        <div class="user-role">Portfolio Director</div>
+      </div>
+    </div>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<div class="main">
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="page-title">Reports</div>
+      <div class="breadcrumb">Generate, schedule, and export pipeline reports</div>
+    </div>
+    <div class="topbar-right">
+      <button class="btn btn-ghost">⬇ Export All</button>
+      <button class="btn btn-primary">+ New Report</button>
+    </div>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="content">
+    <div class="two-col">
+
+      <!-- LEFT: Report Library -->
+      <div>
+        <div class="section-header">
+          <span class="section-title">Available Reports</span>
+          <span class="section-badge">12 templates</span>
+        </div>
+
+        <div class="report-list">
+
+          <div class="report-card">
+            <div class="report-icon">📊</div>
+            <div class="report-info">
+              <div class="report-name">Pipeline Summary</div>
+              <div class="report-desc">Full pipeline snapshot: deal count, total value, stage distribution, LTV range.</div>
+              <div class="report-meta">
+                <span class="report-last report-last-today">Last generated: Today</span>
+              </div>
+            </div>
+            <div class="report-actions">
+              <button class="btn-generate">Generate &rarr;</button>
+            </div>
+          </div>
+
+          <div class="report-card">
+            <div class="report-icon">📋</div>
+            <div class="report-info">
+              <div class="report-name">LTV Exposure Report</div>
+              <div class="report-desc">LTV distribution across active portfolio. Flags deals exceeding 70% threshold.</div>
+              <div class="report-meta">
+                <span class="report-last">Last generated: Mar 3</span>
+              </div>
+            </div>
+            <div class="report-actions">
+              <button class="btn-generate">Generate &rarr;</button>
+            </div>
+          </div>
+
+          <div class="report-card">
+            <div class="report-icon">📈</div>
+            <div class="report-info">
+              <div class="report-name">Origination Volume</div>
+              <div class="report-desc">Monthly origination trend with quarter-over-quarter comparison and growth rate.</div>
+              <div class="report-meta">
+                <span class="report-last">Last generated: Mar 1</span>
+              </div>
+            </div>
+            <div class="report-actions">
+              <button class="btn-generate">Generate &rarr;</button>
+            </div>
+          </div>
+
+          <div class="report-card">
+            <div class="report-icon">🏢</div>
+            <div class="report-info">
+              <div class="report-name">Property Type Breakdown</div>
+              <div class="report-desc">Portfolio mix by asset class with concentration risk flags and exposure limits.</div>
+              <div class="report-meta">
+                <span class="report-last">Last generated: Feb 28</span>
+              </div>
+            </div>
+            <div class="report-actions">
+              <button class="btn-generate">Generate &rarr;</button>
+            </div>
+          </div>
+
+          <div class="report-card">
+            <div class="report-icon">👤</div>
+            <div class="report-info">
+              <div class="report-name">Officer Performance</div>
+              <div class="report-desc">Deal count, volume, avg LTV, and close rate by loan officer for the current period.</div>
+              <div class="report-meta">
+                <span class="report-last">Last generated: Feb 28</span>
+              </div>
+            </div>
+            <div class="report-actions">
+              <button class="btn-generate">Generate &rarr;</button>
+            </div>
+          </div>
+
+          <div class="report-card">
+            <div class="report-icon">⚖️</div>
+            <div class="report-info">
+              <div class="report-name">Compliance Checklist</div>
+              <div class="report-desc">Document completion rates across all active deals. Surfaces missing doc flags.</div>
+              <div class="report-meta">
+                <span class="report-last">Last generated: Feb 25</span>
+              </div>
+            </div>
+            <div class="report-actions">
+              <button class="btn-generate">Generate &rarr;</button>
+            </div>
+          </div>
+
+          <div class="report-card">
+            <div class="report-icon">📋</div>
+            <div class="report-info">
+              <div class="report-name">Closing Schedule</div>
+              <div class="report-desc">All deals targeting close within 30/60/90 days with document status and officer.</div>
+              <div class="report-meta">
+                <span class="report-last">Last generated: Feb 20</span>
+              </div>
+            </div>
+            <div class="report-actions">
+              <button class="btn-generate">Generate &rarr;</button>
+            </div>
+          </div>
+
+          <div class="report-card">
+            <div class="report-icon">📊</div>
+            <div class="report-info">
+              <div class="report-name">DSCR Analysis</div>
+              <div class="report-desc">Debt service coverage ratios across portfolio with risk banding and trend overlay.</div>
+              <div class="report-meta">
+                <span class="report-last">Last generated: Feb 15</span>
+              </div>
+            </div>
+            <div class="report-actions">
+              <button class="btn-generate">Generate &rarr;</button>
+            </div>
+          </div>
+
+        </div><!-- /report-list -->
+      </div><!-- /left -->
+
+      <!-- RIGHT: Sidebar -->
+      <div>
+
+        <!-- Scheduled Reports -->
+        <div class="sidebar-card sidebar-card-navy">
+          <div class="sc-header">
+            <span class="sc-title-navy">Scheduled Reports</span>
+          </div>
+          <div class="sched-list">
+            <div class="sched-item">
+              <span class="sched-dot sched-dot-green"></span>
+              <div class="sched-info">
+                <div class="sched-name">Pipeline Summary</div>
+                <div class="sched-freq">Every Monday &middot; 8:00 am</div>
+              </div>
+              <span class="sched-status sched-status-active">Active</span>
+            </div>
+            <div class="sched-item">
+              <span class="sched-dot sched-dot-green"></span>
+              <div class="sched-info">
+                <div class="sched-name">LTV Exposure</div>
+                <div class="sched-freq">1st of month</div>
+              </div>
+              <span class="sched-status sched-status-active">Active</span>
+            </div>
+            <div class="sched-item">
+              <span class="sched-dot sched-dot-amber"></span>
+              <div class="sched-info">
+                <div class="sched-name">Officer Performance</div>
+                <div class="sched-freq">Every Friday</div>
+              </div>
+              <span class="sched-status sched-status-paused">Paused</span>
+            </div>
+          </div>
+          <div class="sched-add">
+            <span>+</span> Add Schedule
+          </div>
+        </div>
+
+        <!-- Recently Generated -->
+        <div class="sidebar-card sidebar-card-white">
+          <div class="sc-header" style="border-bottom: 1px solid var(--border); padding-bottom: 12px;">
+            <span class="sc-title">Recently Generated</span>
+          </div>
+          <div class="recent-list">
+
+            <div class="recent-item">
+              <span class="recent-icon">📊</span>
+              <div class="recent-info">
+                <div class="recent-name">Pipeline Summary</div>
+                <div class="recent-meta">
+                  Today 9:14 am &middot;
+                  <span class="av-xs" style="background:var(--green); margin: 0 2px;">JR</span>
+                  James R.
+                </div>
+              </div>
+              <button class="recent-dl" title="Download">↓</button>
+            </div>
+
+            <div class="recent-item">
+              <span class="recent-icon">📋</span>
+              <div class="recent-info">
+                <div class="recent-name">LTV Exposure</div>
+                <div class="recent-meta">
+                  Mar 3 &middot;
+                  <span class="av-xs" style="background:var(--purple); margin: 0 2px;">MR</span>
+                  M. Rodriguez
+                </div>
+              </div>
+              <button class="recent-dl" title="Download">↓</button>
+            </div>
+
+            <div class="recent-item">
+              <span class="recent-icon">📈</span>
+              <div class="recent-info">
+                <div class="recent-name">Origination Volume</div>
+                <div class="recent-meta">
+                  Mar 1 &middot;
+                  <span class="av-xs" style="background:var(--purple); margin: 0 2px;">MR</span>
+                  M. Rodriguez
+                </div>
+              </div>
+              <button class="recent-dl" title="Download">↓</button>
+            </div>
+
+            <div class="recent-item">
+              <span class="recent-icon">🏢</span>
+              <div class="recent-info">
+                <div class="recent-name">Property Type</div>
+                <div class="recent-meta">
+                  Feb 28 &middot;
+                  <span class="av-xs" style="background:var(--blue); margin: 0 2px;">SK</span>
+                  Sarah K.
+                </div>
+              </div>
+              <button class="recent-dl" title="Download">↓</button>
+            </div>
+
+            <div class="recent-item">
+              <span class="recent-icon">👤</span>
+              <div class="recent-info">
+                <div class="recent-name">Officer Performance</div>
+                <div class="recent-meta">
+                  Feb 28 &middot;
+                  <span class="av-xs" style="background:var(--purple); margin: 0 2px;">MR</span>
+                  M. Rodriguez
+                </div>
+              </div>
+              <button class="recent-dl" title="Download">↓</button>
+            </div>
+
+          </div>
+        </div>
+
+      </div><!-- /right sidebar -->
+    </div><!-- /two-col -->
+  </div><!-- /content -->
+</div><!-- /main -->
+
+</body>
+</html>

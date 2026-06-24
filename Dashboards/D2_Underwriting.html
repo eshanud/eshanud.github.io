@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>SimpleCITI — Deal Underwriting</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --navy:#0D1B2A; --blue:#1B4F8A; --accent:#2A7FD4; --gold:#C9A84C;
+  --cream:#F7F4EF; --offwhite:#FAFAF8; --mid:#6B7280; --border:#E5E1D8;
+  --text:#1A1A1A; --green:#16A34A; --amber:#D97706; --red:#DC2626; --purple:#7C3AED;
+  --sidebar-w:220px;
+}
+body { font-family:'DM Sans',sans-serif; background:var(--offwhite); color:var(--text); font-size:14px; display:flex; height:100vh; overflow:hidden; }
+
+/* SIDEBAR — same as D1 */
+.sidebar { width:var(--sidebar-w); background:var(--navy); display:flex; flex-direction:column; flex-shrink:0; height:100vh; overflow-y:auto; }
+.sidebar-logo { padding:24px 20px 20px; border-bottom:1px solid rgba(255,255,255,0.07); }
+.logo-mark { font-family:'DM Serif Display',serif; font-size:20px; color:#fff; }
+.logo-mark span { color:var(--gold); }
+.logo-sub { font-family:'JetBrains Mono',monospace; font-size:9px; color:rgba(255,255,255,0.3); text-transform:uppercase; letter-spacing:0.15em; margin-top:3px; }
+.nav-section { padding:20px 12px 8px; }
+.nav-section-label { font-family:'JetBrains Mono',monospace; font-size:9px; color:rgba(255,255,255,0.25); text-transform:uppercase; letter-spacing:0.15em; padding:0 8px; margin-bottom:6px; }
+.nav-item { display:flex; align-items:center; gap:10px; padding:9px 10px; border-radius:7px; color:rgba(255,255,255,0.45); font-size:13px; font-weight:500; cursor:pointer; transition:all 0.15s; margin-bottom:2px; text-decoration:none; }
+.nav-item:hover { background:rgba(255,255,255,0.06); color:rgba(255,255,255,0.8); }
+.nav-item.active { background:rgba(42,127,212,0.18); color:#fff; }
+.nav-item.active .nav-icon { color:var(--accent); }
+.nav-icon { font-size:15px; width:18px; text-align:center; flex-shrink:0; }
+.nav-badge { margin-left:auto; background:var(--accent); color:#fff; font-size:10px; font-weight:600; padding:2px 7px; border-radius:10px; }
+.sidebar-footer { margin-top:auto; padding:16px 12px; border-top:1px solid rgba(255,255,255,0.07); }
+.user-chip { display:flex; align-items:center; gap:10px; padding:8px 10px; border-radius:8px; cursor:pointer; }
+.avatar { width:30px; height:30px; border-radius:50%; background:var(--blue); display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; color:#fff; }
+.user-name { font-size:12px; font-weight:600; color:rgba(255,255,255,0.75); }
+.user-role { font-size:10px; color:rgba(255,255,255,0.3); }
+
+/* MAIN */
+.main { flex:1; display:flex; flex-direction:column; overflow:hidden; }
+
+/* STICKY DEAL HEADER */
+.deal-header {
+  background:#fff; border-bottom:1px solid var(--border);
+  padding:0 28px; height:64px; display:flex; align-items:center; justify-content:space-between; flex-shrink:0;
+}
+.deal-header-left { display:flex; align-items:center; gap:16px; }
+.back-btn { display:flex; align-items:center; gap:6px; font-size:12px; color:var(--mid); cursor:pointer; padding:6px 10px; border-radius:6px; border:1px solid var(--border); transition:all 0.15s; text-decoration:none; }
+.back-btn:hover { border-color:var(--accent); color:var(--accent); }
+.deal-title { font-family:'DM Serif Display',serif; font-size:20px; color:var(--navy); }
+.deal-meta { display:flex; align-items:center; gap:8px; }
+.deal-header-right { display:flex; align-items:center; gap:10px; }
+
+.pill { display:inline-flex; align-items:center; gap:5px; padding:4px 10px; border-radius:20px; font-size:10px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; }
+.pill-dot { width:5px; height:5px; border-radius:50%; }
+.pill-underwriting { background:#FEF3C7; color:#B45309; }
+.pill-underwriting .pill-dot { background:#D97706; }
+.pill-multifamily { background:rgba(42,127,212,0.1); color:var(--accent); }
+
+.btn { display:inline-flex; align-items:center; gap:6px; padding:7px 14px; border-radius:7px; font-size:12px; font-weight:600; cursor:pointer; border:none; transition:all 0.15s; font-family:'DM Sans',sans-serif; }
+.btn-primary { background:var(--accent); color:#fff; }
+.btn-primary:hover { background:#2270bb; }
+.btn-danger { background:rgba(220,38,38,0.1); color:var(--red); border:1px solid rgba(220,38,38,0.2); }
+.btn-ghost { background:transparent; color:var(--mid); border:1px solid var(--border); }
+
+/* STEPPER */
+.stepper {
+  background:#fff; border-bottom:1px solid var(--border);
+  padding:0 28px; height:52px; display:flex; align-items:center; gap:0; flex-shrink:0;
+}
+.step { display:flex; align-items:center; gap:8px; padding:0 20px 0 0; position:relative; }
+.step-num { width:22px; height:22px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:700; flex-shrink:0; }
+.step-done .step-num { background:var(--green); color:#fff; }
+.step-active .step-num { background:var(--accent); color:#fff; }
+.step-pending .step-num { background:var(--border); color:var(--mid); }
+.step-label { font-size:12px; font-weight:500; }
+.step-done .step-label { color:var(--green); }
+.step-active .step-label { color:var(--accent); font-weight:600; }
+.step-pending .step-label { color:var(--mid); }
+.step-connector { width:32px; height:2px; background:var(--border); margin-right:20px; flex-shrink:0; }
+.step-connector.done { background:var(--green); }
+
+/* CONTENT */
+.content { flex:1; overflow-y:auto; padding:24px 28px; }
+
+/* 3-COL LAYOUT */
+.three-col { display:grid; grid-template-columns:320px 1fr 280px; gap:16px; }
+
+/* CARDS */
+.card { background:#fff; border-radius:12px; border:1px solid var(--border); overflow:hidden; animation:fadeUp 0.4s ease both; }
+.card:nth-child(1) { animation-delay:0.05s; }
+.card:nth-child(2) { animation-delay:0.1s; }
+.card:nth-child(3) { animation-delay:0.15s; }
+.card-header { padding:14px 18px; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; }
+.card-title { font-family:'DM Serif Display',serif; font-size:15px; color:var(--navy); }
+.card-label { font-family:'JetBrains Mono',monospace; font-size:9px; color:var(--accent); text-transform:uppercase; letter-spacing:0.15em; }
+.card-body { padding:18px; }
+
+/* METRIC ROWS */
+.metric { display:flex; align-items:center; justify-content:space-between; padding:10px 0; border-bottom:1px solid var(--border); }
+.metric:last-child { border-bottom:none; }
+.metric-label { font-size:12px; color:var(--mid); }
+.metric-val { font-family:'JetBrains Mono',monospace; font-size:14px; font-weight:500; color:var(--navy); }
+.metric-val.green { color:var(--green); }
+.metric-val.amber { color:var(--amber); }
+.metric-val.red { color:var(--red); }
+
+/* LTV GAUGE */
+.ltv-gauge { margin:16px 0 8px; }
+.ltv-gauge-label { display:flex; justify-content:space-between; font-size:11px; color:var(--mid); margin-bottom:6px; }
+.ltv-track { height:8px; background:var(--cream); border-radius:4px; position:relative; overflow:hidden; }
+.ltv-fill-bar { height:100%; border-radius:4px; background:linear-gradient(90deg, var(--green), var(--accent)); width:68%; }
+.ltv-threshold { position:absolute; top:0; bottom:0; right:25%; width:2px; background:var(--red); opacity:0.5; }
+.ltv-threshold-label { font-size:10px; color:var(--red); text-align:right; margin-top:4px; }
+
+/* DSCR BADGE */
+.dscr-badge { display:inline-flex; align-items:center; gap:6px; background:rgba(22,163,74,0.1); border:1px solid rgba(22,163,74,0.2); border-radius:8px; padding:8px 14px; margin-top:10px; }
+.dscr-val { font-family:'JetBrains Mono',monospace; font-size:20px; color:var(--green); font-weight:500; }
+.dscr-label { font-size:11px; color:var(--mid); line-height:1.3; }
+.dscr-check { font-size:16px; }
+
+/* CAP STACK */
+.cap-bar { height:36px; border-radius:8px; overflow:hidden; display:flex; margin-bottom:12px; }
+.cap-seg { display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:700; color:rgba(255,255,255,0.9); }
+.cap-senior { background:var(--blue); }
+.cap-mezz { background:var(--accent); }
+.cap-equity { background:var(--gold); }
+.cap-legend { display:flex; flex-direction:column; gap:8px; margin-top:4px; }
+.cap-legend-item { display:flex; align-items:center; justify-content:space-between; }
+.cap-legend-left { display:flex; align-items:center; gap:8px; font-size:12px; color:var(--mid); }
+.cap-dot { width:10px; height:10px; border-radius:3px; }
+.cap-legend-val { font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--navy); }
+
+/* RISK FLAGS */
+.risk-section { margin-top:16px; }
+.risk-header { font-family:'JetBrains Mono',monospace; font-size:9px; color:var(--accent); text-transform:uppercase; letter-spacing:0.15em; margin-bottom:10px; }
+.risk-item { display:flex; align-items:flex-start; gap:10px; padding:9px 12px; border-radius:7px; margin-bottom:6px; }
+.risk-item:last-child { margin-bottom:0; }
+.risk-green { background:rgba(22,163,74,0.07); border:1px solid rgba(22,163,74,0.15); }
+.risk-amber { background:rgba(217,119,6,0.07); border:1px solid rgba(217,119,6,0.15); }
+.risk-red { background:rgba(220,38,38,0.07); border:1px solid rgba(220,38,38,0.15); }
+.risk-icon { font-size:13px; flex-shrink:0; margin-top:1px; }
+.risk-text { font-size:12px; line-height:1.4; }
+.risk-green .risk-text { color:#065F46; }
+.risk-amber .risk-text { color:#92400E; }
+.risk-red .risk-text { color:#991B1B; }
+
+/* DOC LIST */
+.doc-item { display:flex; align-items:center; gap:10px; padding:9px 0; border-bottom:1px solid var(--border); font-size:12px; }
+.doc-item:last-child { border-bottom:none; }
+.doc-status { width:20px; height:20px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:700; flex-shrink:0; }
+.doc-done { background:#D1FAE5; color:var(--green); }
+.doc-pending { background:#FEF3C7; color:var(--amber); }
+.doc-missing { background:#FEE2E2; color:var(--red); }
+.doc-name { flex:1; color:var(--text); }
+.doc-tag { font-size:10px; color:var(--mid); background:var(--cream); padding:2px 7px; border-radius:4px; }
+
+/* RECOMMENDATION BOX */
+.rec-box { background:var(--navy); border-radius:10px; padding:18px; margin-top:16px; }
+.rec-label { font-family:'JetBrains Mono',monospace; font-size:9px; color:rgba(255,255,255,0.35); text-transform:uppercase; letter-spacing:0.15em; margin-bottom:8px; }
+.rec-status { font-family:'DM Serif Display',serif; font-size:16px; color:#fff; margin-bottom:6px; }
+.rec-note { font-size:11px; color:rgba(255,255,255,0.45); line-height:1.5; }
+
+@keyframes fadeUp { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
+::-webkit-scrollbar { width:5px; }
+::-webkit-scrollbar-thumb { background:var(--border); border-radius:10px; }
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-mark">Simple<span>CITI</span></div>
+    <div class="logo-sub">CRE Lending Platform</div>
+  </div>
+  <div class="nav-section">
+    <div class="nav-section-label">Main</div>
+    <a class="nav-item" href="#">⬡&nbsp;&nbsp; Pipeline <span class="nav-badge">34</span></a>
+    <a class="nav-item" href="#">◈&nbsp;&nbsp; Deals</a>
+    <a class="nav-item active" href="#">⊞&nbsp;&nbsp; Underwriting <span class="nav-badge" style="background:#D97706;">8</span></a>
+    <a class="nav-item" href="#">◎&nbsp;&nbsp; Portfolio</a>
+  </div>
+  <div class="nav-section">
+    <div class="nav-section-label">Tools</div>
+    <a class="nav-item" href="#">⊟&nbsp;&nbsp; Reports</a>
+    <a class="nav-item" href="#">◷&nbsp;&nbsp; Activity Log</a>
+    <a class="nav-item" href="#">⊕&nbsp;&nbsp; Intake Form</a>
+  </div>
+  <div class="nav-section">
+    <div class="nav-section-label">Admin</div>
+    <a class="nav-item" href="#"><span class="nav-icon">⊙</span> Settings</a>
+  </div>
+  <div class="sidebar-footer">
+    <div class="user-chip">
+      <div class="avatar">SK</div>
+      <div><div class="user-name">Sarah K.</div><div class="user-role">Loan Officer</div></div>
+    </div>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- STICKY DEAL HEADER -->
+  <div class="deal-header">
+    <div class="deal-header-left">
+      <a class="back-btn" href="#">← Pipeline</a>
+      <div class="deal-title">Meridian Flats</div>
+      <div class="deal-meta">
+        <span class="pill pill-multifamily">Multifamily</span>
+        <span class="pill pill-underwriting"><span class="pill-dot"></span>Underwriting</span>
+        <span style="font-size:12px; color:var(--mid);">Brooklyn, NY · 142 Units</span>
+      </div>
+    </div>
+    <div class="deal-header-right">
+      <span style="font-size:12px; color:var(--mid);">Assigned: <strong style="color:var(--navy);">Sarah K.</strong></span>
+      <span style="font-size:12px; color:var(--amber); font-weight:600;">Target Close: Mar 15</span>
+      <button class="btn btn-danger">⚑ Flag Deal</button>
+      <button class="btn btn-primary">Submit for Approval →</button>
+    </div>
+  </div>
+
+  <!-- STEPPER -->
+  <div class="stepper">
+    <div class="step step-done">
+      <div class="step-num">✓</div>
+      <span class="step-label">Intake</span>
+    </div>
+    <div class="step-connector done"></div>
+    <div class="step step-active">
+      <div class="step-num">2</div>
+      <span class="step-label">Underwriting</span>
+    </div>
+    <div class="step-connector"></div>
+    <div class="step step-pending">
+      <div class="step-num">3</div>
+      <span class="step-label">Approval</span>
+    </div>
+    <div class="step-connector"></div>
+    <div class="step step-pending">
+      <div class="step-num">4</div>
+      <span class="step-label">Closing</span>
+    </div>
+    <div class="step-connector"></div>
+    <div class="step step-pending">
+      <div class="step-num">5</div>
+      <span class="step-label">Closed</span>
+    </div>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="content">
+    <div class="three-col">
+
+      <!-- LEFT: FINANCIAL METRICS -->
+      <div>
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">Financial Metrics</span>
+            <span class="card-label">Deal Analysis</span>
+          </div>
+          <div class="card-body">
+            <div class="metric">
+              <span class="metric-label">Loan Amount</span>
+              <span class="metric-val">$8,900,000</span>
+            </div>
+            <div class="metric">
+              <span class="metric-label">Property Value (Appraised)</span>
+              <span class="metric-val">$13,100,000</span>
+            </div>
+            <div class="metric">
+              <span class="metric-label">NOI (Annual)</span>
+              <span class="metric-val">$612,000</span>
+            </div>
+            <div class="metric">
+              <span class="metric-label">Annual Debt Service</span>
+              <span class="metric-val">$430,800</span>
+            </div>
+            <div class="metric">
+              <span class="metric-label">Interest Rate</span>
+              <span class="metric-val">6.85% Fixed</span>
+            </div>
+            <div class="metric">
+              <span class="metric-label">Loan Term</span>
+              <span class="metric-val">5 Years</span>
+            </div>
+            <div class="metric">
+              <span class="metric-label">Amortization</span>
+              <span class="metric-val">30 Years</span>
+            </div>
+            <div class="metric">
+              <span class="metric-label">Borrower Credit Score</span>
+              <span class="metric-val green">724</span>
+            </div>
+
+            <!-- LTV GAUGE -->
+            <div class="ltv-gauge">
+              <div class="ltv-gauge-label">
+                <span>Loan-to-Value</span>
+                <span style="font-family:'JetBrains Mono',monospace; font-size:14px; color:var(--accent); font-weight:500;">68.0%</span>
+              </div>
+              <div class="ltv-track">
+                <div class="ltv-fill-bar"></div>
+                <div class="ltv-threshold"></div>
+              </div>
+              <div class="ltv-threshold-label">75% max threshold</div>
+            </div>
+
+            <!-- DSCR BADGE -->
+            <div class="dscr-badge">
+              <span class="dscr-check">✓</span>
+              <div>
+                <div style="display:flex; align-items:baseline; gap:6px;">
+                  <span class="dscr-val">1.42</span>
+                  <span style="font-size:11px; color:var(--mid);">DSCR</span>
+                </div>
+                <div class="dscr-label">Above 1.25 minimum threshold</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CENTER: CAPITAL STACK + RISK -->
+      <div style="display:flex; flex-direction:column; gap:16px;">
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">Capital Stack</span>
+            <span class="card-label">Meridian Flats</span>
+          </div>
+          <div class="card-body">
+            <div class="cap-bar">
+              <div class="cap-seg cap-senior" style="width:72%;">72% Senior</div>
+              <div class="cap-seg cap-mezz" style="width:10%;">10%</div>
+              <div class="cap-seg cap-equity" style="width:18%;">18% Eq.</div>
+            </div>
+            <div class="cap-legend">
+              <div class="cap-legend-item">
+                <div class="cap-legend-left"><div class="cap-dot" style="background:var(--blue);"></div>Senior Debt</div>
+                <span class="cap-legend-val">$6,408,000 · 72%</span>
+              </div>
+              <div class="cap-legend-item">
+                <div class="cap-legend-left"><div class="cap-dot" style="background:var(--accent);"></div>Mezzanine</div>
+                <span class="cap-legend-val">$890,000 · 10%</span>
+              </div>
+              <div class="cap-legend-item">
+                <div class="cap-legend-left"><div class="cap-dot" style="background:var(--gold);"></div>Equity</div>
+                <span class="cap-legend-val">$1,602,000 · 18%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">Risk Assessment</span>
+            <span style="font-size:10px; background:rgba(217,119,6,0.1); color:var(--amber); padding:3px 10px; border-radius:20px; font-weight:600; font-size:10px;">1 Caution</span>
+          </div>
+          <div class="card-body">
+            <div class="risk-item risk-green">
+              <span class="risk-icon">✓</span>
+              <span class="risk-text"><strong>LTV Within Acceptable Range</strong> — 68% is below the 75% threshold.</span>
+            </div>
+            <div class="risk-item risk-green">
+              <span class="risk-icon">✓</span>
+              <span class="risk-text"><strong>DSCR Above Minimum</strong> — 1.42 coverage exceeds 1.25 requirement.</span>
+            </div>
+            <div class="risk-item risk-green">
+              <span class="risk-icon">✓</span>
+              <span class="risk-text"><strong>Borrower Credit Acceptable</strong> — Score of 724, no recent defaults.</span>
+            </div>
+            <div class="risk-item risk-amber">
+              <span class="risk-icon">⚠</span>
+              <span class="risk-text"><strong>Environmental Report Pending</strong> — Phase I ESA not yet submitted. Required before approval.</span>
+            </div>
+            <div class="risk-item risk-green">
+              <span class="risk-icon">✓</span>
+              <span class="risk-text"><strong>Title Search Clear</strong> — No liens, encumbrances, or ownership disputes found.</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">Underwriter Notes</span>
+          </div>
+          <div class="card-body">
+            <textarea style="width:100%; min-height:80px; border:1px solid var(--border); border-radius:7px; padding:10px 12px; font-size:12px; font-family:'DM Sans',sans-serif; color:var(--text); resize:vertical; outline:none; background:var(--cream);" placeholder="Add underwriting notes...">Strong sponsor with 12 years multifamily experience. Property fully stabilized at 96% occupancy. Environmental report expected by Mar 8 — flagged as blocker for closing timeline.</textarea>
+
+            <div class="rec-box" style="margin-top:14px;">
+              <div class="rec-label">Current Recommendation</div>
+              <div class="rec-status">Conditional Approval Pending</div>
+              <div class="rec-note">Pending receipt and review of Phase I Environmental Site Assessment. All other conditions met.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT: DOCUMENTS -->
+      <div>
+        <div class="card" style="height:100%;">
+          <div class="card-header">
+            <span class="card-title">Documents</span>
+            <span style="font-size:10px; background:rgba(22,163,74,0.1); color:var(--green); padding:3px 10px; border-radius:20px; font-weight:600;">4/7 Complete</span>
+          </div>
+          <div class="card-body">
+            <!-- Progress bar -->
+            <div style="height:6px; background:var(--border); border-radius:3px; overflow:hidden; margin-bottom:16px;">
+              <div style="width:57%; height:100%; background:linear-gradient(90deg,var(--green),var(--accent)); border-radius:3px;"></div>
+            </div>
+
+            <div class="doc-item">
+              <div class="doc-status doc-done">✓</div>
+              <span class="doc-name">Appraisal Report</span>
+              <span class="doc-tag">Required</span>
+            </div>
+            <div class="doc-item">
+              <div class="doc-status doc-done">✓</div>
+              <span class="doc-name">Title Search</span>
+              <span class="doc-tag">Required</span>
+            </div>
+            <div class="doc-item">
+              <div class="doc-status doc-done">✓</div>
+              <span class="doc-name">Borrower Financials</span>
+              <span class="doc-tag">Required</span>
+            </div>
+            <div class="doc-item">
+              <div class="doc-status doc-done">✓</div>
+              <span class="doc-name">Rent Roll</span>
+              <span class="doc-tag">Required</span>
+            </div>
+            <div class="doc-item">
+              <div class="doc-status doc-pending">⏳</div>
+              <span class="doc-name">Environmental Report</span>
+              <span class="doc-tag" style="color:var(--amber); background:rgba(217,119,6,0.1);">Blocker</span>
+            </div>
+            <div class="doc-item">
+              <div class="doc-status doc-pending">⏳</div>
+              <span class="doc-name">Loan Agreement Draft</span>
+              <span class="doc-tag">Required</span>
+            </div>
+            <div class="doc-item">
+              <div class="doc-status doc-missing">✕</div>
+              <span class="doc-name">Phase I ESA</span>
+              <span class="doc-tag" style="color:var(--red); background:rgba(220,38,38,0.1);">Missing</span>
+            </div>
+            <div class="doc-item">
+              <div class="doc-status doc-done">✓</div>
+              <span class="doc-name">Borrower Entity Docs</span>
+              <span class="doc-tag">Required</span>
+            </div>
+            <div class="doc-item">
+              <div class="doc-status doc-done" style="background:rgba(42,127,212,0.1); color:var(--accent);">–</div>
+              <span class="doc-name">Insurance Certificate</span>
+              <span class="doc-tag">Optional</span>
+            </div>
+
+            <button style="width:100%; margin-top:16px; padding:10px; border:2px dashed var(--border); border-radius:8px; background:var(--cream); color:var(--mid); font-size:12px; cursor:pointer; font-family:'DM Sans',sans-serif;">
+              + Upload Document
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

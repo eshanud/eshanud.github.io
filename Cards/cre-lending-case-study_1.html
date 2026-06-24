@@ -1,0 +1,1560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SimpleCITI — CRE Lending Pipeline · Case Study</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --navy: #0D1B2A; --gold: #C9A84C; --gold-dim: rgba(201,168,76,0.1);
+  --blue: #2A7FD4; --green: #16A34A; --amber: #D97706; --red: #DC2626; --purple: #7C3AED;
+  --text: #0D1B2A; --text-2: #4a5568; --muted: #718096;
+  --border: rgba(13,27,42,0.08); --border-s: rgba(13,27,42,0.14);
+  --surf: #f8f7f4; --surf2: #efe9e0; --white: #fff;
+}
+html { scroll-behavior: smooth; }
+body { font-family: 'DM Sans', sans-serif; background: var(--white); color: var(--text); font-size: 15px; line-height: 1.72; -webkit-font-smoothing: antialiased; }
+
+/* ── HERO ────────────────────────────────── */
+.hero {
+  background: var(--navy);
+  height: 100vh; min-height: 700px;
+  position: relative; overflow: hidden;
+}
+
+/* Full-bleed image */
+.hero-bg { position: absolute; inset: 0; z-index: 0; }
+.hero-bg img { width: 100%; height: 100%; object-fit: cover; object-position: center top; display: block; }
+
+/* Corner-only overlay — just the top-left where text sits, image free everywhere else */
+.hero-overlay {
+  position: absolute; inset: 0; z-index: 1;
+  background: linear-gradient(110deg,
+    rgba(13,27,42,0.78) 0%,
+    rgba(13,27,42,0.42) 24%,
+    transparent        44%
+  );
+}
+
+/* Text pinned top-left, after the nav */
+.hero-inner {
+  position: absolute; top: 0; left: 0;
+  z-index: 3;
+  padding: 40px 2rem 0 calc(196px + 2.5rem);
+  max-width: 480px;
+}
+.hero-kicker { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+.hero-kicker-line { width: 18px; height: 1px; background: var(--gold); flex-shrink: 0; }
+.hero-kicker span { font-size: 9px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold); }
+.hero h1 { font-family: 'DM Serif Display', serif; font-size: clamp(18px, 2vw, 28px); line-height: 1.15; color: #fff; font-weight: 400; margin-bottom: 12px; }
+.hero h1 em { font-style: italic; color: var(--gold); }
+.hero-sub { font-size: 11.5px; color: rgba(255,255,255,0.45); line-height: 1.65; max-width: 340px; margin-bottom: 24px; }
+.hero-meta { display: flex; gap: 32px; flex-wrap: wrap; padding-top: 24px; border-top: 1px solid rgba(255,255,255,0.08); }
+.meta-item { display: flex; flex-direction: column; gap: 3px; }
+.meta-lbl { font-size: 9px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.22); }
+.meta-val { font-size: 12px; color: rgba(255,255,255,0.65); }
+
+/* ── CASE INTRO BLOCK ────────────────────── */
+.case-intro {
+  padding: 52px 3rem 48px calc(196px + 68px);
+  border-bottom: 1px solid var(--border);
+}
+.ci-kicker { display: inline-flex; align-items: center; gap: 8px; background: rgba(201,168,76,0.07); border: 1px solid rgba(201,168,76,0.18); border-radius: 20px; padding: 5px 14px 5px 10px; margin-bottom: 24px; }
+.ci-kicker span { font-family: 'JetBrains Mono', monospace; font-size: 9px; font-weight: 600; letter-spacing: 0.04em; color: var(--gold); }
+.case-intro h1 {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(18px, 1.8vw, 24px);
+  line-height: 1.35;
+  color: var(--navy);
+  font-weight: 400;
+  margin: 0 0 24px;
+  max-width: 560px;
+}
+.case-intro h1 em { font-style: italic; color: var(--gold); }
+.ci-meta-row { display: flex; gap: 36px; flex-wrap: wrap; padding-top: 20px; border-top: 1px solid var(--border); }
+.ci-meta-item { display: flex; flex-direction: column; gap: 4px; }
+.ci-meta-lbl { font-family: 'JetBrains Mono', monospace; font-size: 9px; font-weight: 600; letter-spacing: 0.04em; color: var(--gold); }
+.ci-meta-val { font-size: 13px; color: var(--navy); font-weight: 500; }
+
+/* ── CONCEPT BANNER ──────────────────────── */
+.concept-banner { background: rgba(201,168,76,0.07); border-bottom: 1px solid rgba(201,168,76,0.18); padding: 10px 2.5rem 10px calc(196px + 2.5rem); text-align: center; }
+.concept-banner p { font-size: 12px; color: rgba(13,27,42,0.55); line-height: 1.5; }
+.concept-banner strong { color: var(--navy); font-weight: 600; }
+
+/* ── BODY LAYOUT ─────────────────────────── */
+.body-wrap { display: block; padding-right: 48px; }
+
+/* ── SIDE NAV ────────────────────────────── */
+.side-nav { width: 196px; position: fixed; left: 0; top: 0; bottom: 0; padding: 28px 0 40px 28px; background: var(--white); border-right: 1px solid var(--border); z-index: 100; overflow-y: auto; }
+.sn-brand { display: flex; align-items: center; gap: 9px; }
+.sn-brand-mark { width: 26px; height: 26px; background: var(--navy); border-radius: 6px; display: flex; align-items: center; justify-content: center; font-family: 'DM Serif Display', serif; font-size: 13px; color: var(--gold); flex-shrink: 0; }
+.sn-brand-name { font-size: 11px; font-weight: 600; color: var(--navy); letter-spacing: -0.01em; }
+.sn-title { font-family: 'JetBrains Mono', monospace; font-size: 9px; text-transform: uppercase; letter-spacing: 0.18em; color: rgba(13,27,42,0.22); margin-bottom: 22px; }
+.sn-list { list-style: none; position: relative; }
+.sn-list::before { content: ''; position: absolute; left: 5px; top: 10px; bottom: 10px; width: 1px; background: var(--border); }
+.sn-item { position: relative; }
+.sn-item a { display: flex; align-items: center; gap: 12px; padding: 8px 8px 8px 0; text-decoration: none; }
+.sn-dot { width: 11px; height: 11px; border-radius: 50%; border: 1.5px solid rgba(13,27,42,0.14); background: var(--white); flex-shrink: 0; position: relative; z-index: 1; transition: all 0.22s ease; }
+.sn-item a:hover .sn-dot { border-color: var(--gold); background: rgba(201,168,76,0.12); }
+.sn-item.active .sn-dot { background: var(--gold); border-color: var(--gold); box-shadow: 0 0 0 3px rgba(201,168,76,0.18); }
+.sn-label { font-size: 11px; color: rgba(13,27,42,0.35); font-weight: 500; line-height: 1.3; transition: color 0.18s; }
+.sn-num { font-family: 'JetBrains Mono', monospace; font-size: 8px; color: rgba(13,27,42,0.2); display: block; transition: color 0.18s; }
+.sn-sym { font-size: 12px; opacity: 0.7; }
+.sn-item a:hover .sn-label { color: var(--navy); }
+.sn-item.active .sn-label { color: var(--navy); font-weight: 600; }
+.sn-item.active .sn-num { color: var(--gold); }
+.sn-divider { height: 1px; background: var(--border); margin: 10px 0 10px 14px; }
+
+/* ── MAIN CONTENT ────────────────────────── */
+.main-col { margin-left: 196px; max-width: 920px; border-left: 1px solid var(--border); padding-left: 68px; }
+
+section { padding: 92px 0; border-bottom: 1px solid var(--border); }
+section:last-child { border-bottom: none; }
+
+/* SECTION LABEL — pill eyebrow */
+.section-label { display: inline-flex; align-items: center; gap: 8px; background: rgba(201,168,76,0.07); border: 1px solid rgba(201,168,76,0.18); border-radius: 20px; padding: 5px 14px 5px 10px; margin-bottom: 28px; }
+.section-num { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--gold); font-weight: 600; letter-spacing: 0.04em; }
+.section-name { font-size: 9px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(13,27,42,0.5); }
+.section-rule { display: none; }
+
+h2 { font-family: 'DM Serif Display', serif; font-size: clamp(26px, 3.4vw, 40px); line-height: 1.12; font-weight: 400; color: var(--navy); margin-bottom: 20px; }
+h3 { font-size: 13px; font-weight: 700; color: var(--navy); margin: 32px 0 10px; letter-spacing: -0.01em; }
+p { color: var(--text-2); margin-bottom: 16px; font-size: 14.5px; line-height: 1.82; }
+p:last-child { margin-bottom: 0; }
+strong { color: var(--text); font-weight: 600; }
+
+/* DESIGN SYSTEM SECTION */
+.ds-block {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 32px;
+  align-items: end;
+  margin: 28px 0 0;
+}
+.ds-tokens {
+  display: flex;
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 24px;
+}
+.ds-token {
+  flex: 1;
+  padding: 14px 16px;
+  background: var(--white);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.ds-swatch { width: 20px; height: 20px; border-radius: 5px; flex-shrink: 0; }
+.ds-token-lbl { font-family: 'JetBrains Mono', monospace; font-size: 8px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(13,27,42,0.35); }
+.ds-token-val { font-size: 11.5px; font-weight: 600; color: var(--navy); }
+.ds-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  background: var(--navy);
+  color: #fff;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.18s ease;
+  white-space: nowrap;
+  align-self: flex-end;
+}
+.ds-btn:hover { background: #1a3558; transform: translateY(-1px); }
+.ds-btn svg { flex-shrink: 0; }
+
+/* PAIN CARDS */
+.pain-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  margin: 36px 0;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  overflow: hidden;
+}
+.pain-card {
+  background: var(--white);
+  padding: 28px 26px 30px;
+  position: relative;
+  overflow: hidden;
+  cursor: default;
+  transition: background 0.2s ease;
+}
+.pain-card::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 2px;
+  background: var(--red);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.pain-card.amber::after { background: var(--amber); }
+.pain-card:hover { background: var(--surf); }
+.pain-card:hover::after { transform: scaleX(1); }
+.pain-num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 8.5px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.14em;
+  color: var(--red);
+  margin-bottom: 14px;
+  display: flex; align-items: center; gap: 7px;
+}
+.pain-num::before {
+  content: '✦';
+  font-size: 9px;
+  flex-shrink: 0;
+  opacity: 0.85;
+}
+.pain-card.amber .pain-num { color: var(--amber); }
+.pain-card.amber .pain-num::before { color: var(--amber); }
+.pain-icon {
+  width: 36px; height: 36px; border-radius: 9px;
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 16px; flex-shrink: 0;
+}
+.pain-card .pain-icon { background: rgba(220,38,38,0.08); }
+.pain-card.amber .pain-icon { background: rgba(217,119,6,0.09); }
+.pain-icon svg { display: block; }
+.pain-card h4 {
+  font-size: 13.5px; font-weight: 700;
+  color: var(--navy); margin-bottom: 8px;
+  line-height: 1.3;
+  transition: transform 0.22s ease;
+}
+.pain-card:hover h4 { transform: translateY(-2px); }
+.pain-card p { font-size: 12px; color: var(--muted); line-height: 1.72; margin: 0; }
+/* Research sources strip */
+.research-sources {
+  display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+  margin-top: 28px; padding: 16px 20px;
+  background: var(--surf); border: 1px solid var(--border);
+  border-radius: 10px;
+}
+.rs-label { font-family: 'JetBrains Mono', monospace; font-size: 8.5px; font-weight: 700; letter-spacing: 0.13em; text-transform: uppercase; color: rgba(13,27,42,0.3); flex-shrink: 0; margin-right: 4px; }
+.rs-pill {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: var(--white); border: 1px solid var(--border-s);
+  border-radius: 20px; padding: 4px 10px 4px 6px;
+  font-size: 11px; font-weight: 600; color: var(--navy);
+}
+.rs-dot { width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 8px; font-weight: 800; color: #fff; flex-shrink: 0; }
+.rs-divider { width: 1px; height: 16px; background: var(--border); flex-shrink: 0; }
+.rs-note { font-size: 11px; color: var(--muted); margin-left: auto; font-style: italic; }
+
+/* ZOOM LEVELS */
+.zoom-levels { display: grid; grid-template-columns: repeat(3,1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; margin: 28px 0; }
+.zoom-card { background: var(--white); padding: 0 0 22px; }
+.zoom-mock { padding: 16px 16px 14px; border-bottom: 1px solid var(--border); background: var(--surf); min-height: 88px; display: flex; flex-direction: column; gap: 5px; }
+/* level 01 — KPI cards */
+.zm-kpi { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; }
+.zm-kpi-card { background: var(--white); border: 1px solid var(--border); border-radius: 4px; padding: 5px 7px; }
+.zm-kpi-val { height: 5px; width: 60%; border-radius: 2px; background: rgba(13,27,42,0.18); margin-bottom: 3px; }
+.zm-kpi-lbl { height: 3px; width: 40%; border-radius: 2px; background: var(--border-s); }
+/* level 02 — table rows */
+.zm-table { display: flex; flex-direction: column; gap: 3px; }
+.zm-row { display: grid; grid-template-columns: 1.6fr 0.8fr 0.9fr 0.7fr; gap: 4px; align-items: center; background: var(--white); border: 1px solid var(--border); border-radius: 3px; padding: 4px 6px; }
+.zm-row:first-child { background: var(--surf); }
+.zm-cell { height: 4px; border-radius: 2px; background: var(--border-s); }
+.zm-pill { height: 8px; border-radius: 20px; }
+.zm-pill.g { background: rgba(22,163,74,0.25); }
+.zm-pill.a { background: rgba(217,119,6,0.3); }
+.zm-pill.r { background: rgba(220,38,38,0.25); }
+.zm-dot { width: 8px; height: 8px; border-radius: 50%; justify-self: center; }
+.zm-dot.g { background: #16a34a; }
+.zm-dot.a { background: #d97706; }
+.zm-dot.r { background: #dc2626; }
+/* level 03 — panel */
+.zm-panel { display: grid; grid-template-columns: 1fr 0.7fr; gap: 4px; height: 100%; }
+.zm-panel-main { display: flex; flex-direction: column; gap: 3px; }
+.zm-panel-side { background: var(--white); border: 1px solid var(--border); border-radius: 4px; padding: 5px; display: flex; flex-direction: column; gap: 3px; }
+.zm-panel-line { height: 3px; border-radius: 2px; background: var(--border-s); }
+.zm-panel-line.gold { background: rgba(201,168,76,0.5); width: 50%; }
+.zoom-body { padding: 14px 16px 0; }
+.zoom-level { font-family: 'JetBrains Mono', monospace; font-size: 8.5px; font-weight: 700; letter-spacing: 0.14em; color: var(--gold); margin-bottom: 6px; }
+.zoom-card h4 { font-size: 12.5px; font-weight: 700; color: var(--navy); margin-bottom: 4px; }
+.zoom-card p { font-size: 11px; color: var(--muted); line-height: 1.6; margin: 0; }
+
+/* CLOSING RISK SCORE */
+.crs-block { background: var(--navy); border-radius: 14px; overflow: hidden; margin: 28px 0; }
+.crs-header { padding: 22px 28px 18px; border-bottom: 1px solid rgba(255,255,255,0.07); display: flex; align-items: baseline; justify-content: space-between; gap: 16px; }
+.crs-kicker { font-family: 'JetBrains Mono', monospace; font-size: 8.5px; color: var(--gold); text-transform: uppercase; letter-spacing: 0.18em; margin-bottom: 7px; }
+.crs-header h3 { font-size: 16px; font-weight: 600; color: #fff; margin: 0; line-height: 1.3; }
+.crs-header p { font-size: 12px; color: rgba(255,255,255,0.38); margin: 0; max-width: 220px; text-align: right; line-height: 1.5; }
+.crs-body { display: grid; grid-template-columns: 1fr 40px 1fr; align-items: center; gap: 0; padding: 28px; }
+/* inputs */
+.crs-inputs { display: flex; flex-direction: column; gap: 10px; }
+.crs-input { display: flex; align-items: center; gap: 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); border-radius: 9px; padding: 12px 14px; }
+.crs-input-icon { width: 30px; height: 30px; border-radius: 7px; background: rgba(201,168,76,0.12); border: 1px solid rgba(201,168,76,0.2); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.crs-input-text { font-size: 11.5px; color: rgba(255,255,255,0.7); line-height: 1.4; font-weight: 500; }
+.crs-input-sub { font-size: 10px; color: rgba(255,255,255,0.28); margin-top: 1px; }
+/* arrow */
+.crs-arrow { display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,0.2); font-size: 20px; }
+/* outputs */
+.crs-outputs { display: flex; flex-direction: column; gap: 8px; }
+.crs-output { display: flex; align-items: center; gap: 12px; border-radius: 9px; padding: 12px 14px; border: 1px solid transparent; }
+.crs-output.high { background: rgba(220,38,38,0.12); border-color: rgba(220,38,38,0.22); }
+.crs-output.watch { background: rgba(217,119,6,0.12); border-color: rgba(217,119,6,0.22); }
+.crs-output.good { background: rgba(22,163,74,0.1); border-color: rgba(22,163,74,0.2); }
+.crs-output-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+.crs-output.high .crs-output-dot { background: #f87171; box-shadow: 0 0 6px rgba(248,113,113,0.5); }
+.crs-output.watch .crs-output-dot { background: #fbbf24; box-shadow: 0 0 6px rgba(251,191,36,0.4); }
+.crs-output.good .crs-output-dot { background: #4ade80; box-shadow: 0 0 6px rgba(74,222,128,0.4); }
+.crs-output-label { font-size: 12px; font-weight: 700; }
+.crs-output.high .crs-output-label { color: #f87171; }
+.crs-output.watch .crs-output-label { color: #fbbf24; }
+.crs-output.good .crs-output-label { color: #4ade80; }
+.crs-output-desc { font-size: 10.5px; color: rgba(255,255,255,0.3); margin-left: auto; }
+.crs-footer { padding: 14px 28px 20px; border-top: 1px solid rgba(255,255,255,0.07); font-size: 11.5px; color: rgba(255,255,255,0.35); font-style: italic; }
+
+/* FINDING GRID — kept for fallback */
+.finding-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin: 28px 0; }
+.finding { background: var(--surf); border: 1px solid var(--border); border-radius: 12px; padding: 20px 22px; }
+.finding-num { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--gold); margin-bottom: 8px; letter-spacing: 0.06em; }
+.finding h4 { font-size: 13px; font-weight: 700; color: var(--navy); margin-bottom: 6px; line-height: 1.35; }
+.finding p { font-size: 12px; color: var(--muted); line-height: 1.6; margin: 0; }
+
+/* COMP TABLE */
+/* PLATFORM AUDIT CARDS */
+.platform-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; margin: 28px 0; }
+.plat-card { background: var(--white); padding: 22px 24px 24px; transition: background 0.2s; cursor: default; }
+.plat-card:hover { background: var(--surf); }
+.plat-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+.plat-logo { display: flex; align-items: center; gap: 9px; }
+.plat-badge { width: 30px; height: 30px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; color: #fff; flex-shrink: 0; }
+.plat-name { font-size: 13px; font-weight: 700; color: var(--navy); }
+.verdict { display: inline-flex; align-items: center; gap: 4px; font-size: 8.5px; font-weight: 700; padding: 3px 9px; border-radius: 20px; text-transform: uppercase; letter-spacing: 0.08em; }
+.v-partial { background: rgba(217,119,6,0.09); color: var(--amber); }
+.v-miss { background: rgba(220,38,38,0.07); color: var(--red); }
+.plat-gap { font-size: 11.5px; color: var(--muted); line-height: 1.65; border-top: 1px solid var(--border); padding-top: 12px; }
+.plat-gap strong { color: var(--navy); font-weight: 600; }
+/* LIFECYCLE FLOW */
+.lifecycle { display: flex; align-items: center; gap: 0; margin: 32px 0 4px; }
+.lc-stage { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 8px; position: relative; }
+.lc-icon { width: 40px; height: 40px; border-radius: 10px; background: var(--surf); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; transition: background 0.2s, border-color 0.2s; }
+.lc-stage:hover .lc-icon { background: rgba(201,168,76,0.08); border-color: rgba(201,168,76,0.3); }
+.lc-stage:hover .lc-icon svg path, .lc-stage:hover .lc-icon svg rect, .lc-stage:hover .lc-icon svg circle { stroke: var(--gold); }
+.lc-label { font-size: 9.5px; font-weight: 600; color: var(--navy); text-align: center; letter-spacing: 0.01em; }
+.lc-arrow { color: var(--border-s); font-size: 16px; padding: 0 2px; margin-bottom: 18px; flex-shrink: 0; }
+.lc-note { font-size: 10.5px; color: var(--muted); text-align: center; margin-top: 2px; }
+.v-miss { background: rgba(220,38,38,0.08); color: var(--red); }
+.v-partial { background: rgba(217,119,6,0.1); color: var(--amber); }
+
+/* CALLOUTS */
+.pull-quote { border-left: 4px solid var(--gold); padding: 22px 28px; margin: 36px 0; background: var(--gold-dim); border-radius: 0 12px 12px 0; }
+.pull-quote p { font-family: 'DM Serif Display', serif; font-size: 19px; line-height: 1.5; color: var(--navy); font-style: italic; margin-bottom: 10px; }
+.pull-quote .attr { font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+
+.callout { background: var(--surf); border: 1px solid var(--border-s); border-radius: 12px; padding: 20px 24px; margin: 24px 0; }
+.callout-lbl { font-size: 9px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold); margin-bottom: 8px; }
+.callout p { font-size: 14px; margin-bottom: 0; }
+
+
+
+/* CLEVER BLOCK */
+.clever-block { background: var(--navy); border-radius: 14px; overflow: hidden; margin: 32px 0; }
+.clever-hd { padding: 22px 30px 18px; border-bottom: 1px solid rgba(255,255,255,0.06); }
+.clever-kicker { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--gold); text-transform: uppercase; letter-spacing: 0.18em; margin-bottom: 8px; }
+.clever-hd h3 { font-size: 17px; font-weight: 600; color: #fff; margin: 0; line-height: 1.3; }
+.clever-bd { padding: 24px 30px; }
+.clever-bd p { font-size: 14px; color: rgba(255,255,255,0.52); line-height: 1.78; margin-bottom: 14px; }
+.clever-bd p:last-child { margin-bottom: 0; }
+.rs-row { display: flex; gap: 10px; flex-wrap: wrap; margin: 16px 0 20px; }
+.rs-pill { display: flex; align-items: center; gap: 9px; padding: 10px 16px; border-radius: 8px; }
+.rs-pill.r { background: rgba(220,38,38,0.14); border: 1px solid rgba(220,38,38,0.22); }
+.rs-pill.a { background: rgba(217,119,6,0.14); border: 1px solid rgba(217,119,6,0.22); }
+.rs-pill.g { background: rgba(22,163,74,0.14); border: 1px solid rgba(22,163,74,0.22); }
+.rs-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+.rs-pill.r .rs-dot { background: var(--red); }
+.rs-pill.a .rs-dot { background: var(--amber); }
+.rs-pill.g .rs-dot { background: var(--green); }
+.rs-text .rs-l { font-size: 12px; font-weight: 700; }
+.rs-pill.r .rs-l { color: #f87171; }
+.rs-pill.a .rs-l { color: #fbbf24; }
+.rs-pill.g .rs-l { color: #4ade80; }
+.rs-text .rs-d { font-size: 10px; color: rgba(255,255,255,0.28); }
+
+/* DECISION GRID */
+/* WRONG TURN — visual comparison */
+.dec-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; margin: 32px 0; background: var(--border); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; }
+.dec-card { background: var(--white); display: flex; flex-direction: column; }
+.dec-card.no { opacity: 0.72; }
+/* mini mockup area */
+.dc-visual { padding: 20px 20px 0; flex-shrink: 0; }
+.dc-mock-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; }
+.dc-mock-card { background: var(--surf); border: 1px solid var(--border); border-radius: 5px; padding: 7px 8px; }
+.dc-mock-card-line { height: 4px; border-radius: 2px; background: var(--border-s); margin-bottom: 4px; }
+.dc-mock-card-line:first-child { width: 55%; background: rgba(13,27,42,0.15); }
+.dc-mock-table { border: 1px solid var(--border); border-radius: 5px; overflow: hidden; }
+.dc-mock-tr { display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 0; }
+.dc-mock-tr + .dc-mock-tr { border-top: 1px solid var(--border); }
+.dc-mock-th { height: 18px; background: var(--surf); }
+.dc-mock-td { height: 18px; background: var(--white); }
+.dc-mock-td:first-child { background: rgba(13,27,42,0.025); }
+/* label + text area */
+.dc-body { padding: 16px 20px 22px; }
+.dc-verdict {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 9px; font-weight: 700; letter-spacing: 0.13em; text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.dc-verdict-icon {
+  width: 16px; height: 16px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 9px; font-weight: 900; flex-shrink: 0;
+}
+.dec-card.no .dc-verdict { color: rgba(13,27,42,0.38); }
+.dec-card.no .dc-verdict-icon { background: rgba(220,38,38,0.1); color: var(--red); }
+.dec-card.yes .dc-verdict { color: var(--green); }
+.dec-card.yes .dc-verdict-icon { background: rgba(22,163,74,0.12); color: var(--green); }
+.dec-card h4 { font-size: 13.5px; font-weight: 700; color: var(--navy); margin-bottom: 5px; }
+.dec-card p { font-size: 12px; color: var(--muted); line-height: 1.68; margin: 0; }
+.wt-rule { font-size: 13px; font-weight: 600; color: var(--navy); border-top: 1px solid var(--border); padding-top: 20px; margin-top: 4px; }
+.wt-rule em { font-style: normal; color: var(--muted); font-weight: 400; }
+
+/* ── SCREENS ─────────────────────────────── */
+.screen-block { padding: 56px 0; border-bottom: 1px solid var(--border); opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
+.screen-block.visible { opacity: 1; transform: none; }
+.screen-block:last-child { border-bottom: none; }
+
+.screen-cap { display: flex; align-items: flex-start; gap: 24px; margin-bottom: 28px; }
+.sc-icon-wrap { display: flex; flex-direction: column; align-items: center; gap: 8px; flex-shrink: 0; padding-top: 4px; }
+.sc-icon { font-size: 28px; color: var(--navy); opacity: 0.65; display: block; line-height: 1; transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1), opacity 0.25s; }
+.screen-block:hover .sc-icon { transform: scale(1.18); opacity: 1; }
+.sc-num { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--gold); font-weight: 600; letter-spacing: 0.12em; }
+.sc-text h4 { font-size: 20px; font-weight: 700; color: var(--navy); margin-bottom: 4px; line-height: 1.15; }
+.sc-sub { font-family: 'JetBrains Mono', monospace; font-size: 9px; text-transform: uppercase; letter-spacing: 0.14em; color: rgba(13,27,42,0.35); display: block; margin-bottom: 14px; }
+.sc-text > p { font-size: 14px; color: var(--muted); margin: 0; line-height: 1.75; max-width: 560px; }
+
+/* SCREEN EMBED */
+.screen-embed { border-radius: 12px; overflow: hidden; border: 1px solid var(--border-s); box-shadow: 0 2px 10px rgba(13,27,42,0.05), 0 8px 32px rgba(13,27,42,0.07); margin: 0; transition: box-shadow 0.45s ease, transform 0.45s ease; }
+.screen-embed:hover { box-shadow: 0 6px 20px rgba(13,27,42,0.09), 0 22px 56px rgba(13,27,42,0.12); transform: translateY(-3px); }
+.screen-body { position: relative; background: #fff; overflow: hidden; }
+.screen-body iframe { display: block; width: 1440px; border: none; transform-origin: top left; }
+.screen-open { display: flex; justify-content: flex-end; margin-top: 14px; }
+.screen-open a { font-size: 10px; font-weight: 600; color: rgba(13,27,42,0.28); text-decoration: none; letter-spacing: 0.06em; display: flex; align-items: center; gap: 4px; transition: color 0.2s; }
+.screen-open a .arr { display: inline-block; transition: transform 0.2s ease; }
+.screen-open a:hover { color: var(--blue); }
+.screen-open a:hover .arr { transform: translate(2px, -2px); }
+
+/* METRICS */
+.metrics-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin: 28px 0; }
+.metric-card { background: var(--surf); border: 1px solid var(--border-s); border-radius: 12px; padding: 20px 18px; }
+.mk { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--gold); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.1em; }
+.metric-card h4 { font-family: 'JetBrains Mono', monospace; font-size: 22px; font-weight: 500; color: var(--navy); margin-bottom: 6px; line-height: 1; }
+.metric-card p { font-size: 11.5px; color: var(--muted); margin: 0; line-height: 1.55; }
+
+/* DO DIFFERENTLY — Gap cards */
+.gap-list { display: flex; flex-direction: column; gap: 16px; margin: 32px 0; }
+.gap-item { border: 1px solid var(--border-s); border-radius: 14px; overflow: hidden; transition: box-shadow 0.3s ease; }
+.gap-item:hover { box-shadow: 0 4px 20px rgba(13,27,42,0.07); }
+.gap-header { display: flex; align-items: center; gap: 16px; padding: 18px 24px; background: var(--surf); border-bottom: 1px solid var(--border); }
+.gap-meta { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+.gap-num { font-family: 'JetBrains Mono', monospace; font-size: 9px; font-weight: 700; color: rgba(13,27,42,0.25); letter-spacing: 0.14em; }
+.gap-severity { font-size: 9px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; padding: 3px 10px; border-radius: 20px; }
+.gap-severity.critical { background: rgba(220,38,38,0.08); color: var(--red); }
+.gap-severity.missed { background: rgba(217,119,6,0.09); color: var(--amber); }
+.gap-title { font-size: 14px; font-weight: 700; color: var(--navy); margin: 0; line-height: 1.3; }
+.gap-body { padding: 22px 24px; }
+.gap-body p { font-size: 13.5px; color: var(--text-2); line-height: 1.78; margin-bottom: 14px; }
+.gap-body p:last-of-type { margin-bottom: 16px; }
+.gap-fix { display: flex; gap: 12px; align-items: baseline; background: rgba(13,27,42,0.03); border: 1px solid var(--border); border-left: 3px solid var(--navy); border-radius: 0 8px 8px 0; padding: 12px 16px; font-size: 13px; color: var(--text-2); line-height: 1.72; }
+.gap-fix-lbl { font-family: 'JetBrains Mono', monospace; font-size: 8px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--navy); flex-shrink: 0; margin-top: 2px; }
+
+/* CRITIQUE GRID — What Holds It Back */
+.critique-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; margin: 28px 0; }
+.crit-card { background: var(--white); padding: 24px 24px 26px; position: relative; overflow: hidden; transition: background 0.2s; }
+.crit-card:hover { background: var(--surf); }
+.crit-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; transform: scaleX(0); transform-origin: left; transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1); }
+.crit-card.red::before { background: var(--red); }
+.crit-card.amber::before { background: var(--amber); }
+.crit-card:hover::before { transform: scaleX(1); }
+.crit-icon { width: 36px; height: 36px; border-radius: 9px; display: flex; align-items: center; justify-content: center; margin-bottom: 14px; }
+.crit-card.red .crit-icon { background: rgba(220,38,38,0.07); }
+.crit-card.amber .crit-icon { background: rgba(217,119,6,0.08); }
+.crit-tag { font-family: 'JetBrains Mono', monospace; font-size: 8.5px; font-weight: 700; letter-spacing: 0.13em; text-transform: uppercase; margin-bottom: 8px; }
+.crit-card.red .crit-tag { color: var(--red); }
+.crit-card.amber .crit-tag { color: var(--amber); }
+.crit-card h4 { font-size: 13.5px; font-weight: 700; color: var(--navy); margin-bottom: 7px; line-height: 1.3; }
+.crit-card p { font-size: 11.5px; color: var(--muted); line-height: 1.68; margin: 0 0 12px; }
+.crit-fix { display: inline-flex; align-items: center; gap: 5px; font-size: 10.5px; font-weight: 600; color: var(--navy); background: var(--surf); border: 1px solid var(--border); border-radius: 20px; padding: 3px 10px; }
+.crit-fix::before { content: '→'; font-size: 10px; }
+
+/* REFLECTIONS */
+.refl-list { list-style: none; margin: 24px 0; }
+.refl-list li { display: flex; gap: 16px; padding: 16px 0; border-bottom: 1px solid var(--border); font-size: 14px; color: var(--text-2); line-height: 1.75; }
+.refl-list li:last-child { border-bottom: none; padding-bottom: 0; }
+.refl-list li::before { content: '→'; color: var(--gold); font-weight: 600; flex-shrink: 0; margin-top: 2px; }
+
+/* PILL */
+.pill { display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: 0.05em; padding: 2px 8px; border-radius: 20px; text-transform: uppercase; }
+.pill-a { background: rgba(217,119,6,0.1); color: var(--amber); }
+.pill-g { background: rgba(22,163,74,0.1); color: var(--green); }
+.pill-p { background: rgba(124,58,237,0.1); color: var(--purple); }
+.pill-r { background: rgba(220,38,38,0.08); color: var(--red); }
+
+/* FOOTER */
+footer { background: var(--navy); padding: 64px 2.5rem; text-align: center; }
+footer p { color: rgba(255,255,255,0.28); font-size: 12px; line-height: 1.8; }
+footer strong { color: rgba(255,255,255,0.5); font-weight: 500; }
+
+/* ── SCREEN CALLOUTS ─────────────────────── */
+.annotations { display: none; }
+
+.callout-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 1px;
+  margin-top: 18px;
+  background: var(--border);
+  border: 1px solid var(--border-s);
+  border-radius: 12px;
+  overflow: hidden;
+}
+.callout-item {
+  padding: 18px 20px 20px;
+  background: var(--white);
+  display: block;
+  position: relative;
+  overflow: hidden;
+  cursor: default;
+  transition: background 0.22s ease;
+}
+.callout-item:last-child {}
+/* Left accent bar — springs in on hover */
+.callout-item::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 16%; bottom: 16%;
+  width: 2px;
+  background: var(--navy);
+  border-radius: 0 2px 2px 0;
+  transform: scaleY(0);
+  transform-origin: 50% 100%;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+/* Top shimmer — slides in on hover */
+.callout-item::after {
+  content: '';
+  position: absolute;
+  top: 0; left: -100%; right: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(13,27,42,0.1), transparent);
+  transition: left 0.4s ease, right 0.4s ease;
+}
+.callout-item:hover { background: var(--surf); }
+.callout-item:hover::before { transform: scaleY(1); }
+.callout-item:hover::after { left: 0; right: 0; }
+
+.ci-num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 8px;
+  font-weight: 600;
+  color: rgba(13,27,42,0.2);
+  letter-spacing: 0.22em;
+  display: block;
+  margin-bottom: 8px;
+}
+.ci-num::before { content: '0'; }
+.ci-text { font-size: 12px; color: var(--muted); line-height: 1.62; }
+.ci-text strong {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--navy);
+  display: block;
+  margin-bottom: 3px;
+  letter-spacing: -0.01em;
+  transition: transform 0.22s ease;
+}
+.callout-item:hover .ci-text strong { transform: translateX(4px); }
+
+/* SCROLLBAR */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-thumb { background: var(--border-s); border-radius: 10px; }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<header class="hero">
+
+  <!-- Full-bleed background image -->
+  <div class="hero-bg">
+    <img src="Hero.SimpleCITI.png" alt="CapiCITI — CRE Lending Pipeline Dashboard" draggable="false">
+    <div class="hero-overlay"></div>
+  </div>
+
+
+</header>
+
+<!-- CONCEPT BANNER -->
+
+
+<!-- BODY -->
+<div class="body-wrap">
+
+  <!-- SIDE NAV -->
+  <nav class="side-nav">
+    <div class="sn-brand">
+      <div class="sn-brand-mark">S</div>
+      <div class="sn-brand-name">SimpleCITI</div>
+    </div>
+    <div class="sn-divider" style="margin: 20px 0 24px 0;"></div>
+    <div class="sn-title">Case Study</div>
+    <ul class="sn-list" id="sn-list">
+      <li class="sn-item" data-section="problem">
+        <a href="#problem">
+          <div class="sn-dot"></div>
+          <div class="sn-label"><span class="sn-num">01</span>Problem</div>
+        </a>
+      </li>
+      <li class="sn-item" data-section="research">
+        <a href="#research">
+          <div class="sn-dot"></div>
+          <div class="sn-label"><span class="sn-num">02</span>Research</div>
+        </a>
+      </li>
+      <li class="sn-item" data-section="wrong-turn">
+        <a href="#wrong-turn">
+          <div class="sn-dot"></div>
+          <div class="sn-label"><span class="sn-num">03</span>Wrong Turn</div>
+        </a>
+      </li>
+      <li class="sn-item" data-section="design-system">
+        <a href="#design-system">
+          <div class="sn-dot"></div>
+          <div class="sn-label"><span class="sn-num">04</span>Design System</div>
+        </a>
+      </li>
+      <li class="sn-item" data-section="solution">
+        <a href="#solution">
+          <div class="sn-dot"></div>
+          <div class="sn-label"><span class="sn-num">05</span>Solution</div>
+        </a>
+      </li>
+      <li class="sn-item" data-section="screens">
+        <a href="#screens">
+          <div class="sn-dot"></div>
+          <div class="sn-label"><span class="sn-num">06</span>Screens</div>
+        </a>
+      </li>
+      <li class="sn-item" data-section="differently">
+        <a href="#differently">
+          <div class="sn-dot"></div>
+          <div class="sn-label"><span class="sn-num">07</span>Do Differently</div>
+        </a>
+      </li>
+      <li class="sn-item" data-section="learned">
+        <a href="#learned">
+          <div class="sn-dot"></div>
+          <div class="sn-label"><span class="sn-num">08</span>Learnings</div>
+        </a>
+      </li>
+    </ul>
+  </nav>
+
+  <!-- MAIN CONTENT -->
+  <main class="main-col">
+
+    <!-- CASE INTRO -->
+    <div class="case-intro">
+      <div class="ci-kicker">
+        <span>Case Study · Concept Project · 2025</span>
+      </div>
+      <h1>Solo UI/UX designer focused on fintech and B2B SaaS.<br><em>I design for decisions</em>, not screens.</h1>
+      <div class="ci-meta-row">
+        <div class="ci-meta-item"><div class="ci-meta-lbl">Role</div><div class="ci-meta-val">Solo UI/UX Designer</div></div>
+        <div class="ci-meta-item"><div class="ci-meta-lbl">Domain</div><div class="ci-meta-val">Fintech · CRE Lending · B2B SaaS</div></div>
+        <div class="ci-meta-item"><div class="ci-meta-lbl">Tools</div><div class="ci-meta-val">Figma · FigJam · HTML/CSS</div></div>
+      </div>
+    </div>
+
+    <!-- 01 PROBLEM -->
+    <section id="problem">
+      <div class="section-label">
+        <span class="section-num">01</span>
+        <span class="section-name">Problem</span>
+      </div>
+      <h2>The right signal exists.<br>It just arrives after the damage is done.</h2>
+      <p>12 active deals. The information exists — CRM, email, spreadsheet. The problem is the 20–30 minutes every morning spent reconstructing it to find the one deal on fire.</p>
+
+      <div class="pain-grid">
+        <!-- Critical 01 -->
+        <div class="pain-card">
+          <div class="pain-icon">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+              <path d="M9 2L2 14h14L9 2z" stroke="#DC2626" stroke-width="1.4" stroke-linejoin="round"/>
+              <path d="M9 7v4M9 12.5v.5" stroke="#DC2626" stroke-width="1.4" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div class="pain-num">Critical 01</div>
+          <h4>The Phase I ESA cascade</h4>
+          <p>One missing environmental report blocks Credit Review, delays close, triggers rate lock renegotiation. Officer finds out when the lawyer emails — two days before closing.</p>
+        </div>
+        <!-- Systemic 02 -->
+        <div class="pain-card amber">
+          <div class="pain-icon">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+              <circle cx="9" cy="9" r="6.5" stroke="#D97706" stroke-width="1.4"/>
+              <path d="M9 5v4l2.5 2.5" stroke="#D97706" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div class="pain-num">Systemic 02</div>
+          <h4>LTV buried in the deal</h4>
+          <p>Every officer checks LTV first. Every platform requires clicking in to see it. 12 deals = 12 unnecessary clicks before triage even starts.</p>
+        </div>
+        <!-- Systemic 03 -->
+        <div class="pain-card amber">
+          <div class="pain-icon">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+              <rect x="2" y="4" width="14" height="2.5" rx="1.2" stroke="#D97706" stroke-width="1.4"/>
+              <rect x="2" y="8" width="10" height="2.5" rx="1.2" stroke="#D97706" stroke-width="1.4"/>
+              <rect x="2" y="12" width="7" height="2.5" rx="1.2" stroke="#D97706" stroke-width="1.4"/>
+            </svg>
+          </div>
+          <div class="pain-num">Systemic 03</div>
+          <h4>Stage tells where, not whether</h4>
+          <p>"Underwriting" on 8 deals = 8 different situations. Officers rebuild context every morning to separate urgent from idle.</p>
+        </div>
+      </div>
+
+      <!-- Research sources -->
+      <div class="research-sources">
+        <span class="rs-label">Sourced from</span>
+        <span class="rs-pill"><span class="rs-dot" style="background:#1a56db;">D</span>Dealpath</span>
+        <span class="rs-pill"><span class="rs-dot" style="background:#047857;">n</span>nCino</span>
+        <span class="rs-pill"><span class="rs-dot" style="background:#7c3aed;">B</span>Blooma</span>
+        <div class="rs-divider"></div>
+        <span class="rs-pill">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 4h10M2 7h7M2 10h5" stroke="#9CA3AF" stroke-width="1.3" stroke-linecap="round"/></svg>
+          CRE Forums
+        </span>
+        <span class="rs-note">No direct interviews — informed hypotheses</span>
+      </div>
+    </section>
+
+    <!-- 02 RESEARCH -->
+    <section id="research">
+      <div class="section-label">
+        <span class="section-num">02</span>
+        <span class="section-name">Research</span>
+      </div>
+      <h2>No users. So I audited the tools they're stuck with.</h2>
+
+      <!-- Platform audit cards -->
+      <div class="platform-grid">
+
+        <div class="plat-card">
+          <div class="plat-header">
+            <div class="plat-logo">
+              <div class="plat-badge" style="background:#1a56db;">D</div>
+              <span class="plat-name">Dealpath</span>
+            </div>
+            <span class="verdict v-partial">Partial</span>
+          </div>
+          <div class="plat-gap"><strong>Missing:</strong> No row-level risk signal. LTV buried. Every deal looks equal weight at a glance.</div>
+        </div>
+
+        <div class="plat-card">
+          <div class="plat-header">
+            <div class="plat-logo">
+              <div class="plat-badge" style="background:#7c3aed;">B</div>
+              <span class="plat-name">Blooma</span>
+            </div>
+            <span class="verdict v-partial">Partial</span>
+          </div>
+          <div class="plat-gap"><strong>Missing:</strong> Fast DSCR/LTV on import, but optimized for underwriting — not morning pipeline triage.</div>
+        </div>
+
+        <div class="plat-card">
+          <div class="plat-header">
+            <div class="plat-logo">
+              <div class="plat-badge" style="background:#0891b2;">J</div>
+              <span class="plat-name">Juniper Square</span>
+            </div>
+            <span class="verdict v-miss">Wrong persona</span>
+          </div>
+          <div class="plat-gap"><strong>Built for:</strong> LP reporting and fund directors. Deal origination is an afterthought.</div>
+        </div>
+
+        <div class="plat-card">
+          <div class="plat-header">
+            <div class="plat-logo">
+              <div class="plat-badge" style="background:#047857;">n</div>
+              <span class="plat-name">nCino</span>
+            </div>
+            <span class="verdict v-miss">Wrong context</span>
+          </div>
+          <div class="plat-gap"><strong>Built for:</strong> Bank compliance teams. Too much config overhead for independent lenders moving fast.</div>
+        </div>
+
+      </div>
+
+      <!-- Lifecycle flow -->
+      <div class="lifecycle">
+        <div class="lc-stage">
+          <div class="lc-icon">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="3" y="5" width="12" height="9" rx="1.5" stroke="#0D1B2A" stroke-width="1.3"/><path d="M3 8h12" stroke="#0D1B2A" stroke-width="1.3"/><path d="M6 3v4M12 3v4" stroke="#0D1B2A" stroke-width="1.3" stroke-linecap="round"/></svg>
+          </div>
+          <div class="lc-label">Intake</div>
+        </div>
+        <div class="lc-arrow">→</div>
+        <div class="lc-stage">
+          <div class="lc-icon">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="3" y="3" width="12" height="12" rx="2" stroke="#0D1B2A" stroke-width="1.3"/><path d="M6 9h2m0 0V7m0 2v2m2-2h2" stroke="#0D1B2A" stroke-width="1.3" stroke-linecap="round"/></svg>
+          </div>
+          <div class="lc-label">Underwriting</div>
+        </div>
+        <div class="lc-arrow">→</div>
+        <div class="lc-stage">
+          <div class="lc-icon">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 2.5L3 6v4c0 3.3 2.6 5.8 6 6.5 3.4-.7 6-3.2 6-6.5V6L9 2.5z" stroke="#0D1B2A" stroke-width="1.3" stroke-linejoin="round"/><path d="M6.5 9l2 2 3-3" stroke="#0D1B2A" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div class="lc-label">Credit Review</div>
+        </div>
+        <div class="lc-arrow">→</div>
+        <div class="lc-stage">
+          <div class="lc-icon">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="6" stroke="#0D1B2A" stroke-width="1.3"/><path d="M6 9l2.5 2.5L12 7" stroke="#0D1B2A" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div class="lc-label">Approval</div>
+        </div>
+        <div class="lc-arrow">→</div>
+        <div class="lc-stage">
+          <div class="lc-icon">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3 14h12M6 14V8.5L9 6l3 2.5V14" stroke="#0D1B2A" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><rect x="7.5" y="10.5" width="3" height="3.5" rx="0.5" stroke="#0D1B2A" stroke-width="1.3"/></svg>
+          </div>
+          <div class="lc-label">Closing</div>
+        </div>
+      </div>
+      <p style="font-size:11.5px; color:var(--muted); margin-top:10px;">Each stage has distinct blockers and decision-makers. None of the platforms above treat them differently.</p>
+
+    </section>
+
+    <!-- 03 WRONG TURN -->
+    <section id="wrong-turn">
+      <div class="section-label">
+        <span class="section-num">03</span>
+        <span class="section-name">Wrong Turn</span>
+      </div>
+      <h2>The first direction looked right.<br>That was the warning sign.</h2>
+
+      <div class="dec-grid">
+        <!-- V1 Rejected -->
+        <div class="dec-card no">
+          <div class="dc-visual">
+            <div class="dc-mock-cards">
+              <div class="dc-mock-card"><div class="dc-mock-card-line"></div><div class="dc-mock-card-line"></div><div class="dc-mock-card-line"></div></div>
+              <div class="dc-mock-card"><div class="dc-mock-card-line"></div><div class="dc-mock-card-line"></div><div class="dc-mock-card-line"></div></div>
+              <div class="dc-mock-card"><div class="dc-mock-card-line"></div><div class="dc-mock-card-line"></div><div class="dc-mock-card-line"></div></div>
+              <div class="dc-mock-card"><div class="dc-mock-card-line"></div><div class="dc-mock-card-line"></div><div class="dc-mock-card-line"></div></div>
+            </div>
+          </div>
+          <div class="dc-body">
+            <div class="dc-verdict">
+              <span class="dc-verdict-icon">✕</span>
+              Rejected — V1
+            </div>
+            <h4>Card grid</h4>
+            <p>Designed for screenshots. One deal in focus at a time — structurally wrong for scanning 12 deals at 8am.</p>
+          </div>
+        </div>
+        <!-- V2 Chosen -->
+        <div class="dec-card yes">
+          <div class="dc-visual">
+            <div class="dc-mock-table">
+              <div class="dc-mock-tr"><div class="dc-mock-th"></div><div class="dc-mock-th"></div><div class="dc-mock-th"></div><div class="dc-mock-th"></div></div>
+              <div class="dc-mock-tr"><div class="dc-mock-td"></div><div class="dc-mock-td"></div><div class="dc-mock-td"></div><div class="dc-mock-td"></div></div>
+              <div class="dc-mock-tr"><div class="dc-mock-td"></div><div class="dc-mock-td"></div><div class="dc-mock-td"></div><div class="dc-mock-td"></div></div>
+              <div class="dc-mock-tr"><div class="dc-mock-td"></div><div class="dc-mock-td"></div><div class="dc-mock-td"></div><div class="dc-mock-td"></div></div>
+            </div>
+          </div>
+          <div class="dc-body">
+            <div class="dc-verdict">
+              <span class="dc-verdict-icon">✓</span>
+              Chosen — V2
+            </div>
+            <h4>Table + inline panel</h4>
+            <p>LTV, stage, close date scannable in one pass. Depth on demand — panel opens without leaving the pipeline.</p>
+          </div>
+        </div>
+      </div>
+
+      <p class="wt-rule">Cards focus. Tables scan. <em>Not preference — functional requirement.</em></p>
+    </section>
+
+    <!-- 04 DESIGN SYSTEM -->
+    <section id="design-system">
+      <div class="section-label">
+        <span class="section-num">04</span>
+        <span class="section-name">Design System</span>
+      </div>
+      <h2>Resolved before the first screen.</h2>
+      <p>Token system locked first. Navy for authority, gold for financial signal moments, monospaced numerals throughout. JetBrains Mono for every number isn't aesthetic — it prevents misreads when scanning a column of dollar figures at speed. Monospaced numerals are how financial software earns trust.</p>
+
+      <div class="ds-tokens">
+        <div class="ds-token">
+          <div class="ds-swatch" style="background:#0D1B2A;"></div>
+          <div class="ds-token-lbl">Authority</div>
+          <div class="ds-token-val">Navy #0D1B2A</div>
+        </div>
+        <div class="ds-token">
+          <div class="ds-swatch" style="background:#C9A84C;"></div>
+          <div class="ds-token-lbl">Signal</div>
+          <div class="ds-token-val">Gold #C9A84C</div>
+        </div>
+        <div class="ds-token">
+          <div class="ds-swatch" style="background:#DC2626;"></div>
+          <div class="ds-token-lbl">Critical</div>
+          <div class="ds-token-val">Red #DC2626</div>
+        </div>
+        <div class="ds-token">
+          <div class="ds-swatch" style="background:#D97706;"></div>
+          <div class="ds-token-lbl">Systemic</div>
+          <div class="ds-token-val">Amber #D97706</div>
+        </div>
+        <div class="ds-token">
+          <div class="ds-swatch" style="background:#F6F7F9; border:1px solid #E4E7EC;"></div>
+          <div class="ds-token-lbl">Surface</div>
+          <div class="ds-token-val">Surf #F6F7F9</div>
+        </div>
+      </div>
+
+      <div class="ds-block">
+        <p style="margin:0; font-size:13px; color:var(--muted);">Typography, spacing scale, component states, and interaction tokens documented in full.</p>
+        <a class="ds-btn" href="#" onclick="return false;">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1" y="1" width="12" height="12" rx="2.5" stroke="currentColor" stroke-width="1.3"/><path d="M4 7h6M7 4v6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+          View Full System
+        </a>
+      </div>
+    </section>
+
+    <!-- 05 SOLUTION -->
+    <section id="solution">
+      <div class="section-label">
+        <span class="section-num">04</span>
+        <span class="section-name">Solution</span>
+        <div class="section-rule"></div>
+      </div>
+      <h2>Three zoom levels, one surface —<br>plus a risk signal nobody else has.</h2>
+
+      <!-- Zoom levels -->
+      <div class="zoom-levels">
+
+        <div class="zoom-card">
+          <div class="zoom-mock">
+            <div class="zm-kpi">
+              <div class="zm-kpi-card"><div class="zm-kpi-val"></div><div class="zm-kpi-lbl"></div></div>
+              <div class="zm-kpi-card"><div class="zm-kpi-val" style="width:45%"></div><div class="zm-kpi-lbl" style="width:55%"></div></div>
+              <div class="zm-kpi-card"><div class="zm-kpi-val" style="width:70%"></div><div class="zm-kpi-lbl"></div></div>
+              <div class="zm-kpi-card"><div class="zm-kpi-val" style="width:40%"></div><div class="zm-kpi-lbl" style="width:60%"></div></div>
+            </div>
+          </div>
+          <div class="zoom-body">
+            <div class="zoom-level">Level 01</div>
+            <h4>Portfolio Health</h4>
+            <p>4 KPIs. Total pipeline, active deals, avg LTV, closings this month. Macro read in 3 seconds.</p>
+          </div>
+        </div>
+
+        <div class="zoom-card">
+          <div class="zoom-mock">
+            <div class="zm-table">
+              <div class="zm-row"><div class="zm-cell" style="background:rgba(13,27,42,0.2)"></div><div class="zm-cell"></div><div class="zm-pill a"></div><div class="zm-dot a"></div></div>
+              <div class="zm-row"><div class="zm-cell"></div><div class="zm-cell"></div><div class="zm-pill g"></div><div class="zm-dot g"></div></div>
+              <div class="zm-row"><div class="zm-cell"></div><div class="zm-cell"></div><div class="zm-pill r"></div><div class="zm-dot r"></div></div>
+              <div class="zm-row"><div class="zm-cell"></div><div class="zm-cell"></div><div class="zm-pill g"></div><div class="zm-dot g"></div></div>
+            </div>
+          </div>
+          <div class="zoom-body">
+            <div class="zoom-level">Level 02</div>
+            <h4>Deal Triage</h4>
+            <p>LTV color-coded. Stage pills. Close dates flagged amber at 7 days. Risk Score on every row.</p>
+          </div>
+        </div>
+
+        <div class="zoom-card">
+          <div class="zoom-mock">
+            <div class="zm-panel">
+              <div class="zm-panel-main">
+                <div class="zm-row" style="grid-template-columns:1fr;"><div class="zm-cell"></div></div>
+                <div class="zm-row" style="grid-template-columns:1fr;"><div class="zm-cell"></div></div>
+                <div class="zm-row" style="grid-template-columns:1fr;"><div class="zm-cell"></div></div>
+              </div>
+              <div class="zm-panel-side">
+                <div class="zm-panel-line gold"></div>
+                <div class="zm-panel-line"></div>
+                <div class="zm-panel-line"></div>
+                <div class="zm-panel-line" style="width:70%"></div>
+                <div class="zm-panel-line"></div>
+              </div>
+            </div>
+          </div>
+          <div class="zoom-body">
+            <div class="zoom-level">Level 03</div>
+            <h4>Deal Depth</h4>
+            <p>Panel slides in on row click. Capital stack, doc checklist, timeline — pipeline stays visible.</p>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Closing Risk Score -->
+      <div class="crs-block">
+        <div class="crs-header">
+          <div>
+            <div class="crs-kicker">The Key Invention</div>
+            <h3>Closing Risk Score</h3>
+          </div>
+          <p>Stage tells you where a deal is.<br>This tells you if it will actually close.</p>
+        </div>
+        <div class="crs-body">
+          <!-- Inputs -->
+          <div class="crs-inputs">
+            <div class="crs-input">
+              <div class="crs-input-icon">
+                <svg width="15" height="15" viewBox="0 0 15 15" fill="none"><circle cx="7.5" cy="7.5" r="5.5" stroke="#C9A84C" stroke-width="1.2"/><path d="M7.5 4.5v3l2 2" stroke="#C9A84C" stroke-width="1.2" stroke-linecap="round"/></svg>
+              </div>
+              <div>
+                <div class="crs-input-text">Days to close</div>
+                <div class="crs-input-sub">vs. stage-appropriate norms</div>
+              </div>
+            </div>
+            <div class="crs-input">
+              <div class="crs-input-icon">
+                <svg width="15" height="15" viewBox="0 0 15 15" fill="none"><rect x="2.5" y="1.5" width="10" height="12" rx="1.5" stroke="#C9A84C" stroke-width="1.2"/><path d="M5 5.5h5M5 8h3" stroke="#C9A84C" stroke-width="1.2" stroke-linecap="round"/></svg>
+              </div>
+              <div>
+                <div class="crs-input-text">Document blockers</div>
+                <div class="crs-input-sub">outstanding items in checklist</div>
+              </div>
+            </div>
+            <div class="crs-input">
+              <div class="crs-input-icon">
+                <svg width="15" height="15" viewBox="0 0 15 15" fill="none"><path d="M2 11L5.5 7l3 3L12 4" stroke="#C9A84C" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </div>
+              <div>
+                <div class="crs-input-text">LTV headroom</div>
+                <div class="crs-input-sub">against appraisal variance norms</div>
+              </div>
+            </div>
+          </div>
+          <!-- Arrow -->
+          <div class="crs-arrow">→</div>
+          <!-- Outputs -->
+          <div class="crs-outputs">
+            <div class="crs-output high">
+              <div class="crs-output-dot"></div>
+              <span class="crs-output-label">High Risk</span>
+              <span class="crs-output-desc">Needs action today</span>
+            </div>
+            <div class="crs-output watch">
+              <div class="crs-output-dot"></div>
+              <span class="crs-output-label">Watch</span>
+              <span class="crs-output-desc">Track this week</span>
+            </div>
+            <div class="crs-output good">
+              <div class="crs-output-dot"></div>
+              <span class="crs-output-label">On Track</span>
+              <span class="crs-output-desc">Moving on its own</span>
+            </div>
+          </div>
+        </div>
+        <div class="crs-footer">One dot replaces the mental math officers do every morning — inputs already exist in the system.</div>
+      </div>
+    </section>
+
+    <!-- 05 SCREENS -->
+    <section id="screens">
+      <div class="section-label">
+        <span class="section-num">05</span>
+        <span class="section-name">Design Execution</span>
+        <div class="section-rule"></div>
+      </div>
+      <h2>Eight screens. Each answers a specific question.</h2>
+
+      <!-- 01 PIPELINE -->
+      <div class="screen-block" id="scr-pipeline">
+        <div class="screen-cap">
+          <div class="sc-icon-wrap">
+            <span class="sc-icon">▤</span>
+            <span class="sc-num">01</span>
+          </div>
+          <div class="sc-text">
+            <h4>Pipeline</h4>
+            <span class="sc-sub">Daily Command Center</span>
+            <p>Four KPI cards first, then the table: LTV color-coded per row, <span class="pill pill-a">Underwriting</span> <span class="pill pill-g">Approved</span> <span class="pill pill-p">Closing</span> <span class="pill pill-r">Flagged</span> stage pills, close dates turning amber within 7 days. Closing Risk Score on every row.</p>
+          </div>
+        </div>
+        <div class="screen-embed">
+          <div class="screen-body">
+            <iframe src="../Dashboards/D1_Loan_Pipeline.html" loading="lazy" title="D1 Loan Pipeline"></iframe>
+            <div class="annotations">
+              <div class="ann-num" style="top:14%;left:28%">1</div>
+              <div class="ann-num" style="top:47%;left:46%">2</div>
+              <div class="ann-num" style="top:47%;left:74%">3</div>
+            </div>
+          </div>
+        </div>
+        <div class="callout-list">
+          <div class="callout-item">
+            <div class="ci-num">1</div>
+            <div class="ci-text"><strong>Four KPI cards</strong>Total pipeline, avg LTV, active deals, closings this month. Macro read before the table.</div>
+          </div>
+          <div class="callout-item">
+            <div class="ci-num">2</div>
+            <div class="ci-text"><strong>LTV color-coded</strong>Green below 65%, amber to 75%, red above — scanned in a column without a click.</div>
+          </div>
+          <div class="callout-item">
+            <div class="ci-num">3</div>
+            <div class="ci-text"><strong>Closing Risk Score</strong>Composite of days-to-close, doc blockers, and LTV headroom. Replaces morning mental math.</div>
+          </div>
+        </div>
+        <div class="screen-open"><a href="../Dashboards/D1_Loan_Pipeline.html" target="_blank">Open full screen <span class="arr">↗</span></a></div>
+      </div>
+
+      <!-- 02 DEALS -->
+      <div class="screen-block" id="scr-deals">
+        <div class="screen-cap">
+          <div class="sc-icon-wrap">
+            <span class="sc-icon">◆</span>
+            <span class="sc-num">02</span>
+          </div>
+          <div class="sc-text">
+            <h4>Deals</h4>
+            <span class="sc-sub">Active Deal Directory</span>
+            <p>Full roster across all stages. Stage filter tabs, LTV, DSCR, borrower, property type, and Closing Risk Score on every row — one surface, no drilling.</p>
+          </div>
+        </div>
+        <div class="screen-embed">
+          <div class="screen-body">
+            <iframe src="../Dashboards/D_Deals.html" loading="lazy" title="Deals Directory"></iframe>
+            <div class="annotations">
+              <div class="ann-num" style="top:27%;left:22%">1</div>
+              <div class="ann-num" style="top:46%;left:52%">2</div>
+            </div>
+          </div>
+        </div>
+        <div class="callout-list">
+          <div class="callout-item">
+            <div class="ci-num">1</div>
+            <div class="ci-text"><strong>Stage filter tabs</strong>One click to see only Intake, Underwriting, Approved, or Closing — the whole roster without drilling.</div>
+          </div>
+          <div class="callout-item">
+            <div class="ci-num">2</div>
+            <div class="ci-text"><strong>DSCR on every row</strong>Debt Service Coverage Ratio visible inline — no click into the deal, no context switch required.</div>
+          </div>
+        </div>
+        <div class="screen-open"><a href="../Dashboards/D_Deals.html" target="_blank">Open full screen <span class="arr">↗</span></a></div>
+      </div>
+
+      <!-- 03 UNDERWRITING -->
+      <div class="screen-block" id="scr-underwriting">
+        <div class="screen-cap">
+          <div class="sc-icon-wrap">
+            <span class="sc-icon">◎</span>
+            <span class="sc-num">03</span>
+          </div>
+          <div class="sc-text">
+            <h4>Underwriting</h4>
+            <span class="sc-sub">Single Deal View</span>
+            <p>Three columns in parallel: financials, capital stack + risk, document checklist. An underwriter asks three questions simultaneously — hiding any one behind a tab is a friction tax on every review. LTV and DSCR live together because they're read together.</p>
+          </div>
+        </div>
+        <div class="screen-embed">
+          <div class="screen-body">
+            <iframe src="../Dashboards/D2_Underwriting.html" loading="lazy" title="D2 Underwriting"></iframe>
+            <div class="annotations">
+              <div class="ann-num" style="top:38%;left:19%">1</div>
+              <div class="ann-num" style="top:34%;left:44%">2</div>
+              <div class="ann-num" style="top:22%;left:71%">3</div>
+            </div>
+          </div>
+        </div>
+        <div class="callout-list">
+          <div class="callout-item">
+            <div class="ci-num">1</div>
+            <div class="ci-text"><strong>LTV gauge</strong>Threshold line at 75%. Fills red when breached — the one number that gates credit approval.</div>
+          </div>
+          <div class="callout-item">
+            <div class="ci-num">2</div>
+            <div class="ci-text"><strong>Capital stack</strong>Senior debt, mezzanine, and equity visualized as a stacked bar. Lender exposure readable in one second.</div>
+          </div>
+          <div class="callout-item">
+            <div class="ci-num">3</div>
+            <div class="ci-text"><strong>Document checklist</strong>Phase I ESA, appraisal, title — each with status. Missing items surface before they become closing blockers.</div>
+          </div>
+        </div>
+        <div class="screen-open"><a href="../Dashboards/D2_Underwriting.html" target="_blank">Open full screen <span class="arr">↗</span></a></div>
+      </div>
+
+      <!-- 04 PORTFOLIO -->
+      <div class="screen-block" id="scr-portfolio">
+        <div class="screen-cap">
+          <div class="sc-icon-wrap">
+            <span class="sc-icon">⬡</span>
+            <span class="sc-num">04</span>
+          </div>
+          <div class="sc-text">
+            <h4>Portfolio</h4>
+            <span class="sc-sub">Management Layer</span>
+            <p>Different persona, same system. The portfolio director asks "how is the business performing?" Six KPIs, origination trend, property type breakdown, officer leaderboard. Horizontal bars throughout — quantity comparison instant, no mental math.</p>
+          </div>
+        </div>
+        <div class="screen-embed">
+          <div class="screen-body">
+            <iframe src="../Dashboards/D3_Portfolio.html" loading="lazy" title="D3 Portfolio"></iframe>
+            <div class="annotations">
+              <div class="ann-num" style="top:13%;left:28%">1</div>
+              <div class="ann-num" style="top:50%;left:21%">2</div>
+              <div class="ann-num" style="top:50%;left:53%">3</div>
+            </div>
+          </div>
+        </div>
+        <div class="callout-list">
+          <div class="callout-item">
+            <div class="ci-num">1</div>
+            <div class="ci-text"><strong>Six KPIs</strong>Total AUM, avg LTV, weighted DSCR, delinquency rate, new originations, and active deals. Business health in three seconds.</div>
+          </div>
+          <div class="callout-item">
+            <div class="ci-num">2</div>
+            <div class="ci-text"><strong>Origination trend</strong>Horizontal bars by month — quantity comparison is instant, no mental math, no squinting at axis labels.</div>
+          </div>
+          <div class="callout-item">
+            <div class="ci-num">3</div>
+            <div class="ci-text"><strong>Officer leaderboard</strong>Volume and deal count per officer. Shared context without a separate reporting request.</div>
+          </div>
+        </div>
+        <div class="screen-open"><a href="../Dashboards/D3_Portfolio.html" target="_blank">Open full screen <span class="arr">↗</span></a></div>
+      </div>
+
+      <!-- 05 REPORTS -->
+      <div class="screen-block" id="scr-reports">
+        <div class="screen-cap">
+          <div class="sc-icon-wrap">
+            <span class="sc-icon">≣</span>
+            <span class="sc-num">05</span>
+          </div>
+          <div class="sc-text">
+            <h4>Reports</h4>
+            <span class="sc-sub">Report Library</span>
+            <p>Templates grouped by persona — officer, compliance, management. Scheduled reports and recent downloads in the sidebar. One click to generate, no context lost.</p>
+          </div>
+        </div>
+        <div class="screen-embed">
+          <div class="screen-body">
+            <iframe src="../Dashboards/D_Reports.html" loading="lazy" title="Reports Library"></iframe>
+            <div class="annotations">
+              <div class="ann-num" style="top:30%;left:22%">1</div>
+              <div class="ann-num" style="top:20%;left:72%">2</div>
+            </div>
+          </div>
+        </div>
+        <div class="callout-list">
+          <div class="callout-item">
+            <div class="ci-num">1</div>
+            <div class="ci-text"><strong>Grouped by persona</strong>Officer, Compliance, and Management templates separated — no hunting for the right report in a flat list.</div>
+          </div>
+          <div class="callout-item">
+            <div class="ci-num">2</div>
+            <div class="ci-text"><strong>Scheduled reports sidebar</strong>Upcoming auto-generates and recent downloads visible at a glance. One click to run ad hoc.</div>
+          </div>
+        </div>
+        <div class="screen-open"><a href="../Dashboards/D_Reports.html" target="_blank">Open full screen <span class="arr">↗</span></a></div>
+      </div>
+
+      <!-- 06 ACTIVITY LOG -->
+      <div class="screen-block" id="scr-activity">
+        <div class="screen-cap">
+          <div class="sc-icon-wrap">
+            <span class="sc-icon">◷</span>
+            <span class="sc-num">06</span>
+          </div>
+          <div class="sc-text">
+            <h4>Activity Log</h4>
+            <span class="sc-sub">Proactive Surfacing</span>
+            <p>Grouped by consequence, not time. Critical blockers lead — missing Phase I ESA, LTV breach — each with an inline action. Read alerts fade to 65% so triage stays clear.</p>
+          </div>
+        </div>
+        <div class="screen-embed">
+          <div class="screen-body">
+            <iframe src="../Dashboards/D6_Notifications.html" loading="lazy" title="D6 Notifications"></iframe>
+            <div class="annotations">
+              <div class="ann-num" style="top:20%;left:24%">1</div>
+              <div class="ann-num" style="top:40%;left:68%">2</div>
+              <div class="ann-num" style="top:62%;left:24%">3</div>
+            </div>
+          </div>
+        </div>
+        <div class="callout-list">
+          <div class="callout-item">
+            <div class="ci-num">1</div>
+            <div class="ci-text"><strong>Consequence-first sort</strong>Missing Phase I ESA and LTV breaches lead — not the most recent event, but the one that costs most to ignore.</div>
+          </div>
+          <div class="callout-item">
+            <div class="ci-num">2</div>
+            <div class="ci-text"><strong>Inline action</strong>Upload, assign, or resolve directly from the alert row. No navigation away, no context lost.</div>
+          </div>
+          <div class="callout-item">
+            <div class="ci-num">3</div>
+            <div class="ci-text"><strong>Read alerts fade to 65%</strong>Cleared items recede without disappearing. The active triage list stays visually dominant.</div>
+          </div>
+        </div>
+        <div class="screen-open"><a href="../Dashboards/D6_Notifications.html" target="_blank">Open full screen <span class="arr">↗</span></a></div>
+      </div>
+
+      <!-- 07 INTAKE FORM -->
+      <div class="screen-block" id="scr-intake">
+        <div class="screen-cap">
+          <div class="sc-icon-wrap">
+            <span class="sc-icon">⊕</span>
+            <span class="sc-num">07</span>
+          </div>
+          <div class="sc-text">
+            <h4>Intake Form</h4>
+            <span class="sc-sub">Entry Point · Interactive</span>
+            <p>Four-step form with a live summary panel. Real-time LTV: green below 65%, amber to 75%, red above. Risk surfaced at entry — not discovered at underwriting where it costs more to fix.</p>
+          </div>
+        </div>
+        <div class="screen-embed">
+          <div class="screen-body">
+            <iframe src="../Dashboards/D4_Intake_Form.html" loading="lazy" title="D4 Intake Form"></iframe>
+            <div class="annotations">
+              <div class="ann-num" style="top:13%;left:28%">1</div>
+              <div class="ann-num" style="top:46%;left:69%">2</div>
+              <div class="ann-num" style="top:68%;left:28%">3</div>
+            </div>
+          </div>
+        </div>
+        <div class="callout-list">
+          <div class="callout-item">
+            <div class="ci-num">1</div>
+            <div class="ci-text"><strong>4-step stepper</strong>Borrower → Property → Financials → Documents. Progress visible at all times, back-navigation preserved.</div>
+          </div>
+          <div class="callout-item">
+            <div class="ci-num">2</div>
+            <div class="ci-text"><strong>Live LTV calculator</strong>Updates on every keystroke. Green below 65%, amber to 75%, red above. Risk visible before submission.</div>
+          </div>
+          <div class="callout-item">
+            <div class="ci-num">3</div>
+            <div class="ci-text"><strong>Risk at entry</strong>A high-LTV deal is flagged here, not discovered two weeks into underwriting when it's expensive to unwind.</div>
+          </div>
+        </div>
+        <div class="screen-open"><a href="../Dashboards/D4_Intake_Form.html" target="_blank">Open full screen <span class="arr">↗</span></a></div>
+      </div>
+
+      <!-- 08 SETTINGS -->
+      <div class="screen-block" id="scr-settings">
+        <div class="screen-cap">
+          <div class="sc-icon-wrap">
+            <span class="sc-icon">⊙</span>
+            <span class="sc-num">08</span>
+          </div>
+          <div class="sc-text">
+            <h4>Settings</h4>
+            <span class="sc-sub">Account & Configuration</span>
+            <p>Profile, Notifications, Team, Integrations — tabbed and scannable. Two-column form with account summary card. Alert thresholds configurable without leaving the surface.</p>
+          </div>
+        </div>
+        <div class="screen-embed">
+          <div class="screen-body">
+            <iframe src="../Dashboards/D_Settings.html" loading="lazy" title="Settings"></iframe>
+            <div class="annotations">
+              <div class="ann-num" style="top:17%;left:22%">1</div>
+              <div class="ann-num" style="top:34%;left:67%">2</div>
+            </div>
+          </div>
+        </div>
+        <div class="callout-list">
+          <div class="callout-item">
+            <div class="ci-num">1</div>
+            <div class="ci-text"><strong>Tab navigation</strong>Profile, Notifications, Team, Integrations — all surfaces reachable in one click with full state preserved.</div>
+          </div>
+          <div class="callout-item">
+            <div class="ci-num">2</div>
+            <div class="ci-text"><strong>Account summary card</strong>Plan, usage, and billing visible without leaving the profile tab. No buried settings page required.</div>
+          </div>
+        </div>
+        <div class="screen-open"><a href="../Dashboards/D_Settings.html" target="_blank">Open full screen <span class="arr">↗</span></a></div>
+      </div>
+
+      <!-- METRICS -->
+      <h3 style="margin-top: 48px;">If I could measure success</h3>
+      <div class="metrics-row">
+        <div class="metric-card">
+          <div class="mk">Target</div>
+          <h4>&lt;90s</h4>
+          <p>Login to first meaningful action. Currently estimated at 20+ min with email + spreadsheet context-rebuilding.</p>
+        </div>
+        <div class="metric-card">
+          <div class="mk">Target</div>
+          <h4>↓60%</h4>
+          <p>Document gap discovery at closing vs. underwriting stage. Blockers should surface earlier.</p>
+        </div>
+        <div class="metric-card">
+          <div class="mk">Target</div>
+          <h4>&lt;5%</h4>
+          <p>Close date slippage from missing required documents. Should approach zero with proactive flagging.</p>
+        </div>
+        <div class="metric-card">
+          <div class="mk">Target</div>
+          <h4>0 clicks</h4>
+          <p>To see LTV, stage, and close date for any deal. Currently: 1–3 clicks in every platform audited.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="differently">
+      <div class="section-label">
+        <span class="section-num">06</span>
+        <span class="section-name">What I'd Do Differently</span>
+        <div class="section-rule"></div>
+      </div>
+      <h2>Assumptions I got wrong — or diagnosed but didn't solve.</h2>
+
+      <div class="gap-list">
+
+        <div class="gap-item">
+          <div class="gap-header">
+            <div class="gap-meta">
+              <span class="gap-num">01</span>
+              <span class="gap-severity critical">Critical gap</span>
+            </div>
+            <h3 class="gap-title">Multi-entity borrower structures</h3>
+          </div>
+          <div class="gap-body">
+            <p>CRE deals above $5–7M involve layered ownership — LLC → Trust → individuals, sometimes foreign entities. My intake form assumed one borrower, one signature. That breaks on 40–60% of the target pipeline, with downstream pain in KYC/AML and document execution.</p>
+            <div class="gap-fix">
+              <span class="gap-fix-lbl">Fix needed</span>
+              Entity relationship mapping, multiple guarantors, dynamic signature workflows. Week 1 work.
+            </div>
+          </div>
+        </div>
+
+        <div class="gap-item">
+          <div class="gap-header">
+            <div class="gap-meta">
+              <span class="gap-num">02</span>
+              <span class="gap-severity missed">Missed opportunity</span>
+            </div>
+            <h3 class="gap-title">Appraisal stress-testing</h3>
+          </div>
+          <div class="gap-body">
+            <p>I named appraisal variance as a deal-killer, then designed nothing for it. Zero modeling capability for an 8–12% appraisal shortfall — the most common late-stage surprise in CRE lending.</p>
+            <div class="gap-fix">
+              <span class="gap-fix-lbl">Fix needed</span>
+              A non-destructive scenario panel recalculating LTV, DSCR, and capital stack impact.
+            </div>
+          </div>
+        </div>
+
+        <div class="gap-item">
+          <div class="gap-header">
+            <div class="gap-meta">
+              <span class="gap-num">03</span>
+              <span class="gap-severity missed">Deferred problem</span>
+            </div>
+            <h3 class="gap-title">Credit committee / Submit for Approval workflow</h3>
+          </div>
+          <div class="gap-body">
+            <p>The "Submit for Approval" button leads nowhere. Credit committee review is where approval latency actually lives — I stopped exactly at the handoff.</p>
+            <div class="gap-fix">
+              <span class="gap-fix-lbl">Fix needed</span>
+              Reviewer assignment, comment threads, version control, approval status visibility.
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 07 LEARNINGS -->
+    <section id="learned">
+      <div class="section-label">
+        <span class="section-num">07</span>
+        <span class="section-name">What I Learned</span>
+        <div class="section-rule"></div>
+      </div>
+      <h2>Domain knowledge isn't research overhead. It's the design work.</h2>
+
+      <p>Consumer products optimize for delight. Enterprise tools must optimize for <strong>decision velocity.</strong></p>
+
+      <ul class="refl-list">
+        <li>Domain fluency turned a generic table into something credible. Column ordering is a domain problem, not an aesthetic one.</li>
+        <li>Cards looked right. They were structurally wrong for the workflow. Looking good isn't a validation signal.</li>
+        <li>Writing rationale for decisions revealed the holes. Articulating a decision is part of making a better one.</li>
+      </ul>
+
+      <div class="pull-quote">
+        <p>"The hardest part of design isn't craft. It's knowing which problem actually needs solving — and having the domain depth to see it first."</p>
+        <span class="attr">— The principle this whole project was built around</span>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<footer>
+  <p><strong>SimpleCITI — CRE Lending Pipeline</strong> · Concept Project · 2025<br>UI/UX Case Study · Fintech · B2B SaaS · Solo Designer · All deal data is illustrative</p>
+</footer>
+
+<script>
+  // ── SCALE IFRAMES ─────────────────────────────────
+  function scaleIframes() {
+    document.querySelectorAll('.screen-embed').forEach(embed => {
+      const body = embed.querySelector('.screen-body');
+      const iframe = embed.querySelector('iframe');
+      if (!body || !iframe) return;
+      const scale = body.offsetWidth / 1440;
+      const scaledH = Math.round(900 * scale);
+      iframe.style.height = '900px';
+      iframe.style.transform = `scale(${scale})`;
+      body.style.height = scaledH + 'px';
+    });
+  }
+  scaleIframes();
+  window.addEventListener('resize', scaleIframes);
+
+  // ── SCROLL REVEAL ─────────────────────────────────
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        revealObserver.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.screen-block').forEach(b => revealObserver.observe(b));
+
+  // ── SIDE NAV ACTIVE STATE ─────────────────────────
+  const sections = document.querySelectorAll('section[id]');
+  const navItems = document.querySelectorAll('.sn-item');
+
+  function updateActive() {
+    let current = '';
+    sections.forEach(sec => {
+      if (window.scrollY >= sec.offsetTop - 120) current = sec.id;
+    });
+    navItems.forEach(item => {
+      item.classList.toggle('active', item.dataset.section === current);
+    });
+  }
+  window.addEventListener('scroll', updateActive, { passive: true });
+  updateActive();
+</script>
+</body>
+</html>

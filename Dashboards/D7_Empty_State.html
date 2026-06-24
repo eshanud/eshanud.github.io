@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SimpleCITI — Empty State</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --navy: #0D1B2A; --blue: #1B4F8A; --accent: #2A7FD4; --gold: #C9A84C;
+  --cream: #F7F4EF; --offwhite: #FAFAF8; --mid: #6B7280; --border: #E5E1D8;
+  --text: #1A1A1A; --green: #16A34A; --amber: #D97706; --red: #DC2626; --purple: #7C3AED;
+  --sidebar-w: 220px;
+}
+body { font-family: 'DM Sans', sans-serif; background: var(--offwhite); color: var(--text); font-size: 14px; display: flex; height: 100vh; overflow: hidden; }
+
+.sidebar { width: var(--sidebar-w); background: var(--navy); display: flex; flex-direction: column; flex-shrink: 0; height: 100vh; overflow-y: auto; }
+.sidebar-logo { padding: 24px 20px 20px; border-bottom: 1px solid rgba(255,255,255,0.07); }
+.logo-mark { font-family: 'DM Serif Display', serif; font-size: 20px; color: #fff; letter-spacing: -0.5px; }
+.logo-mark span { color: var(--gold); }
+.logo-sub { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: rgba(255,255,255,0.3); text-transform: uppercase; letter-spacing: 0.15em; margin-top: 3px; }
+.nav-section { padding: 20px 12px 8px; }
+.nav-section-label { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: rgba(255,255,255,0.25); text-transform: uppercase; letter-spacing: 0.15em; padding: 0 8px; margin-bottom: 6px; }
+.nav-item { display: flex; align-items: center; gap: 10px; padding: 9px 10px; border-radius: 7px; color: rgba(255,255,255,0.45); font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.15s; margin-bottom: 2px; text-decoration: none; }
+.nav-item:hover { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.8); }
+.nav-item.active { background: rgba(42,127,212,0.18); color: #fff; }
+.nav-icon { font-size: 15px; width: 18px; text-align: center; flex-shrink: 0; }
+.nav-badge { margin-left: auto; background: var(--accent); color: #fff; font-size: 10px; font-weight: 600; padding: 2px 7px; border-radius: 10px; }
+.sidebar-footer { margin-top: auto; padding: 16px 12px; border-top: 1px solid rgba(255,255,255,0.07); }
+.user-chip { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 8px; cursor: pointer; }
+.avatar { width: 30px; height: 30px; border-radius: 50%; background: var(--blue); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: #fff; flex-shrink: 0; }
+.user-name { font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.75); }
+.user-role { font-size: 10px; color: rgba(255,255,255,0.3); }
+
+.main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+.topbar { background: #fff; border-bottom: 1px solid var(--border); padding: 0 28px; height: 60px; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
+.topbar-left { display: flex; align-items: center; gap: 16px; }
+.page-title { font-family: 'DM Serif Display', serif; font-size: 20px; color: var(--navy); }
+.breadcrumb { font-size: 12px; color: var(--mid); }
+.topbar-right { display: flex; align-items: center; gap: 10px; }
+.btn { display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px; border-radius: 7px; font-size: 12px; font-weight: 600; cursor: pointer; border: none; }
+.btn-primary { background: var(--accent); color: #fff; }
+.btn-ghost { background: transparent; color: var(--mid); border: 1px solid var(--border); }
+.search-box { display: flex; align-items: center; gap: 8px; background: var(--cream); border: 1px solid var(--border); border-radius: 7px; padding: 6px 12px; width: 200px; }
+.search-box input { background: none; border: none; outline: none; font-size: 12px; color: var(--text); width: 100%; font-family: 'DM Sans', sans-serif; }
+.search-box input::placeholder { color: var(--mid); }
+.icon-btn { width: 34px; height: 34px; border-radius: 7px; border: 1px solid var(--border); background: #fff; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 15px; color: var(--mid); }
+.select-box { padding: 5px 10px; border: 1px solid var(--border); border-radius: 6px; font-size: 12px; color: var(--mid); background: #fff; outline: none; font-family: 'DM Sans', sans-serif; }
+
+.content { flex: 1; overflow-y: auto; padding: 24px 28px; display: flex; flex-direction: column; }
+
+/* KPI ROW — empty state */
+.kpi-row { display: grid; grid-template-columns: repeat(4,1fr); gap: 14px; margin-bottom: 24px; }
+.kpi-card { background: var(--navy); border-radius: 10px; padding: 20px 20px 18px; position: relative; overflow: hidden; opacity: 0.5; }
+.kpi-card::after { content: ''; position: absolute; top: -30px; right: -30px; width: 90px; height: 90px; background: radial-gradient(circle, rgba(42,127,212,0.2), transparent 70%); }
+.kpi-label { font-size: 10px; font-weight: 600; color: rgba(255,255,255,0.38); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 10px; }
+.kpi-value { font-family: 'JetBrains Mono', monospace; font-size: 26px; color: rgba(255,255,255,0.25); font-weight: 500; line-height: 1; margin-bottom: 10px; }
+.kpi-dash { height: 8px; border-radius: 4px; background: rgba(255,255,255,0.07); width: 60%; }
+
+/* TABLE SHELL — empty */
+.table-wrap { background: #fff; border-radius: 12px; border: 1px solid var(--border); overflow: hidden; flex: 1; display: flex; flex-direction: column; }
+.table-header-row { display: flex; align-items: center; justify-content: space-between; padding: 16px 20px; border-bottom: 1px solid var(--border); flex-shrink: 0; }
+.table-title { font-family: 'DM Serif Display', serif; font-size: 16px; color: var(--navy); }
+.table-count { font-size: 11px; color: var(--mid); background: var(--cream); padding: 3px 10px; border-radius: 20px; margin-left: 10px; }
+table { width: 100%; border-collapse: collapse; }
+thead tr { background: var(--navy); }
+thead th { padding: 12px 16px; text-align: left; font-size: 10px; font-weight: 600; color: rgba(255,255,255,0.3); text-transform: uppercase; letter-spacing: 0.1em; white-space: nowrap; }
+
+/* EMPTY STATE BODY */
+.empty-body { flex: 1; display: flex; align-items: center; justify-content: center; padding: 60px 40px; }
+.empty-inner { text-align: center; max-width: 480px; }
+
+/* ILLUSTRATION */
+.empty-illustration { margin: 0 auto 32px; width: 180px; height: 120px; position: relative; }
+.ei-table { width: 160px; height: 90px; background: var(--cream); border: 1.5px solid var(--border); border-radius: 8px; margin: 0 auto; position: relative; overflow: hidden; }
+.ei-header { background: var(--navy); height: 22px; width: 100%; display: flex; align-items: center; padding: 0 10px; gap: 6px; }
+.ei-col { height: 6px; border-radius: 3px; background: rgba(255,255,255,0.15); }
+.ei-rows { padding: 8px 10px; display: flex; flex-direction: column; gap: 7px; }
+.ei-row { display: flex; gap: 6px; align-items: center; }
+.ei-cell { height: 6px; border-radius: 3px; background: #E5E1D8; }
+.ei-badge { height: 12px; border-radius: 6px; background: #E5E1D8; }
+/* floating plus button */
+.ei-plus { position: absolute; bottom: -10px; right: -10px; width: 36px; height: 36px; background: var(--accent); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 20px; font-weight: 300; box-shadow: 0 4px 12px rgba(42,127,212,0.35); }
+
+.empty-title { font-family: 'DM Serif Display', serif; font-size: 22px; color: var(--navy); margin-bottom: 10px; }
+.empty-sub { font-size: 14px; color: var(--mid); line-height: 1.65; margin-bottom: 28px; }
+
+.empty-cta { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+.btn-lg { display: inline-flex; align-items: center; gap: 8px; padding: 11px 24px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; border: none; transition: all 0.15s; }
+.btn-lg-primary { background: var(--accent); color: #fff; }
+.btn-lg-primary:hover { background: #2270bb; }
+.btn-lg-ghost { background: transparent; color: var(--mid); border: 1px solid var(--border); font-size: 12px; padding: 8px 18px; border-radius: 7px; cursor: pointer; }
+
+/* STEP HINTS */
+.step-hints { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; margin-top: 40px; text-align: left; }
+.step-hint { background: var(--cream); border: 1px solid var(--border); border-radius: 10px; padding: 16px 18px; }
+.sh-num { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--accent); margin-bottom: 8px; font-weight: 600; }
+.sh-title { font-size: 13px; font-weight: 600; color: var(--navy); margin-bottom: 4px; }
+.sh-desc { font-size: 12px; color: var(--mid); line-height: 1.5; }
+
+/* SAMPLE DATA BANNER */
+.sample-banner { background: rgba(201,168,76,0.08); border: 1px solid rgba(201,168,76,0.2); border-radius: 8px; padding: 11px 16px; display: flex; align-items: center; gap: 10px; margin-top: 16px; }
+.sample-banner-icon { font-size: 15px; flex-shrink: 0; }
+.sample-banner p { font-size: 12px; color: #7a6020; margin: 0; }
+.sample-banner a { color: var(--accent); font-weight: 600; cursor: pointer; text-decoration: none; }
+
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
+</style>
+</head>
+<body>
+
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-mark">Simple<span>CITI</span></div>
+    <div class="logo-sub">CRE Lending Platform</div>
+  </div>
+  <div class="nav-section">
+    <div class="nav-section-label">Main</div>
+    <a class="nav-item active" href="#"><span class="nav-icon">⬡</span> Pipeline<span class="nav-badge" style="background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.3);">0</span></a>
+    <a class="nav-item" href="#"><span class="nav-icon">◈</span> Deals</a>
+    <a class="nav-item" href="#"><span class="nav-icon">⊞</span> Underwriting</a>
+    <a class="nav-item" href="#"><span class="nav-icon">◎</span> Portfolio</a>
+  </div>
+  <div class="nav-section">
+    <div class="nav-section-label">Tools</div>
+    <a class="nav-item" href="#"><span class="nav-icon">⊟</span> Reports</a>
+    <a class="nav-item" href="#"><span class="nav-icon">◷</span> Activity Log</a>
+    <a class="nav-item" href="#"><span class="nav-icon">⊕</span> Intake Form</a>
+  </div>
+  <div class="nav-section">
+    <div class="nav-section-label">Admin</div>
+    <a class="nav-item" href="#"><span class="nav-icon">⊙</span> Settings</a>
+  </div>
+  <div class="sidebar-footer">
+    <div class="user-chip">
+      <div class="avatar">SK</div>
+      <div><div class="user-name">Sarah K.</div><div class="user-role">Loan Officer</div></div>
+    </div>
+  </div>
+</aside>
+
+<div class="main">
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="page-title">Loan Pipeline</div>
+      <div class="breadcrumb">Welcome, Sarah — let's get started</div>
+    </div>
+    <div class="topbar-right">
+      <div class="search-box">
+        <span style="color:var(--mid);font-size:13px;">⌕</span>
+        <input type="text" placeholder="Search deals..."/>
+      </div>
+      <select class="select-box"><option>All Officers</option></select>
+      <div class="icon-btn">🔔</div>
+      <button class="btn btn-primary">+ New Deal</button>
+    </div>
+  </div>
+
+  <div class="content">
+    <!-- KPI ROW — ghosted -->
+    <div class="kpi-row">
+      <div class="kpi-card"><div class="kpi-label">Total Pipeline Value</div><div class="kpi-value" style="color:rgba(255,255,255,0.12);">—</div><div class="kpi-dash"></div></div>
+      <div class="kpi-card"><div class="kpi-label">Active Deals</div><div class="kpi-value" style="color:rgba(255,255,255,0.12);">—</div><div class="kpi-dash" style="width:40%"></div></div>
+      <div class="kpi-card"><div class="kpi-label">Avg. Portfolio LTV</div><div class="kpi-value" style="color:rgba(255,255,255,0.12);">—</div><div class="kpi-dash" style="width:50%"></div></div>
+      <div class="kpi-card"><div class="kpi-label">Closing This Month</div><div class="kpi-value" style="color:rgba(255,255,255,0.12);">—</div><div class="kpi-dash" style="width:30%"></div></div>
+    </div>
+
+    <!-- TABLE SHELL + EMPTY STATE -->
+    <div class="table-wrap">
+      <div class="table-header-row">
+        <div style="display:flex;align-items:center;">
+          <span class="table-title">Active Deals</span>
+          <span class="table-count">0 deals</span>
+        </div>
+        <div style="display:flex;gap:8px;">
+          <button class="btn btn-ghost" style="font-size:11px;opacity:0.4;pointer-events:none;">⬇ Export</button>
+          <button class="btn btn-ghost" style="font-size:11px;opacity:0.4;pointer-events:none;">⊟ Columns</button>
+        </div>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Deal Name</th>
+            <th>Property Type</th>
+            <th>Loan Amount</th>
+            <th>LTV</th>
+            <th>Stage</th>
+            <th>Officer</th>
+            <th>Close Date</th>
+          </tr>
+        </thead>
+      </table>
+
+      <div class="empty-body">
+        <div class="empty-inner">
+
+          <!-- ILLUSTRATION -->
+          <div class="empty-illustration">
+            <div class="ei-table">
+              <div class="ei-header">
+                <div class="ei-col" style="width:28%"></div>
+                <div class="ei-col" style="width:16%"></div>
+                <div class="ei-col" style="width:14%"></div>
+                <div class="ei-col" style="width:18%"></div>
+              </div>
+              <div class="ei-rows">
+                <div class="ei-row"><div class="ei-cell" style="width:35%"></div><div class="ei-cell" style="width:15%"></div><div class="ei-cell" style="width:18%"></div><div class="ei-badge" style="width:55px"></div></div>
+                <div class="ei-row"><div class="ei-cell" style="width:42%"></div><div class="ei-cell" style="width:12%"></div><div class="ei-cell" style="width:20%"></div><div class="ei-badge" style="width:48px"></div></div>
+                <div class="ei-row"><div class="ei-cell" style="width:30%"></div><div class="ei-cell" style="width:18%"></div><div class="ei-cell" style="width:16%"></div><div class="ei-badge" style="width:60px"></div></div>
+              </div>
+            </div>
+            <div class="ei-plus">+</div>
+          </div>
+
+          <div class="empty-title">No deals in your pipeline yet</div>
+          <div class="empty-sub">Your pipeline is where all active CRE deals live — with LTV, stage, document status, and close dates visible at a glance. Add your first deal to get started.</div>
+
+          <div class="empty-cta">
+            <button class="btn-lg btn-lg-primary">⊕ Add your first deal</button>
+            <button class="btn-lg-ghost">Import from spreadsheet</button>
+          </div>
+
+          <div class="sample-banner">
+            <span class="sample-banner-icon">💡</span>
+            <p>Not sure where to start? <a>Load sample data</a> to explore the platform with a pre-filled pipeline of 9 deals.</p>
+          </div>
+
+          <!-- STEP HINTS -->
+          <div class="step-hints">
+            <div class="step-hint">
+              <div class="sh-num">Step 01</div>
+              <div class="sh-title">Add a deal via Intake Form</div>
+              <div class="sh-desc">Enter property details, loan structure, and borrower info. LTV calculates automatically.</div>
+            </div>
+            <div class="step-hint">
+              <div class="sh-num">Step 02</div>
+              <div class="sh-title">Track stage & documents</div>
+              <div class="sh-desc">Move deals through Intake → Underwriting → Approval → Closing. Document gaps are flagged automatically.</div>
+            </div>
+            <div class="step-hint">
+              <div class="sh-num">Step 03</div>
+              <div class="sh-title">Review portfolio health</div>
+              <div class="sh-desc">KPI cards and the Portfolio view give you a real-time read on LTV exposure and deal velocity.</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>

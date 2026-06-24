@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>SimpleCITI — All Deals</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --navy: #0D1B2A; --blue: #1B4F8A; --accent: #2A7FD4; --gold: #C9A84C;
+  --cream: #F7F4EF; --offwhite: #FAFAF8; --mid: #6B7280; --border: #E5E1D8;
+  --text: #1A1A1A; --green: #16A34A; --amber: #D97706; --red: #DC2626; --purple: #7C3AED;
+  --sidebar-w: 220px;
+}
+body { font-family: 'DM Sans', sans-serif; background: var(--offwhite); color: var(--text); font-size: 14px; display: flex; height: 100vh; overflow: hidden; }
+
+/* SIDEBAR */
+.sidebar {
+  width: var(--sidebar-w); background: var(--navy); display: flex; flex-direction: column;
+  flex-shrink: 0; height: 100vh; overflow-y: auto;
+}
+.sidebar-logo {
+  padding: 24px 20px 20px;
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+}
+.logo-mark {
+  font-family: 'DM Serif Display', serif; font-size: 20px; color: #fff; letter-spacing: -0.5px;
+}
+.logo-mark span { color: var(--gold); }
+.logo-sub { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: rgba(255,255,255,0.3); text-transform: uppercase; letter-spacing: 0.15em; margin-top: 3px; }
+
+.nav-section { padding: 20px 12px 8px; }
+.nav-section-label { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: rgba(255,255,255,0.25); text-transform: uppercase; letter-spacing: 0.15em; padding: 0 8px; margin-bottom: 6px; }
+.nav-item {
+  display: flex; align-items: center; gap: 10px; padding: 9px 10px; border-radius: 7px;
+  color: rgba(255,255,255,0.45); font-size: 13px; font-weight: 500; cursor: pointer;
+  transition: all 0.15s; margin-bottom: 2px; text-decoration: none;
+}
+.nav-item:hover { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.8); }
+.nav-item.active { background: rgba(42,127,212,0.18); color: #fff; }
+.nav-item.active .nav-icon { color: var(--accent); }
+.nav-icon { font-size: 15px; width: 18px; text-align: center; flex-shrink: 0; }
+.nav-badge { margin-left: auto; background: var(--accent); color: #fff; font-size: 10px; font-weight: 600; padding: 2px 7px; border-radius: 10px; }
+
+.sidebar-footer { margin-top: auto; padding: 16px 12px; border-top: 1px solid rgba(255,255,255,0.07); }
+.user-chip { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 8px; cursor: pointer; }
+.user-chip:hover { background: rgba(255,255,255,0.06); }
+.avatar { width: 30px; height: 30px; border-radius: 50%; background: var(--blue); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: #fff; flex-shrink: 0; }
+.user-name { font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.75); }
+.user-role { font-size: 10px; color: rgba(255,255,255,0.3); }
+
+/* MAIN */
+.main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+
+/* TOPBAR */
+.topbar {
+  background: #fff; border-bottom: 1px solid var(--border);
+  padding: 0 28px; height: 60px; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0;
+}
+.topbar-left { display: flex; align-items: center; gap: 16px; }
+.page-title { font-family: 'DM Serif Display', serif; font-size: 20px; color: var(--navy); }
+.breadcrumb { font-size: 12px; color: var(--mid); }
+.topbar-right { display: flex; align-items: center; gap: 10px; }
+.btn {
+  display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px; border-radius: 7px;
+  font-size: 12px; font-weight: 600; cursor: pointer; border: none; transition: all 0.15s;
+}
+.btn-primary { background: var(--accent); color: #fff; }
+.btn-primary:hover { background: #2270bb; }
+.btn-ghost { background: transparent; color: var(--mid); border: 1px solid var(--border); }
+.btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+.search-box {
+  display: flex; align-items: center; gap: 8px; background: var(--cream);
+  border: 1px solid var(--border); border-radius: 7px; padding: 6px 12px; width: 200px;
+}
+.search-box input { background: none; border: none; outline: none; font-size: 12px; color: var(--text); width: 100%; font-family: 'DM Sans', sans-serif; }
+.search-box input::placeholder { color: var(--mid); }
+.select-box { padding: 6px 10px; border: 1px solid var(--border); border-radius: 7px; font-size: 12px; color: var(--mid); background: #fff; outline: none; font-family: 'DM Sans', sans-serif; cursor: pointer; height: 34px; }
+.icon-btn { width: 34px; height: 34px; border-radius: 7px; border: 1px solid var(--border); background: #fff; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 15px; color: var(--mid); position: relative; }
+.notif-dot { position: absolute; top: 6px; right: 6px; width: 7px; height: 7px; background: var(--red); border-radius: 50%; border: 1.5px solid #fff; }
+
+/* CONTENT */
+.content { flex: 1; overflow-y: auto; padding: 24px 28px; }
+
+/* KPI ROW */
+.kpi-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 24px; }
+.kpi-card {
+  background: var(--navy); border-radius: 10px; padding: 20px 20px 18px;
+  position: relative; overflow: hidden;
+  animation: fadeUp 0.5s ease both;
+}
+.kpi-card:nth-child(1) { animation-delay: 0.05s; }
+.kpi-card:nth-child(2) { animation-delay: 0.1s; }
+.kpi-card:nth-child(3) { animation-delay: 0.15s; }
+.kpi-card:nth-child(4) { animation-delay: 0.2s; }
+.kpi-card::after {
+  content: ''; position: absolute; top: -30px; right: -30px; width: 90px; height: 90px;
+  background: radial-gradient(circle, rgba(42,127,212,0.2), transparent 70%);
+}
+.kpi-label { font-size: 10px; font-weight: 600; color: rgba(255,255,255,0.38); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 10px; }
+.kpi-value { font-family: 'JetBrains Mono', monospace; font-size: 26px; color: #fff; font-weight: 500; line-height: 1; margin-bottom: 10px; }
+.kpi-delta { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 600; padding: 3px 8px; border-radius: 20px; }
+.delta-up { background: rgba(22,163,74,0.2); color: #4ade80; }
+.delta-neutral { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.4); }
+.delta-warn { background: rgba(217,119,6,0.2); color: #fbbf24; }
+.delta-down { background: rgba(22,163,74,0.2); color: #4ade80; }
+
+/* STAGE TABS */
+.stage-tabs {
+  display: flex; align-items: center; gap: 6px; margin-bottom: 16px; flex-wrap: wrap;
+}
+.stage-tab {
+  display: inline-flex; align-items: center; gap: 5px; padding: 6px 14px;
+  border-radius: 20px; font-size: 11px; font-weight: 600; cursor: pointer;
+  border: 1px solid var(--border); background: #fff; color: var(--mid); transition: all 0.15s;
+  white-space: nowrap;
+}
+.stage-tab:hover { border-color: var(--accent); color: var(--accent); }
+.stage-tab.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+.stage-tab .tab-count { font-family: 'JetBrains Mono', monospace; font-size: 10px; opacity: 0.75; }
+
+/* TABLE */
+.table-wrap { background: #fff; border-radius: 12px; border: 1px solid var(--border); overflow: hidden; animation: fadeUp 0.5s 0.25s ease both; }
+.table-header-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 20px; border-bottom: 1px solid var(--border);
+}
+.table-title { font-family: 'DM Serif Display', serif; font-size: 16px; color: var(--navy); }
+.table-count { font-size: 11px; color: var(--mid); background: var(--cream); padding: 3px 10px; border-radius: 20px; margin-left: 10px; }
+
+table { width: 100%; border-collapse: collapse; }
+thead tr { background: var(--navy); }
+thead th {
+  padding: 12px 16px; text-align: left; font-size: 10px; font-weight: 600;
+  color: rgba(255,255,255,0.45); text-transform: uppercase; letter-spacing: 0.1em;
+  white-space: nowrap;
+}
+thead th.right { text-align: right; }
+thead th.center { text-align: center; }
+
+tbody tr { border-bottom: 1px solid var(--border); transition: background 0.12s; cursor: pointer; }
+tbody tr:last-child { border-bottom: none; }
+tbody tr:hover { background: rgba(42,127,212,0.04); }
+tbody tr.closed-row { opacity: 0.5; }
+td { padding: 14px 16px; vertical-align: middle; }
+td.right { text-align: right; }
+td.center { text-align: center; }
+
+.deal-name { font-weight: 600; color: var(--navy); font-size: 13px; }
+.deal-sub { font-size: 11px; color: var(--mid); margin-top: 2px; }
+.prop-type { font-size: 11px; color: var(--mid); background: var(--cream); padding: 3px 8px; border-radius: 4px; display: inline-block; }
+.loan-amt { font-family: 'JetBrains Mono', monospace; font-size: 13px; color: var(--navy); font-weight: 500; }
+.ltv-cell { display: flex; align-items: center; gap: 8px; justify-content: flex-end; }
+.ltv-num { font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 500; }
+.ltv-normal { color: var(--navy); }
+.ltv-warn { color: var(--amber); }
+.ltv-danger { color: var(--red); font-weight: 600; }
+.ltv-bar { width: 40px; height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; }
+.ltv-fill { height: 100%; border-radius: 2px; }
+
+.pill { display: inline-flex; align-items: center; gap: 5px; padding: 4px 10px; border-radius: 20px; font-size: 10px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; }
+.pill-dot { width: 5px; height: 5px; border-radius: 50%; }
+.pill-intake { background: #F3F4F6; color: #6B7280; }
+.pill-intake .pill-dot { background: #9CA3AF; }
+.pill-underwriting { background: #FEF3C7; color: #B45309; }
+.pill-underwriting .pill-dot { background: #D97706; }
+.pill-approved { background: #D1FAE5; color: #065F46; }
+.pill-approved .pill-dot { background: #16A34A; }
+.pill-closing { background: #EDE9FE; color: #5B21B6; }
+.pill-closing .pill-dot { background: #7C3AED; }
+.pill-closed { background: #F3F4F6; color: #9CA3AF; }
+.pill-closed .pill-dot { background: #D1D5DB; }
+.pill-flagged { background: #FEE2E2; color: #991B1B; }
+.pill-flagged .pill-dot { background: #DC2626; }
+
+.officer { display: flex; align-items: center; gap: 7px; }
+.av-sm { width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 700; color: #fff; flex-shrink: 0; }
+.av-blue { background: var(--blue); }
+.av-accent { background: var(--accent); }
+.av-gold { background: #9a7b32; }
+.av-green { background: var(--green); }
+.officer-name { font-size: 12px; color: var(--mid); }
+
+.close-date { font-size: 12px; color: var(--mid); }
+.close-date.soon { color: var(--amber); font-weight: 600; }
+
+.action-btn { opacity: 0; width: 28px; height: 28px; border-radius: 6px; border: 1px solid var(--border); background: #fff; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; font-size: 14px; color: var(--mid); transition: all 0.12s; }
+tbody tr:hover .action-btn { opacity: 1; }
+.action-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+/* STATUS BADGE */
+.status-badge { font-size: 10px; font-weight: 600; padding: 3px 8px; border-radius: 4px; }
+.status-active { background: #D1FAE5; color: #065F46; }
+.status-closed { background: #F3F4F6; color: #9CA3AF; }
+
+/* TABLE FOOTER */
+.table-footer {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 20px; border-top: 1px solid var(--border); background: var(--cream);
+}
+.table-footer-info { font-size: 12px; color: var(--mid); }
+.table-footer-pagination { display: flex; align-items: center; gap: 8px; }
+.page-btn { padding: 5px 12px; border-radius: 6px; border: 1px solid var(--border); background: #fff; font-size: 12px; color: var(--mid); cursor: pointer; font-family: 'DM Sans', sans-serif; }
+.page-btn:hover { border-color: var(--accent); color: var(--accent); }
+.load-more-row { text-align: center; padding: 14px; }
+.load-more-link { font-size: 12px; color: var(--accent); font-weight: 600; cursor: pointer; text-decoration: none; }
+.load-more-link:hover { text-decoration: underline; }
+
+@keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+/* SCROLLBAR */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-mark">Simple<span>CITI</span></div>
+    <div class="logo-sub">CRE Lending Platform</div>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-section-label">Main</div>
+    <a class="nav-item" href="#">
+      <span class="nav-icon">⬡</span> Pipeline
+      <span class="nav-badge">34</span>
+    </a>
+    <a class="nav-item active" href="#">
+      <span class="nav-icon">◈</span> Deals
+      <span class="nav-badge" style="background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.35);">12</span>
+    </a>
+    <a class="nav-item" href="#">
+      <span class="nav-icon">⊞</span> Underwriting
+      <span class="nav-badge" style="background:#D97706;">8</span>
+    </a>
+    <a class="nav-item" href="#">
+      <span class="nav-icon">◎</span> Portfolio
+    </a>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-section-label">Tools</div>
+    <a class="nav-item" href="#">
+      <span class="nav-icon">⊟</span> Reports
+    </a>
+    <a class="nav-item" href="#">
+      <span class="nav-icon">◷</span> Activity Log
+    </a>
+    <a class="nav-item" href="#">
+      <span class="nav-icon">⊕</span> Intake Form
+    </a>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-section-label">Admin</div>
+    <a class="nav-item" href="#">
+      <span class="nav-icon">⊙</span> Settings
+    </a>
+  </div>
+
+  <div class="sidebar-footer">
+    <div class="user-chip">
+      <div class="avatar">JR</div>
+      <div>
+        <div class="user-name">James R.</div>
+        <div class="user-role">Senior Loan Officer</div>
+      </div>
+    </div>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<div class="main">
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="page-title">All Deals</div>
+      <div class="breadcrumb">Q1 2026 &middot; 47 deals across all stages</div>
+    </div>
+    <div class="topbar-right">
+      <div class="search-box">
+        <span style="color:var(--mid); font-size:13px;">⌕</span>
+        <input type="text" placeholder="Search deals..."/>
+      </div>
+      <select class="select-box">
+        <option>All Stages</option>
+        <option>Intake</option>
+        <option>Underwriting</option>
+        <option>Approved</option>
+        <option>Closing</option>
+        <option>Closed</option>
+        <option>Flagged</option>
+      </select>
+      <select class="select-box">
+        <option>All Officers</option>
+        <option>James R.</option>
+        <option>Sarah K.</option>
+        <option>David C.</option>
+        <option>Priya M.</option>
+      </select>
+      <div class="icon-btn">
+        🔔
+        <span class="notif-dot"></span>
+      </div>
+      <button class="btn btn-primary">+ New Deal</button>
+    </div>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="content">
+
+    <!-- KPI ROW -->
+    <div class="kpi-row">
+      <div class="kpi-card">
+        <div class="kpi-label">Total Deals</div>
+        <div class="kpi-value">47</div>
+        <span class="kpi-delta delta-up">↑ 13 new YTD</span>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Active</div>
+        <div class="kpi-value">34</div>
+        <span class="kpi-delta delta-up">↑ 6 new this month</span>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Closed YTD</div>
+        <div class="kpi-value">13</div>
+        <span class="kpi-delta delta-neutral">$44.2M volume</span>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Avg Close Time</div>
+        <div class="kpi-value">68 <span style="font-size:14px; opacity:0.5;">days</span></div>
+        <span class="kpi-delta delta-down">↓ 4 days vs Q4</span>
+      </div>
+    </div>
+
+    <!-- STAGE FILTER TABS -->
+    <div class="stage-tabs">
+      <div class="stage-tab active">All <span class="tab-count">47</span></div>
+      <div class="stage-tab">Intake <span class="tab-count">4</span></div>
+      <div class="stage-tab">Underwriting <span class="tab-count">8</span></div>
+      <div class="stage-tab">Approved <span class="tab-count">6</span></div>
+      <div class="stage-tab">Closing <span class="tab-count">5</span></div>
+      <div class="stage-tab">Closed <span class="tab-count">13</span></div>
+      <div class="stage-tab">Flagged <span class="tab-count">2</span></div>
+    </div>
+
+    <!-- TABLE -->
+    <div class="table-wrap">
+      <div class="table-header-row">
+        <div style="display:flex; align-items:center;">
+          <span class="table-title">Deal Directory</span>
+          <span class="table-count">47 deals</span>
+        </div>
+        <div style="display:flex; gap:8px;">
+          <button class="btn btn-ghost" style="font-size:11px;">⬇ Export</button>
+          <button class="btn btn-ghost" style="font-size:11px;">⊟ Columns</button>
+        </div>
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th style="width:36px;"><input type="checkbox" style="accent-color:var(--accent);"/></th>
+            <th>Deal Name</th>
+            <th>Property Type</th>
+            <th class="right">Loan Amount</th>
+            <th class="right">LTV</th>
+            <th class="center">Stage</th>
+            <th>Officer</th>
+            <th>Target Close</th>
+            <th class="center">Status</th>
+            <th style="width:40px;"></th>
+          </tr>
+        </thead>
+        <tbody>
+
+          <!-- Row 1 -->
+          <tr>
+            <td><input type="checkbox" style="accent-color:var(--accent);"/></td>
+            <td><div class="deal-name">Meridian Flats</div><div class="deal-sub">142 Units &middot; Brooklyn, NY</div></td>
+            <td><span class="prop-type">Multifamily</span></td>
+            <td class="right"><span class="loan-amt">$8.9M</span></td>
+            <td class="right">
+              <div class="ltv-cell">
+                <span class="ltv-num ltv-normal">68%</span>
+                <div class="ltv-bar"><div class="ltv-fill" style="width:68%;background:var(--accent);"></div></div>
+              </div>
+            </td>
+            <td class="center"><span class="pill pill-underwriting"><span class="pill-dot"></span>Underwriting</span></td>
+            <td><div class="officer"><div class="av-sm av-blue">SK</div><span class="officer-name">Sarah K.</span></div></td>
+            <td><span class="close-date soon">Mar 15 ⚠</span></td>
+            <td class="center"><span class="status-badge status-active">Active</span></td>
+            <td><button class="action-btn">⋯</button></td>
+          </tr>
+
+          <!-- Row 2 -->
+          <tr>
+            <td><input type="checkbox" style="accent-color:var(--accent);"/></td>
+            <td><div class="deal-name">Vantage Industrial Park</div><div class="deal-sub">220k SF &middot; Newark, NJ</div></td>
+            <td><span class="prop-type">Industrial</span></td>
+            <td class="right"><span class="loan-amt">$14.5M</span></td>
+            <td class="right">
+              <div class="ltv-cell">
+                <span class="ltv-num ltv-normal">63%</span>
+                <div class="ltv-bar"><div class="ltv-fill" style="width:63%;background:var(--accent);"></div></div>
+              </div>
+            </td>
+            <td class="center"><span class="pill pill-underwriting"><span class="pill-dot"></span>Underwriting</span></td>
+            <td><div class="officer"><div class="av-sm av-blue">SK</div><span class="officer-name">Sarah K.</span></div></td>
+            <td><span class="close-date">Apr 02</span></td>
+            <td class="center"><span class="status-badge status-active">Active</span></td>
+            <td><button class="action-btn">⋯</button></td>
+          </tr>
+
+          <!-- Row 3 -->
+          <tr>
+            <td><input type="checkbox" style="accent-color:var(--accent);"/></td>
+            <td><div class="deal-name">Westfield Logistics Hub</div><div class="deal-sub">140k SF &middot; Edison, NJ</div></td>
+            <td><span class="prop-type">Industrial</span></td>
+            <td class="right"><span class="loan-amt">$18.2M</span></td>
+            <td class="right">
+              <div class="ltv-cell">
+                <span class="ltv-num ltv-normal">61%</span>
+                <div class="ltv-bar"><div class="ltv-fill" style="width:61%;background:var(--accent);"></div></div>
+              </div>
+            </td>
+            <td class="center"><span class="pill pill-approved"><span class="pill-dot"></span>Approved</span></td>
+            <td><div class="officer"><div class="av-sm" style="background:var(--purple);">PM</div><span class="officer-name">Priya M.</span></div></td>
+            <td><span class="close-date">Apr 05</span></td>
+            <td class="center"><span class="status-badge status-active">Active</span></td>
+            <td><button class="action-btn">⋯</button></td>
+          </tr>
+
+          <!-- Row 4 -->
+          <tr>
+            <td><input type="checkbox" style="accent-color:var(--accent);"/></td>
+            <td><div class="deal-name">Lakeview Commons</div><div class="deal-sub">Mixed retail &middot; Hoboken, NJ</div></td>
+            <td><span class="prop-type">Mixed-Use</span></td>
+            <td class="right"><span class="loan-amt">$9.1M</span></td>
+            <td class="right">
+              <div class="ltv-cell">
+                <span class="ltv-num ltv-danger">76%</span>
+                <div class="ltv-bar"><div class="ltv-fill" style="width:76%;background:var(--red);"></div></div>
+              </div>
+            </td>
+            <td class="center"><span class="pill pill-underwriting"><span class="pill-dot"></span>Underwriting</span></td>
+            <td><div class="officer"><div class="av-sm av-gold">DC</div><span class="officer-name">David C.</span></div></td>
+            <td><span class="close-date">Apr 18</span></td>
+            <td class="center"><span class="status-badge status-active">Active</span></td>
+            <td><button class="action-btn">⋯</button></td>
+          </tr>
+
+          <!-- Row 5 -->
+          <tr>
+            <td><input type="checkbox" style="accent-color:var(--accent);"/></td>
+            <td><div class="deal-name">Pinecrest Townhomes</div><div class="deal-sub">32 Units &middot; Montclair, NJ</div></td>
+            <td><span class="prop-type">Residential</span></td>
+            <td class="right"><span class="loan-amt">$4.9M</span></td>
+            <td class="right">
+              <div class="ltv-cell">
+                <span class="ltv-num ltv-warn">71%</span>
+                <div class="ltv-bar"><div class="ltv-fill" style="width:71%;background:var(--amber);"></div></div>
+              </div>
+            </td>
+            <td class="center"><span class="pill pill-closing"><span class="pill-dot"></span>Closing</span></td>
+            <td><div class="officer"><div class="av-sm av-green">JR</div><span class="officer-name">James R.</span></div></td>
+            <td><span class="close-date soon">Mar 12 ⚠</span></td>
+            <td class="center"><span class="status-badge status-active">Active</span></td>
+            <td><button class="action-btn">⋯</button></td>
+          </tr>
+
+          <!-- Row 6 -->
+          <tr>
+            <td><input type="checkbox" style="accent-color:var(--accent);"/></td>
+            <td><div class="deal-name">Harbor Cold Storage</div><div class="deal-sub">85k SF &middot; Elizabeth, NJ</div></td>
+            <td><span class="prop-type">Industrial</span></td>
+            <td class="right"><span class="loan-amt">$6.3M</span></td>
+            <td class="right">
+              <div class="ltv-cell">
+                <span class="ltv-num ltv-normal">59%</span>
+                <div class="ltv-bar"><div class="ltv-fill" style="width:59%;background:var(--green);"></div></div>
+              </div>
+            </td>
+            <td class="center"><span class="pill pill-approved"><span class="pill-dot"></span>Approved</span></td>
+            <td><div class="officer"><div class="av-sm av-blue">SK</div><span class="officer-name">Sarah K.</span></div></td>
+            <td><span class="close-date">Mar 20</span></td>
+            <td class="center"><span class="status-badge status-active">Active</span></td>
+            <td><button class="action-btn">⋯</button></td>
+          </tr>
+
+          <!-- Row 7 -->
+          <tr>
+            <td><input type="checkbox" style="accent-color:var(--accent);"/></td>
+            <td><div class="deal-name">Sunrise Office Plaza</div><div class="deal-sub">48k SF &middot; Stamford, CT</div></td>
+            <td><span class="prop-type">Office</span></td>
+            <td class="right"><span class="loan-amt">$7.8M</span></td>
+            <td class="right">
+              <div class="ltv-cell">
+                <span class="ltv-num ltv-normal">65%</span>
+                <div class="ltv-bar"><div class="ltv-fill" style="width:65%;background:var(--accent);"></div></div>
+              </div>
+            </td>
+            <td class="center"><span class="pill pill-intake"><span class="pill-dot"></span>Intake</span></td>
+            <td><div class="officer"><div class="av-sm" style="background:var(--purple);">PM</div><span class="officer-name">Priya M.</span></div></td>
+            <td><span class="close-date">May 10</span></td>
+            <td class="center"><span class="status-badge status-active">Active</span></td>
+            <td><button class="action-btn">⋯</button></td>
+          </tr>
+
+          <!-- Row 8 -->
+          <tr>
+            <td><input type="checkbox" style="accent-color:var(--accent);"/></td>
+            <td><div class="deal-name">Clover Hill Retail</div><div class="deal-sub">22k SF &middot; Parsippany, NJ</div></td>
+            <td><span class="prop-type">Mixed-Use</span></td>
+            <td class="right"><span class="loan-amt">$3.4M</span></td>
+            <td class="right">
+              <div class="ltv-cell">
+                <span class="ltv-num ltv-danger">79%</span>
+                <div class="ltv-bar"><div class="ltv-fill" style="width:79%;background:var(--red);"></div></div>
+              </div>
+            </td>
+            <td class="center"><span class="pill pill-flagged"><span class="pill-dot"></span>Flagged</span></td>
+            <td><div class="officer"><div class="av-sm av-gold">DC</div><span class="officer-name">David C.</span></div></td>
+            <td><span class="close-date">Apr 22</span></td>
+            <td class="center"><span class="status-badge status-active">Active</span></td>
+            <td><button class="action-btn">⋯</button></td>
+          </tr>
+
+          <!-- Row 9 — Closed -->
+          <tr class="closed-row">
+            <td><input type="checkbox" style="accent-color:var(--accent);"/></td>
+            <td><div class="deal-name">Elmwood Heights</div><div class="deal-sub">54 Units &middot; Newark, NJ</div></td>
+            <td><span class="prop-type">Multifamily</span></td>
+            <td class="right"><span class="loan-amt">$5.6M</span></td>
+            <td class="right">
+              <div class="ltv-cell">
+                <span class="ltv-num ltv-normal">64%</span>
+                <div class="ltv-bar"><div class="ltv-fill" style="width:64%;background:var(--accent);"></div></div>
+              </div>
+            </td>
+            <td class="center"><span class="pill pill-closed"><span class="pill-dot"></span>Closed</span></td>
+            <td><div class="officer"><div class="av-sm av-green">JR</div><span class="officer-name">James R.</span></div></td>
+            <td><span class="close-date">Feb 28</span></td>
+            <td class="center"><span class="status-badge status-closed">Closed</span></td>
+            <td><button class="action-btn">⋯</button></td>
+          </tr>
+
+          <!-- Row 10 — Closed -->
+          <tr class="closed-row">
+            <td><input type="checkbox" style="accent-color:var(--accent);"/></td>
+            <td><div class="deal-name">Riverside Commerce</div><div class="deal-sub">110k SF &middot; Trenton, NJ</div></td>
+            <td><span class="prop-type">Industrial</span></td>
+            <td class="right"><span class="loan-amt">$11.2M</span></td>
+            <td class="right">
+              <div class="ltv-cell">
+                <span class="ltv-num ltv-normal">62%</span>
+                <div class="ltv-bar"><div class="ltv-fill" style="width:62%;background:var(--accent);"></div></div>
+              </div>
+            </td>
+            <td class="center"><span class="pill pill-closed"><span class="pill-dot"></span>Closed</span></td>
+            <td><div class="officer"><div class="av-sm av-blue">SK</div><span class="officer-name">Sarah K.</span></div></td>
+            <td><span class="close-date">Jan 15</span></td>
+            <td class="center"><span class="status-badge status-closed">Closed</span></td>
+            <td><button class="action-btn">⋯</button></td>
+          </tr>
+
+        </tbody>
+      </table>
+
+      <!-- Load More Row -->
+      <div class="load-more-row" style="border-top: 1px solid var(--border);">
+        <a class="load-more-link" href="#">Load more &middot; 37 remaining</a>
+      </div>
+
+      <!-- Table Footer -->
+      <div class="table-footer">
+        <span class="table-footer-info">Showing 10 of 47 deals</span>
+        <div class="table-footer-pagination">
+          <button class="page-btn">&lsaquo; Prev</button>
+          <button class="page-btn" style="background:var(--accent); color:#fff; border-color:var(--accent);">1</button>
+          <button class="page-btn">2</button>
+          <button class="page-btn">3</button>
+          <button class="page-btn">Next &rsaquo;</button>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+</div><!-- /main -->
+
+</body>
+</html>
