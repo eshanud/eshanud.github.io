@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SimpleCITI â€” CRE Lending Pipeline Â· Case Study</title>
+<title>SimpleCITI — CRE Lending Pipeline · Case Study</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -17,7 +17,7 @@
 html { scroll-behavior: smooth; }
 body { font-family: 'DM Sans', sans-serif; background: var(--white); color: var(--text); font-size: 15px; line-height: 1.72; -webkit-font-smoothing: antialiased; }
 
-/* â”€â”€ HERO â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── HERO ────────────────────────────────── */
 .hero {
   background: var(--navy);
   height: 100vh; min-height: 700px;
@@ -28,7 +28,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--white); color: var(
 .hero-bg { position: absolute; inset: 0; z-index: 0; }
 .hero-bg img { width: 100%; height: 100%; object-fit: cover; object-position: center top; display: block; }
 
-/* Corner-only overlay â€” just the top-left where text sits, image free everywhere else */
+/* Corner-only overlay — just the top-left where text sits, image free everywhere else */
 .hero-overlay {
   position: absolute; inset: 0; z-index: 1;
   background: linear-gradient(110deg,
@@ -56,7 +56,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--white); color: var(
 .meta-lbl { font-size: 9px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.22); }
 .meta-val { font-size: 12px; color: rgba(255,255,255,0.65); }
 
-/* â”€â”€ CASE INTRO BLOCK â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── CASE INTRO BLOCK ────────────────────── */
 .case-intro {
   padding: 52px 3rem 48px calc(196px + 68px);
   border-bottom: 1px solid var(--border);
@@ -78,15 +78,15 @@ body { font-family: 'DM Sans', sans-serif; background: var(--white); color: var(
 .ci-meta-lbl { font-family: 'JetBrains Mono', monospace; font-size: 9px; font-weight: 600; letter-spacing: 0.04em; color: var(--gold); }
 .ci-meta-val { font-size: 13px; color: var(--navy); font-weight: 500; }
 
-/* â”€â”€ CONCEPT BANNER â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── CONCEPT BANNER ──────────────────────── */
 .concept-banner { background: rgba(201,168,76,0.07); border-bottom: 1px solid rgba(201,168,76,0.18); padding: 10px 2.5rem 10px calc(196px + 2.5rem); text-align: center; }
 .concept-banner p { font-size: 12px; color: rgba(13,27,42,0.55); line-height: 1.5; }
 .concept-banner strong { color: var(--navy); font-weight: 600; }
 
-/* â”€â”€ BODY LAYOUT â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── BODY LAYOUT ─────────────────────────── */
 .body-wrap { display: block; padding-right: 48px; }
 
-/* â”€â”€ SIDE NAV â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── SIDE NAV ────────────────────────────── */
 .side-nav { width: 196px; position: fixed; left: 0; top: 0; bottom: 0; padding: 28px 0 40px 28px; background: var(--white); border-right: 1px solid var(--border); z-index: 100; overflow-y: auto; }
 .sn-brand { display: flex; align-items: center; gap: 9px; }
 .sn-brand-mark { width: 26px; height: 26px; background: var(--navy); border-radius: 6px; display: flex; align-items: center; justify-content: center; font-family: 'DM Serif Display', serif; font-size: 13px; color: var(--gold); flex-shrink: 0; }
@@ -107,13 +107,13 @@ body { font-family: 'DM Sans', sans-serif; background: var(--white); color: var(
 .sn-item.active .sn-num { color: var(--gold); }
 .sn-divider { height: 1px; background: var(--border); margin: 10px 0 10px 14px; }
 
-/* â”€â”€ MAIN CONTENT â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── MAIN CONTENT ────────────────────────── */
 .main-col { margin-left: 196px; max-width: 920px; border-left: 1px solid var(--border); padding-left: 68px; }
 
 section { padding: 92px 0; border-bottom: 1px solid var(--border); }
 section:last-child { border-bottom: none; }
 
-/* SECTION LABEL â€” pill eyebrow */
+/* SECTION LABEL — pill eyebrow */
 .section-label { display: inline-flex; align-items: center; gap: 8px; background: rgba(201,168,76,0.07); border: 1px solid rgba(201,168,76,0.18); border-radius: 20px; padding: 5px 14px 5px 10px; margin-bottom: 28px; }
 .section-num { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--gold); font-weight: 600; letter-spacing: 0.04em; }
 .section-name { font-size: 9px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(13,27,42,0.5); }
@@ -215,7 +215,7 @@ strong { color: var(--text); font-weight: 600; }
   display: flex; align-items: center; gap: 7px;
 }
 .pain-num::before {
-  content: 'âœ¦';
+  content: '✦';
   font-size: 9px;
   flex-shrink: 0;
   opacity: 0.85;
@@ -260,12 +260,12 @@ strong { color: var(--text); font-weight: 600; }
 .zoom-levels { display: grid; grid-template-columns: repeat(3,1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; margin: 28px 0; }
 .zoom-card { background: var(--white); padding: 0 0 22px; }
 .zoom-mock { padding: 16px 16px 14px; border-bottom: 1px solid var(--border); background: var(--surf); min-height: 88px; display: flex; flex-direction: column; gap: 5px; }
-/* level 01 â€” KPI cards */
+/* level 01 — KPI cards */
 .zm-kpi { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; }
 .zm-kpi-card { background: var(--white); border: 1px solid var(--border); border-radius: 4px; padding: 5px 7px; }
 .zm-kpi-val { height: 5px; width: 60%; border-radius: 2px; background: rgba(13,27,42,0.18); margin-bottom: 3px; }
 .zm-kpi-lbl { height: 3px; width: 40%; border-radius: 2px; background: var(--border-s); }
-/* level 02 â€” table rows */
+/* level 02 — table rows */
 .zm-table { display: flex; flex-direction: column; gap: 3px; }
 .zm-row { display: grid; grid-template-columns: 1.6fr 0.8fr 0.9fr 0.7fr; gap: 4px; align-items: center; background: var(--white); border: 1px solid var(--border); border-radius: 3px; padding: 4px 6px; }
 .zm-row:first-child { background: var(--surf); }
@@ -278,7 +278,7 @@ strong { color: var(--text); font-weight: 600; }
 .zm-dot.g { background: #16a34a; }
 .zm-dot.a { background: #d97706; }
 .zm-dot.r { background: #dc2626; }
-/* level 03 â€” panel */
+/* level 03 — panel */
 .zm-panel { display: grid; grid-template-columns: 1fr 0.7fr; gap: 4px; height: 100%; }
 .zm-panel-main { display: flex; flex-direction: column; gap: 3px; }
 .zm-panel-side { background: var(--white); border: 1px solid var(--border); border-radius: 4px; padding: 5px; display: flex; flex-direction: column; gap: 3px; }
@@ -321,7 +321,7 @@ strong { color: var(--text); font-weight: 600; }
 .crs-output-desc { font-size: 10.5px; color: rgba(255,255,255,0.3); margin-left: auto; }
 .crs-footer { padding: 14px 28px 20px; border-top: 1px solid rgba(255,255,255,0.07); font-size: 11.5px; color: rgba(255,255,255,0.35); font-style: italic; }
 
-/* FINDING GRID â€” kept for fallback */
+/* FINDING GRID — kept for fallback */
 .finding-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin: 28px 0; }
 .finding { background: var(--surf); border: 1px solid var(--border); border-radius: 12px; padding: 20px 22px; }
 .finding-num { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--gold); margin-bottom: 8px; letter-spacing: 0.06em; }
@@ -389,7 +389,7 @@ strong { color: var(--text); font-weight: 600; }
 .rs-text .rs-d { font-size: 10px; color: rgba(255,255,255,0.28); }
 
 /* DECISION GRID */
-/* WRONG TURN â€” visual comparison */
+/* WRONG TURN — visual comparison */
 .dec-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; margin: 32px 0; background: var(--border); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; }
 .dec-card { background: var(--white); display: flex; flex-direction: column; }
 .dec-card.no { opacity: 0.72; }
@@ -426,7 +426,7 @@ strong { color: var(--text); font-weight: 600; }
 .wt-rule { font-size: 13px; font-weight: 600; color: var(--navy); border-top: 1px solid var(--border); padding-top: 20px; margin-top: 4px; }
 .wt-rule em { font-style: normal; color: var(--muted); font-weight: 400; }
 
-/* â”€â”€ SCREENS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── SCREENS ─────────────────────────────── */
 .screen-block { padding: 56px 0; border-bottom: 1px solid var(--border); opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
 .screen-block.visible { opacity: 1; transform: none; }
 .screen-block:last-child { border-bottom: none; }
@@ -458,7 +458,7 @@ strong { color: var(--text); font-weight: 600; }
 .metric-card h4 { font-family: 'JetBrains Mono', monospace; font-size: 22px; font-weight: 500; color: var(--navy); margin-bottom: 6px; line-height: 1; }
 .metric-card p { font-size: 11.5px; color: var(--muted); margin: 0; line-height: 1.55; }
 
-/* DO DIFFERENTLY â€” Gap cards */
+/* DO DIFFERENTLY — Gap cards */
 .gap-list { display: flex; flex-direction: column; gap: 16px; margin: 32px 0; }
 .gap-item { border: 1px solid var(--border-s); border-radius: 14px; overflow: hidden; transition: box-shadow 0.3s ease; }
 .gap-item:hover { box-shadow: 0 4px 20px rgba(13,27,42,0.07); }
@@ -475,7 +475,7 @@ strong { color: var(--text); font-weight: 600; }
 .gap-fix { display: flex; gap: 12px; align-items: baseline; background: rgba(13,27,42,0.03); border: 1px solid var(--border); border-left: 3px solid var(--navy); border-radius: 0 8px 8px 0; padding: 12px 16px; font-size: 13px; color: var(--text-2); line-height: 1.72; }
 .gap-fix-lbl { font-family: 'JetBrains Mono', monospace; font-size: 8px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--navy); flex-shrink: 0; margin-top: 2px; }
 
-/* CRITIQUE GRID â€” What Holds It Back */
+/* CRITIQUE GRID — What Holds It Back */
 .critique-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; margin: 28px 0; }
 .crit-card { background: var(--white); padding: 24px 24px 26px; position: relative; overflow: hidden; transition: background 0.2s; }
 .crit-card:hover { background: var(--surf); }
@@ -492,13 +492,13 @@ strong { color: var(--text); font-weight: 600; }
 .crit-card h4 { font-size: 13.5px; font-weight: 700; color: var(--navy); margin-bottom: 7px; line-height: 1.3; }
 .crit-card p { font-size: 11.5px; color: var(--muted); line-height: 1.68; margin: 0 0 12px; }
 .crit-fix { display: inline-flex; align-items: center; gap: 5px; font-size: 10.5px; font-weight: 600; color: var(--navy); background: var(--surf); border: 1px solid var(--border); border-radius: 20px; padding: 3px 10px; }
-.crit-fix::before { content: 'â†’'; font-size: 10px; }
+.crit-fix::before { content: '→'; font-size: 10px; }
 
 /* REFLECTIONS */
 .refl-list { list-style: none; margin: 24px 0; }
 .refl-list li { display: flex; gap: 16px; padding: 16px 0; border-bottom: 1px solid var(--border); font-size: 14px; color: var(--text-2); line-height: 1.75; }
 .refl-list li:last-child { border-bottom: none; padding-bottom: 0; }
-.refl-list li::before { content: 'â†’'; color: var(--gold); font-weight: 600; flex-shrink: 0; margin-top: 2px; }
+.refl-list li::before { content: '→'; color: var(--gold); font-weight: 600; flex-shrink: 0; margin-top: 2px; }
 
 /* PILL */
 .pill { display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: 0.05em; padding: 2px 8px; border-radius: 20px; text-transform: uppercase; }
@@ -512,7 +512,7 @@ footer { background: var(--navy); padding: 64px 2.5rem; text-align: center; }
 footer p { color: rgba(255,255,255,0.28); font-size: 12px; line-height: 1.8; }
 footer strong { color: rgba(255,255,255,0.5); font-weight: 500; }
 
-/* â”€â”€ SCREEN CALLOUTS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── SCREEN CALLOUTS ─────────────────────── */
 .annotations { display: none; }
 
 .callout-list {
@@ -535,7 +535,7 @@ footer strong { color: rgba(255,255,255,0.5); font-weight: 500; }
   transition: background 0.22s ease;
 }
 .callout-item:last-child {}
-/* Left accent bar â€” springs in on hover */
+/* Left accent bar — springs in on hover */
 .callout-item::before {
   content: '';
   position: absolute;
@@ -547,7 +547,7 @@ footer strong { color: rgba(255,255,255,0.5); font-weight: 500; }
   transform-origin: 50% 100%;
   transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
-/* Top shimmer â€” slides in on hover */
+/* Top shimmer — slides in on hover */
 .callout-item::after {
   content: '';
   position: absolute;
@@ -589,16 +589,16 @@ footer strong { color: rgba(255,255,255,0.5); font-weight: 500; }
 </head>
 <body>
 
-<!-- â•â•â•â• PORTFOLIO CHROME (shared) â•â•â•â• -->
+<!-- ════ PORTFOLIO CHROME (shared) ════ -->
 <link rel="stylesheet" href="portfolio-chrome.css">
-<a href="../index.html#featured" class="pf-bar"><span class="pf-arw">â†</span>Back to portfolio</a>
+<a href="../index.html#featured" class="pf-bar"><span class="pf-arw">←</span>Back to portfolio</a>
 
 <!-- HERO -->
 <header class="hero">
 
   <!-- Full-bleed background image -->
   <div class="hero-bg">
-    <img src="Hero.SimpleCITI.png" alt="CapiCITI â€” CRE Lending Pipeline Dashboard" draggable="false">
+    <img src="Hero.SimpleCITI.png" alt="CapiCITI — CRE Lending Pipeline Dashboard" draggable="false">
     <div class="hero-overlay"></div>
   </div>
 
@@ -671,13 +671,13 @@ footer strong { color: rgba(255,255,255,0.5); font-weight: 500; }
     <!-- CASE INTRO -->
     <div class="case-intro">
       <div class="ci-kicker">
-        <span>Case Study Â· Concept Project Â· 2025</span>
+        <span>Case Study · Concept Project · 2025</span>
       </div>
       <h1>Solo UI/UX designer focused on fintech and B2B SaaS.<br><em>I design for decisions</em>, not screens.</h1>
       <div class="ci-meta-row">
         <div class="ci-meta-item"><div class="ci-meta-lbl">Role</div><div class="ci-meta-val">Solo UI/UX Designer</div></div>
-        <div class="ci-meta-item"><div class="ci-meta-lbl">Domain</div><div class="ci-meta-val">Fintech Â· CRE Lending Â· B2B SaaS</div></div>
-        <div class="ci-meta-item"><div class="ci-meta-lbl">Tools</div><div class="ci-meta-val">Figma Â· FigJam Â· HTML/CSS</div></div>
+        <div class="ci-meta-item"><div class="ci-meta-lbl">Domain</div><div class="ci-meta-val">Fintech · CRE Lending · B2B SaaS</div></div>
+        <div class="ci-meta-item"><div class="ci-meta-lbl">Tools</div><div class="ci-meta-val">Figma · FigJam · HTML/CSS</div></div>
       </div>
     </div>
 
@@ -688,7 +688,7 @@ footer strong { color: rgba(255,255,255,0.5); font-weight: 500; }
         <span class="section-name">Problem</span>
       </div>
       <h2>The right signal exists.<br>It just arrives after the damage is done.</h2>
-      <p>12 active deals. The information exists â€” CRM, email, spreadsheet. The problem is the 20â€“30 minutes every morning spent reconstructing it to find the one deal on fire.</p>
+      <p>12 active deals. The information exists — CRM, email, spreadsheet. The problem is the 20–30 minutes every morning spent reconstructing it to find the one deal on fire.</p>
 
       <div class="pain-grid">
         <!-- Critical 01 -->
@@ -701,7 +701,7 @@ footer strong { color: rgba(255,255,255,0.5); font-weight: 500; }
           </div>
           <div class="pain-num">Critical 01</div>
           <h4>The Phase I ESA cascade</h4>
-          <p>One missing environmental report blocks Credit Review, delays close, triggers rate lock renegotiation. Officer finds out when the lawyer emails â€” two days before closing.</p>
+          <p>One missing environmental report blocks Credit Review, delays close, triggers rate lock renegotiation. Officer finds out when the lawyer emails — two days before closing.</p>
         </div>
         <!-- Systemic 02 -->
         <div class="pain-card amber">
@@ -741,7 +741,7 @@ footer strong { color: rgba(255,255,255,0.5); font-weight: 500; }
           <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 4h10M2 7h7M2 10h5" stroke="#9CA3AF" stroke-width="1.3" stroke-linecap="round"/></svg>
           CRE Forums
         </span>
-        <span class="rs-note">No direct interviews â€” informed hypotheses</span>
+        <span class="rs-note">No direct interviews — informed hypotheses</span>
       </div>
     </section>
 
@@ -775,7 +775,7 @@ footer strong { color: rgba(255,255,255,0.5); font-weight: 500; }
             </div>
             <span class="verdict v-partial">Partial</span>
           </div>
-          <div class="plat-gap"><strong>Missing:</strong> Fast DSCR/LTV on import, but optimized for underwriting â€” not morning pipeline triage.</div>
+          <div class="plat-gap"><strong>Missing:</strong> Fast DSCR/LTV on import, but optimized for underwriting — not morning pipeline triage.</div>
         </div>
 
         <div class="plat-card">
@@ -810,28 +810,28 @@ footer strong { color: rgba(255,255,255,0.5); font-weight: 500; }
           </div>
           <div class="lc-label">Intake</div>
         </div>
-        <div class="lc-arrow">â†’</div>
+        <div class="lc-arrow">→</div>
         <div class="lc-stage">
           <div class="lc-icon">
             <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="3" y="3" width="12" height="12" rx="2" stroke="#0D1B2A" stroke-width="1.3"/><path d="M6 9h2m0 0V7m0 2v2m2-2h2" stroke="#0D1B2A" stroke-width="1.3" stroke-linecap="round"/></svg>
           </div>
           <div class="lc-label">Underwriting</div>
         </div>
-        <div class="lc-arrow">â†’</div>
+        <div class="lc-arrow">→</div>
         <div class="lc-stage">
           <div class="lc-icon">
             <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 2.5L3 6v4c0 3.3 2.6 5.8 6 6.5 3.4-.7 6-3.2 6-6.5V6L9 2.5z" stroke="#0D1B2A" stroke-width="1.3" stroke-linejoin="round"/><path d="M6.5 9l2 2 3-3" stroke="#0D1B2A" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </div>
           <div class="lc-label">Credit Review</div>
         </div>
-        <div class="lc-arrow">â†’</div>
+        <div class="lc-arrow">→</div>
         <div class="lc-stage">
           <div class="lc-icon">
             <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="6" stroke="#0D1B2A" stroke-width="1.3"/><path d="M6 9l2.5 2.5L12 7" stroke="#0D1B2A" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </div>
           <div class="lc-label">Approval</div>
         </div>
-        <div class="lc-arrow">â†’</div>
+        <div class="lc-arrow">→</div>
         <div class="lc-stage">
           <div class="lc-icon">
             <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3 14h12M6 14V8.5L9 6l3 2.5V14" stroke="#0D1B2A" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><rect x="7.5" y="10.5" width="3" height="3.5" rx="0.5" stroke="#0D1B2A" stroke-width="1.3"/></svg>
@@ -851,7 +851,7 @@ footer strong { color: rgba(255,255,255,0.5); font-weight: 500; }
         <span class="section-name">Design System</span>
       </div>
       <h2>Resolved before the first screen.</h2>
-      <p>Token system locked first. Navy for authority, gold for financial signal moments, monospaced numerals throughout. JetBrains Mono for every number isn't aesthetic â€” it prevents misreads when scanning a column of dollar figures at speed. Monospaced numerals are how financial software earns trust.</p>
+      <p>Token system locked first. Navy for authority, gold for financial signal moments, monospaced numerals throughout. JetBrains Mono for every number isn't aesthetic — it prevents misreads when scanning a column of dollar figures at speed. Monospaced numerals are how financial software earns trust.</p>
 
       <div class="ds-tokens">
         <div class="ds-token">
@@ -897,7 +897,7 @@ footer strong { color: rgba(255,255,255,0.5); font-weight: 500; }
         <span class="section-name">Solution</span>
         <div class="section-rule"></div>
       </div>
-      <h2>Three zoom levels, one surface â€”<br>plus a risk signal nobody else has.</h2>
+      <h2>Three zoom levels, one surface —<br>plus a risk signal nobody else has.</h2>
 
       <!-- Zoom levels -->
       <div class="zoom-levels">
@@ -954,7 +954,7 @@ footer strong { color: rgba(255,255,255,0.5); font-weight: 500; }
           <div class="zoom-body">
             <div class="zoom-level">Level 03</div>
             <h4>Deal Depth</h4>
-            <p>Panel slides in on row click. Capital stack, doc checklist, timeline â€” pipeline stays visible.</p>
+            <p>Panel slides in on row click. Capital stack, doc checklist, timeline — pipeline stays visible.</p>
           </div>
         </div>
 
@@ -1001,7 +1001,7 @@ footer strong { color: rgba(255,255,255,0.5); font-weight: 500; }
             </div>
           </div>
           <!-- Arrow -->
-          <div class="crs-arrow">â†’</div>
+          <div class="crs-arrow">→</div>
           <!-- Outputs -->
           <div class="crs-outputs">
             <div class="crs-output high">
@@ -1021,7 +1021,7 @@ footer strong { color: rgba(255,255,255,0.5); font-weight: 500; }
             </div>
           </div>
         </div>
-        <div class="crs-footer">One dot replaces the mental math officers do every morning â€” inputs already exist in the system.</div>
+        <div class="crs-footer">One dot replaces the mental math officers do every morning — inputs already exist in the system.</div>
       </div>
     </section>
 
@@ -1038,7 +1038,7 @@ footer strong { color: rgba(255,255,255,0.5); font-weight: 500; }
       <div class="screen-block" id="scr-pipeline">
         <div class="screen-cap">
           <div class="sc-icon-wrap">
-            <span class="sc-icon">â–¤</span>
+            <span class="sc-icon">▤</span>
             <span class="sc-num">01</span>
           </div>
           <div class="sc-text">
@@ -1064,27 +1064,27 @@ footer strong { color: rgba(255,255,255,0.5); font-weight: 500; }
           </div>
           <div class="callout-item">
             <div class="ci-num">2</div>
-            <div class="ci-text"><strong>LTV color-coded</strong>Green below 65%, amber to 75%, red above â€” scanned in a column without a click.</div>
+            <div class="ci-text"><strong>LTV color-coded</strong>Green below 65%, amber to 75%, red above — scanned in a column without a click.</div>
           </div>
           <div class="callout-item">
             <div class="ci-num">3</div>
             <div class="ci-text"><strong>Closing Risk Score</strong>Composite of days-to-close, doc blockers, and LTV headroom. Replaces morning mental math.</div>
           </div>
         </div>
-        <div class="screen-open"><a href="../Dashboards/D1_Loan_Pipeline.html" target="_blank">Open full screen <span class="arr">â†—</span></a></div>
+        <div class="screen-open"><a href="../Dashboards/D1_Loan_Pipeline.html" target="_blank">Open full screen <span class="arr">↗</span></a></div>
       </div>
 
       <!-- 02 DEALS -->
       <div class="screen-block" id="scr-deals">
         <div class="screen-cap">
           <div class="sc-icon-wrap">
-            <span class="sc-icon">â—†</span>
+            <span class="sc-icon">◆</span>
             <span class="sc-num">02</span>
           </div>
           <div class="sc-text">
             <h4>Deals</h4>
             <span class="sc-sub">Active Deal Directory</span>
-            <p>Full roster across all stages. Stage filter tabs, LTV, DSCR, borrower, property type, and Closing Risk Score on every row â€” one surface, no drilling.</p>
+            <p>Full roster across all stages. Stage filter tabs, LTV, DSCR, borrower, property type, and Closing Risk Score on every row — one surface, no drilling.</p>
           </div>
         </div>
         <div class="screen-embed">
@@ -1099,27 +1099,27 @@ footer strong { color: rgba(255,255,255,0.5); font-weight: 500; }
         <div class="callout-list">
           <div class="callout-item">
             <div class="ci-num">1</div>
-            <div class="ci-text"><strong>Stage filter tabs</strong>One click to see only Intake, Underwriting, Approved, or Closing â€” the whole roster without drilling.</div>
+            <div class="ci-text"><strong>Stage filter tabs</strong>One click to see only Intake, Underwriting, Approved, or Closing — the whole roster without drilling.</div>
           </div>
           <div class="callout-item">
             <div class="ci-num">2</div>
-            <div class="ci-text"><strong>DSCR on every row</strong>Debt Service Coverage Ratio visible inline â€” no click into the deal, no context switch required.</div>
+            <div class="ci-text"><strong>DSCR on every row</strong>Debt Service Coverage Ratio visible inline — no click into the deal, no context switch required.</div>
           </div>
         </div>
-        <div class="screen-open"><a href="../Dashboards/D_Deals.html" target="_blank">Open full screen <span class="arr">â†—</span></a></div>
+        <div class="screen-open"><a href="../Dashboards/D_Deals.html" target="_blank">Open full screen <span class="arr">↗</span></a></div>
       </div>
 
       <!-- 03 UNDERWRITING -->
       <div class="screen-block" id="scr-underwriting">
         <div class="screen-cap">
           <div class="sc-icon-wrap">
-            <span class="sc-icon">â—Ž</span>
+            <span class="sc-icon">◎</span>
             <span class="sc-num">03</span>
           </div>
           <div class="sc-text">
             <h4>Underwriting</h4>
             <span class="sc-sub">Single Deal View</span>
-            <p>Three columns in parallel: financials, capital stack + risk, document checklist. An underwriter asks three questions simultaneously â€” hiding any one behind a tab is a friction tax on every review. LTV and DSCR live together because they're read together.</p>
+            <p>Three columns in parallel: financials, capital stack + risk, document checklist. An underwriter asks three questions simultaneously — hiding any one behind a tab is a friction tax on every review. LTV and DSCR live together because they're read together.</p>
           </div>
         </div>
         <div class="screen-embed">
@@ -1135,7 +1135,7 @@ footer strong { color: rgba(255,255,255,0.5); font-weight: 500; }
         <div class="callout-list">
           <div class="callout-item">
             <div class="ci-num">1</div>
-            <div class="ci-text"><strong>LTV gauge</strong>Threshold line at 75%. Fills red when breached â€” the one number that gates credit approval.</div>
+            <div class="ci-text"><strong>LTV gauge</strong>Threshold line at 75%. Fills red when breached — the one number that gates credit approval.</div>
           </div>
           <div class="callout-item">
             <div class="ci-num">2</div>
@@ -1143,23 +1143,23 @@ footer strong { color: rgba(255,255,255,0.5); font-weight: 500; }
           </div>
           <div class="callout-item">
             <div class="ci-num">3</div>
-            <div class="ci-text"><strong>Document checklist</strong>Phase I ESA, appraisal, title â€” each with status. Missing items surface before they become closing blockers.</div>
+            <div class="ci-text"><strong>Document checklist</strong>Phase I ESA, appraisal, title — each with status. Missing items surface before they become closing blockers.</div>
           </div>
         </div>
-        <div class="screen-open"><a href="../Dashboards/D2_Underwriting.html" target="_blank">Open full screen <span class="arr">â†—</span></a></div>
+        <div class="screen-open"><a href="../Dashboards/D2_Underwriting.html" target="_blank">Open full screen <span class="arr">↗</span></a></div>
       </div>
 
       <!-- 04 PORTFOLIO -->
       <div class="screen-block" id="scr-portfolio">
         <div class="screen-cap">
           <div class="sc-icon-wrap">
-            <span class="sc-icon">â¬¡</span>
+            <span class="sc-icon">⬡</span>
             <span class="sc-num">04</span>
           </div>
           <div class="sc-text">
             <h4>Portfolio</h4>
             <span class="sc-sub">Management Layer</span>
-            <p>Different persona, same system. The portfolio director asks "how is the business performing?" Six KPIs, origination trend, property type breakdown, officer leaderboard. Horizontal bars throughout â€” quantity comparison instant, no mental math.</p>
+            <p>Different persona, same system. The portfolio director asks "how is the business performing?" Six KPIs, origination trend, property type breakdown, officer leaderboard. Horizontal bars throughout — quantity comparison instant, no mental math.</p>
           </div>
         </div>
         <div class="screen-embed">
@@ -1179,27 +1179,27 @@ footer strong { color: rgba(255,255,255,0.5); font-weight: 500; }
           </div>
           <div class="callout-item">
             <div class="ci-num">2</div>
-            <div class="ci-text"><strong>Origination trend</strong>Horizontal bars by month â€” quantity comparison is instant, no mental math, no squinting at axis labels.</div>
+            <div class="ci-text"><strong>Origination trend</strong>Horizontal bars by month — quantity comparison is instant, no mental math, no squinting at axis labels.</div>
           </div>
           <div class="callout-item">
             <div class="ci-num">3</div>
             <div class="ci-text"><strong>Officer leaderboard</strong>Volume and deal count per officer. Shared context without a separate reporting request.</div>
           </div>
         </div>
-        <div class="screen-open"><a href="../Dashboards/D3_Portfolio.html" target="_blank">Open full screen <span class="arr">â†—</span></a></div>
+        <div class="screen-open"><a href="../Dashboards/D3_Portfolio.html" target="_blank">Open full screen <span class="arr">↗</span></a></div>
       </div>
 
       <!-- 05 REPORTS -->
       <div class="screen-block" id="scr-reports">
         <div class="screen-cap">
           <div class="sc-icon-wrap">
-            <span class="sc-icon">â‰£</span>
+            <span class="sc-icon">≣</span>
             <span class="sc-num">05</span>
           </div>
           <div class="sc-text">
             <h4>Reports</h4>
             <span class="sc-sub">Report Library</span>
-            <p>Templates grouped by persona â€” officer, compliance, management. Scheduled reports and recent downloads in the sidebar. One click to generate, no context lost.</p>
+            <p>Templates grouped by persona — officer, compliance, management. Scheduled reports and recent downloads in the sidebar. One click to generate, no context lost.</p>
           </div>
         </div>
         <div class="screen-embed">
@@ -1214,27 +1214,27 @@ footer strong { color: rgba(255,255,255,0.5); font-weight: 500; }
         <div class="callout-list">
           <div class="callout-item">
             <div class="ci-num">1</div>
-            <div class="ci-text"><strong>Grouped by persona</strong>Officer, Compliance, and Management templates separated â€” no hunting for the right report in a flat list.</div>
+            <div class="ci-text"><strong>Grouped by persona</strong>Officer, Compliance, and Management templates separated — no hunting for the right report in a flat list.</div>
           </div>
           <div class="callout-item">
             <div class="ci-num">2</div>
             <div class="ci-text"><strong>Scheduled reports sidebar</strong>Upcoming auto-generates and recent downloads visible at a glance. One click to run ad hoc.</div>
           </div>
         </div>
-        <div class="screen-open"><a href="../Dashboards/D_Reports.html" target="_blank">Open full screen <span class="arr">â†—</span></a></div>
+        <div class="screen-open"><a href="../Dashboards/D_Reports.html" target="_blank">Open full screen <span class="arr">↗</span></a></div>
       </div>
 
       <!-- 06 ACTIVITY LOG -->
       <div class="screen-block" id="scr-activity">
         <div class="screen-cap">
           <div class="sc-icon-wrap">
-            <span class="sc-icon">â—·</span>
+            <span class="sc-icon">◷</span>
             <span class="sc-num">06</span>
           </div>
           <div class="sc-text">
             <h4>Activity Log</h4>
             <span class="sc-sub">Proactive Surfacing</span>
-            <p>Grouped by consequence, not time. Critical blockers lead â€” missing Phase I ESA, LTV breach â€” each with an inline action. Read alerts fade to 65% so triage stays clear.</p>
+            <p>Grouped by consequence, not time. Critical blockers lead — missing Phase I ESA, LTV breach — each with an inline action. Read alerts fade to 65% so triage stays clear.</p>
           </div>
         </div>
         <div class="screen-embed">
@@ -1250,7 +1250,7 @@ footer strong { color: rgba(255,255,255,0.5); font-weight: 500; }
         <div class="callout-list">
           <div class="callout-item">
             <div class="ci-num">1</div>
-            <div class="ci-text"><strong>Consequence-first sort</strong>Missing Phase I ESA and LTV breaches lead â€” not the most recent event, but the one that costs most to ignore.</div>
+            <div class="ci-text"><strong>Consequence-first sort</strong>Missing Phase I ESA and LTV breaches lead — not the most recent event, but the one that costs most to ignore.</div>
           </div>
           <div class="callout-item">
             <div class="ci-num">2</div>
@@ -1261,20 +1261,20 @@ footer strong { color: rgba(255,255,255,0.5); font-weight: 500; }
             <div class="ci-text"><strong>Read alerts fade to 65%</strong>Cleared items recede without disappearing. The active triage list stays visually dominant.</div>
           </div>
         </div>
-        <div class="screen-open"><a href="../Dashboards/D6_Notifications.html" target="_blank">Open full screen <span class="arr">â†—</span></a></div>
+        <div class="screen-open"><a href="../Dashboards/D6_Notifications.html" target="_blank">Open full screen <span class="arr">↗</span></a></div>
       </div>
 
       <!-- 07 INTAKE FORM -->
       <div class="screen-block" id="scr-intake">
         <div class="screen-cap">
           <div class="sc-icon-wrap">
-            <span class="sc-icon">âŠ•</span>
+            <span class="sc-icon">⊕</span>
             <span class="sc-num">07</span>
           </div>
           <div class="sc-text">
             <h4>Intake Form</h4>
-            <span class="sc-sub">Entry Point Â· Interactive</span>
-            <p>Four-step form with a live summary panel. Real-time LTV: green below 65%, amber to 75%, red above. Risk surfaced at entry â€” not discovered at underwriting where it costs more to fix.</p>
+            <span class="sc-sub">Entry Point · Interactive</span>
+            <p>Four-step form with a live summary panel. Real-time LTV: green below 65%, amber to 75%, red above. Risk surfaced at entry — not discovered at underwriting where it costs more to fix.</p>
           </div>
         </div>
         <div class="screen-embed">
@@ -1290,7 +1290,7 @@ footer strong { color: rgba(255,255,255,0.5); font-weight: 500; }
         <div class="callout-list">
           <div class="callout-item">
             <div class="ci-num">1</div>
-            <div class="ci-text"><strong>4-step stepper</strong>Borrower â†’ Property â†’ Financials â†’ Documents. Progress visible at all times, back-navigation preserved.</div>
+            <div class="ci-text"><strong>4-step stepper</strong>Borrower → Property → Financials → Documents. Progress visible at all times, back-navigation preserved.</div>
           </div>
           <div class="callout-item">
             <div class="ci-num">2</div>
@@ -1301,20 +1301,20 @@ footer strong { color: rgba(255,255,255,0.5); font-weight: 500; }
             <div class="ci-text"><strong>Risk at entry</strong>A high-LTV deal is flagged here, not discovered two weeks into underwriting when it's expensive to unwind.</div>
           </div>
         </div>
-        <div class="screen-open"><a href="../Dashboards/D4_Intake_Form.html" target="_blank">Open full screen <span class="arr">â†—</span></a></div>
+        <div class="screen-open"><a href="../Dashboards/D4_Intake_Form.html" target="_blank">Open full screen <span class="arr">↗</span></a></div>
       </div>
 
       <!-- 08 SETTINGS -->
       <div class="screen-block" id="scr-settings">
         <div class="screen-cap">
           <div class="sc-icon-wrap">
-            <span class="sc-icon">âŠ™</span>
+            <span class="sc-icon">⊙</span>
             <span class="sc-num">08</span>
           </div>
           <div class="sc-text">
             <h4>Settings</h4>
             <span class="sc-sub">Account & Configuration</span>
-            <p>Profile, Notifications, Team, Integrations â€” tabbed and scannable. Two-column form with account summary card. Alert thresholds configurable without leaving the surface.</p>
+            <p>Profile, Notifications, Team, Integrations — tabbed and scannable. Two-column form with account summary card. Alert thresholds configurable without leaving the surface.</p>
           </div>
         </div>
         <div class="screen-embed">
@@ -1329,14 +1329,14 @@ footer strong { color: rgba(255,255,255,0.5); font-weight: 500; }
         <div class="callout-list">
           <div class="callout-item">
             <div class="ci-num">1</div>
-            <div class="ci-text"><strong>Tab navigation</strong>Profile, Notifications, Team, Integrations â€” all surfaces reachable in one click with full state preserved.</div>
+            <div class="ci-text"><strong>Tab navigation</strong>Profile, Notifications, Team, Integrations — all surfaces reachable in one click with full state preserved.</div>
           </div>
           <div class="callout-item">
             <div class="ci-num">2</div>
             <div class="ci-text"><strong>Account summary card</strong>Plan, usage, and billing visible without leaving the profile tab. No buried settings page required.</div>
           </div>
         </div>
-        <div class="screen-open"><a href="../Dashboards/D_Settings.html" target="_blank">Open full screen <span class="arr">â†—</span></a></div>
+        <div class="screen-open"><a href="../Dashboards/D_Settings.html" target="_blank">Open full screen <span class="arr">↗</span></a></div>
       </div>
 
       <!-- METRICS -->
@@ -1349,7 +1349,7 @@ footer strong { color: rgba(255,255,255,0.5); font-weight: 500; }
         </div>
         <div class="metric-card">
           <div class="mk">Target</div>
-          <h4>â†“60%</h4>
+          <h4>↓60%</h4>
           <p>Document gap discovery at closing vs. underwriting stage. Blockers should surface earlier.</p>
         </div>
         <div class="metric-card">
@@ -1360,7 +1360,7 @@ footer strong { color: rgba(255,255,255,0.5); font-weight: 500; }
         <div class="metric-card">
           <div class="mk">Target</div>
           <h4>0 clicks</h4>
-          <p>To see LTV, stage, and close date for any deal. Currently: 1â€“3 clicks in every platform audited.</p>
+          <p>To see LTV, stage, and close date for any deal. Currently: 1–3 clicks in every platform audited.</p>
         </div>
       </div>
     </section>
@@ -1371,7 +1371,7 @@ footer strong { color: rgba(255,255,255,0.5); font-weight: 500; }
         <span class="section-name">What I'd Do Differently</span>
         <div class="section-rule"></div>
       </div>
-      <h2>Assumptions I got wrong â€” or diagnosed but didn't solve.</h2>
+      <h2>Assumptions I got wrong — or diagnosed but didn't solve.</h2>
 
       <div class="gap-list">
 
@@ -1384,7 +1384,7 @@ footer strong { color: rgba(255,255,255,0.5); font-weight: 500; }
             <h3 class="gap-title">Multi-entity borrower structures</h3>
           </div>
           <div class="gap-body">
-            <p>CRE deals above $5â€“7M involve layered ownership â€” LLC â†’ Trust â†’ individuals, sometimes foreign entities. My intake form assumed one borrower, one signature. That breaks on 40â€“60% of the target pipeline, with downstream pain in KYC/AML and document execution.</p>
+            <p>CRE deals above $5–7M involve layered ownership — LLC → Trust → individuals, sometimes foreign entities. My intake form assumed one borrower, one signature. That breaks on 40–60% of the target pipeline, with downstream pain in KYC/AML and document execution.</p>
             <div class="gap-fix">
               <span class="gap-fix-lbl">Fix needed</span>
               Entity relationship mapping, multiple guarantors, dynamic signature workflows. Week 1 work.
@@ -1401,7 +1401,7 @@ footer strong { color: rgba(255,255,255,0.5); font-weight: 500; }
             <h3 class="gap-title">Appraisal stress-testing</h3>
           </div>
           <div class="gap-body">
-            <p>I named appraisal variance as a deal-killer, then designed nothing for it. Zero modeling capability for an 8â€“12% appraisal shortfall â€” the most common late-stage surprise in CRE lending.</p>
+            <p>I named appraisal variance as a deal-killer, then designed nothing for it. Zero modeling capability for an 8–12% appraisal shortfall — the most common late-stage surprise in CRE lending.</p>
             <div class="gap-fix">
               <span class="gap-fix-lbl">Fix needed</span>
               A non-destructive scenario panel recalculating LTV, DSCR, and capital stack impact.
@@ -1418,7 +1418,7 @@ footer strong { color: rgba(255,255,255,0.5); font-weight: 500; }
             <h3 class="gap-title">Credit committee / Submit for Approval workflow</h3>
           </div>
           <div class="gap-body">
-            <p>The "Submit for Approval" button leads nowhere. Credit committee review is where approval latency actually lives â€” I stopped exactly at the handoff.</p>
+            <p>The "Submit for Approval" button leads nowhere. Credit committee review is where approval latency actually lives — I stopped exactly at the handoff.</p>
             <div class="gap-fix">
               <span class="gap-fix-lbl">Fix needed</span>
               Reviewer assignment, comment threads, version control, approval status visibility.
@@ -1447,8 +1447,8 @@ footer strong { color: rgba(255,255,255,0.5); font-weight: 500; }
       </ul>
 
       <div class="pull-quote">
-        <p>"The hardest part of design isn't craft. It's knowing which problem actually needs solving â€” and having the domain depth to see it first."</p>
-        <span class="attr">â€” The principle this whole project was built around</span>
+        <p>"The hardest part of design isn't craft. It's knowing which problem actually needs solving — and having the domain depth to see it first."</p>
+        <span class="attr">— The principle this whole project was built around</span>
       </div>
     </section>
 
@@ -1456,11 +1456,11 @@ footer strong { color: rgba(255,255,255,0.5); font-weight: 500; }
 </div>
 
 <footer>
-  <p><strong>SimpleCITI â€” CRE Lending Pipeline</strong> Â· Concept Project Â· 2025<br>UI/UX Case Study Â· Fintech Â· B2B SaaS Â· Solo Designer Â· All deal data is illustrative</p>
+  <p><strong>SimpleCITI — CRE Lending Pipeline</strong> · Concept Project · 2025<br>UI/UX Case Study · Fintech · B2B SaaS · Solo Designer · All deal data is illustrative</p>
 </footer>
 
 <script>
-  // â”€â”€ SCALE IFRAMES â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── SCALE IFRAMES ─────────────────────────────────
   function scaleIframes() {
     document.querySelectorAll('.screen-embed').forEach(embed => {
       const body = embed.querySelector('.screen-body');
@@ -1476,7 +1476,7 @@ footer strong { color: rgba(255,255,255,0.5); font-weight: 500; }
   scaleIframes();
   window.addEventListener('resize', scaleIframes);
 
-  // â”€â”€ SCROLL REVEAL â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── SCROLL REVEAL ─────────────────────────────────
   const revealObserver = new IntersectionObserver((entries) => {
     entries.forEach(e => {
       if (e.isIntersecting) {
@@ -1487,7 +1487,7 @@ footer strong { color: rgba(255,255,255,0.5); font-weight: 500; }
   }, { threshold: 0.08 });
   document.querySelectorAll('.screen-block').forEach(b => revealObserver.observe(b));
 
-  // â”€â”€ SIDE NAV ACTIVE STATE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── SIDE NAV ACTIVE STATE ─────────────────────────
   const sections = document.querySelectorAll('section[id]');
   const navItems = document.querySelectorAll('.sn-item');
 
@@ -1507,17 +1507,17 @@ footer strong { color: rgba(255,255,255,0.5); font-weight: 500; }
   <div class="pf-eb">Keep exploring</div>
   <h2 class="pf-head">More work from the <span class="pf-soft">portfolio.</span></h2>
   <div class="pf-grid">
-    <a class="pf-card" href="compound.html"><span class="pf-idx">01</span><span class="pf-cat">Fintech</span><span class="pf-nm">Compound</span><span class="pf-go">View case study â†’</span></a>
-    <a class="pf-card" href="voltfleet.html"><span class="pf-idx">02</span><span class="pf-cat">EV Â· Mobile</span><span class="pf-nm">Voltfleet</span><span class="pf-go">View case study â†’</span></a>
-    <a class="pf-card" href="gpay.html"><span class="pf-idx">03</span><span class="pf-cat">Payments Â· UPI</span><span class="pf-nm">GPay</span><span class="pf-go">View case study â†’</span></a>
+    <a class="pf-card" href="compound.html"><span class="pf-idx">01</span><span class="pf-cat">Fintech</span><span class="pf-nm">Compound</span><span class="pf-go">View case study →</span></a>
+    <a class="pf-card" href="voltfleet.html"><span class="pf-idx">02</span><span class="pf-cat">EV · Mobile</span><span class="pf-nm">Voltfleet</span><span class="pf-go">View case study →</span></a>
+    <a class="pf-card" href="gpay.html"><span class="pf-idx">03</span><span class="pf-cat">Payments · UPI</span><span class="pf-nm">GPay</span><span class="pf-go">View case study →</span></a>
   </div>
   <div class="pf-row">
-    <a class="pf-home" href="../index.html"><span class="pf-mk">E</span>Eshanki UD â€” Portfolio</a>
+    <a class="pf-home" href="../index.html"><span class="pf-mk">E</span>Eshanki UD — Portfolio</a>
     <div class="pf-social">
       <a href="../index.html#works">All work</a>
       <a href="../index.html#contact">Contact</a>
     </div>
-    <span class="pf-cp">Â© 2026 Eshanki UD Â· Designed &amp; built with care.</span>
+    <span class="pf-cp">© 2026 Eshanki UD · Designed &amp; built with care.</span>
   </div>
 </div></footer>
 </body>
