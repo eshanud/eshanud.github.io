@@ -883,6 +883,25 @@ footer a { color: rgba(255,255,255,.75); text-decoration: none; }
 .live-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--green); margin-right: 9px; animation: livePulse 2s ease infinite; }
 @keyframes livePulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(52,168,83,.35); } 50% { box-shadow: 0 0 0 6px rgba(52,168,83,0); } }
 
+/* ── icon micro-interactions ── */
+/* solution-state icon pops gently when its card is hovered */
+.sol-state-ico svg { transition: transform .25s cubic-bezier(.34,1.56,.64,1); }
+.sol-state:hover .sol-state-ico svg { transform: scale(1.14) rotate(-4deg); }
+/* the pending (clock) state spins its hand on hover */
+.sol-state--pending:hover .sol-state-ico svg { animation: tick .9s ease; }
+@keyframes tick { 0%{transform:scale(1.14) rotate(0);} 100%{transform:scale(1.14) rotate(360deg);} }
+/* ship icon (star) twinkles softly, forever */
+.ship-ico svg { animation: twinkle 2.6s ease-in-out infinite; transform-origin: center; }
+@keyframes twinkle { 0%,100%{opacity:1;transform:scale(1) rotate(0);} 50%{opacity:.78;transform:scale(.9) rotate(12deg);} }
+/* refund tracker: the 3 dots pulse in sequence — a live "processing" cue */
+.track-dots circle { animation: dotSeq 1.4s ease-in-out infinite; }
+.track-dots circle:nth-child(2) { animation-delay: .18s; }
+.track-dots circle:nth-child(3) { animation-delay: .36s; }
+@keyframes dotSeq { 0%,100%{opacity:.3;} 50%{opacity:1;} }
+/* research + metric bars grow from the left on load (no observer needed) */
+.sv-fill, .mbar { transform-origin: left; animation: barGrow 1.1s cubic-bezier(.22,.9,.36,1) .15s both; }
+@keyframes barGrow { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+
 .sticky-tag { font-size: 9px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: rgba(0,0,0,.45); margin-bottom: .45rem; }
 .sticky-title { font-size: 13.5px; font-weight: 600; color: #2C2C2C; margin-bottom: .4rem; line-height: 1.35; }
 .sticky-body { font-size: 12px; color: #555; line-height: 1.55; }
@@ -899,6 +918,8 @@ footer a { color: rgba(255,255,255,.75); text-decoration: none; }
   [data-stagger] > * { opacity: 1 !important; animation: none !important; }
   .live-dot { animation: none; }
   .lane-row { transition: none; }
+  .ship-ico svg, .track-dots circle, .sol-state-ico svg { animation: none !important; transition: none !important; }
+  .sv-fill, .mbar { animation: none !important; transform: none !important; }
 }
 </style>
 </head>
@@ -1110,7 +1131,7 @@ footer a { color: rgba(255,255,255,.75); text-decoration: none; }
         </div>
         <div class="lane lane--wait">
           <div class="lane-hd"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="5.6" stroke="#B06000" stroke-width="1.3"/><path d="M7 4v3l2 1.4" stroke="#B06000" stroke-width="1.3" stroke-linecap="round"/></svg> Needs bank API · legal review</div>
-          <div class="lane-row"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="3" cy="7" r="1.6" fill="#E37400"/><circle cx="7" cy="7" r="1.6" fill="#E37400" opacity=".55"/><circle cx="11" cy="7" r="1.6" fill="#E37400" opacity=".3"/></svg> Real-time 4-stage refund tracker</div>
+          <div class="lane-row"><svg class="track-dots" width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="3" cy="7" r="1.6" fill="#E37400"/><circle cx="7" cy="7" r="1.6" fill="#E37400"/><circle cx="11" cy="7" r="1.6" fill="#E37400"/></svg> Real-time 4-stage refund tracker</div>
           <div class="lane-row"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3.5 10h7c-.8-.9-1-2-1-3.4 0-1.8-1-3.1-2.5-3.1S4.5 4.8 4.5 6.6c0 1.4-.2 2.5-1 3.4z" stroke="#E37400" stroke-width="1.3" stroke-linejoin="round"/><path d="M6 11.7a1.1 1.1 0 002 0" stroke="#E37400" stroke-width="1.3" stroke-linecap="round"/></svg> Proactive push on each state change</div>
           <div class="lane-row"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3.5 1.5h5L11 4v8.5H3.5z" stroke="#E37400" stroke-width="1.3" stroke-linejoin="round"/><path d="M5.2 7h3.6M5.2 9.2h3.6" stroke="#E37400" stroke-width="1.2" stroke-linecap="round"/></svg> Pre-filled dispute on SLA breach — user submits</div>
           <div class="lane-row"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1.8L12.8 12H1.2L7 1.8z" stroke="#E37400" stroke-width="1.3" stroke-linejoin="round"/><path d="M7 5.5v3" stroke="#E37400" stroke-width="1.3" stroke-linecap="round"/><circle cx="7" cy="10.2" r=".7" fill="#E37400"/></svg> "Your money is safe" copy — liability risk</div>
@@ -1150,7 +1171,7 @@ footer a { color: rgba(255,255,255,.75); text-decoration: none; }
 
     <div style="background:var(--surface-2);border-radius:12px;padding:1rem 1.25rem;margin:1.5rem 0 0;border-left:3px solid var(--orange);">
       <div style="font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--orange);margin-bottom:.4rem;">Technical reality — the 24-hour Unknown</div>
-      <p style="font-size:12.5px;color:var(--ink-soft);line-height:1.6;margin:0;">NPCI doesn't push real-time state to PSPs, so between debit-confirm and the next ACK the system is blind — sometimes 24h. Fallback: past 4h stale, the tracker freezes the step ("No update from HDFC since 9:00 AM") and shows the bank's line. We never invent progress.</p>
+      <p style="font-size:12.5px;color:var(--ink-soft);line-height:1.6;margin:0;">NPCI doesn't push real-time state, so the system can stay blind up to 24h between updates. When a step goes stale, the tracker freezes it — it never invents progress.</p>
     </div>
 
     <p style="font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-muted);margin:2rem 0 .75rem;">Name the responsible party — no app does this</p>
@@ -1174,7 +1195,7 @@ footer a { color: rgba(255,255,255,.75); text-decoration: none; }
       </div>
     </div>
 
-    <p style="font-size:12px;color:var(--ink-muted);font-style:italic;line-height:1.6;margin:1.5rem 0 0;">The dispute pre-fills but never auto-files — the submit tap stays with the user (RBI compliance). Trust is earned by being checkable: the NPCI ref, the bank's real number, and an honest "no update yet" all live in the screens below.</p>
+    <p style="font-size:12px;color:var(--ink-muted);font-style:italic;line-height:1.6;margin:1.5rem 0 0;">The dispute pre-fills but never auto-files — the submit tap stays with the user (RBI compliance).</p>
   </div>
 </section>
 
@@ -1376,7 +1397,7 @@ footer a { color: rgba(255,255,255,.75); text-decoration: none; }
         <div style="font-size:12px;color:var(--ink-muted);margin:.5rem 0 .875rem;line-height:1.4;">Support tickets · failed UPI payments<br><span style="color:var(--ink-soft);">Source: Zendesk + GPay support logs</span></div>
         <!-- Scale bar -->
         <div style="height:5px;background:var(--surface-2);border-radius:3px;overflow:hidden;">
-          <div style="width:30%;height:100%;background:linear-gradient(90deg,var(--blue),#4285F4);border-radius:3px;"></div>
+          <div class="mbar" style="width:30%;height:100%;background:linear-gradient(90deg,var(--blue),#4285F4);border-radius:3px;"></div>
         </div>
         <div style="display:flex;justify-content:space-between;margin-top:4px;">
           <span style="font-size:9px;color:var(--ink-muted);">0</span>
@@ -1390,7 +1411,7 @@ footer a { color: rgba(255,255,255,.75); text-decoration: none; }
         <div style="font-size:2.75rem;font-family:'DM Serif Display',serif;color:var(--red);line-height:1;">↓50<span style="font-size:1.25rem;">%</span></div>
         <div style="font-size:12px;color:var(--ink-muted);margin:.5rem 0 .875rem;line-height:1.4;">Duplicate retries · debited state<br><span style="color:var(--ink-soft);">Source: payment retry events</span></div>
         <div style="height:5px;background:var(--surface-2);border-radius:3px;overflow:hidden;">
-          <div style="width:50%;height:100%;background:var(--red);border-radius:3px;opacity:.7;"></div>
+          <div class="mbar" style="width:50%;height:100%;background:var(--red);border-radius:3px;opacity:.7;"></div>
         </div>
       </div>
       <!-- Stat 2 -->
@@ -1399,7 +1420,7 @@ footer a { color: rgba(255,255,255,.75); text-decoration: none; }
         <div style="font-size:2.75rem;font-family:'DM Serif Display',serif;color:var(--green);line-height:1;">↑15<span style="font-size:1.25rem;">%</span></div>
         <div style="font-size:12px;color:var(--ink-muted);margin:.5rem 0 .875rem;line-height:1.4;">Returned within 7 days · post-failure<br><span style="color:var(--ink-soft);">Source: session + transaction events</span></div>
         <div style="height:5px;background:var(--surface-2);border-radius:3px;overflow:hidden;">
-          <div style="width:15%;height:100%;background:var(--green);border-radius:3px;"></div>
+          <div class="mbar" style="width:15%;height:100%;background:var(--green);border-radius:3px;"></div>
         </div>
       </div>
     </div>
@@ -1526,22 +1547,8 @@ if (!reduceMotion) {
   staggerEls.forEach(el => el.classList.add('in-view'));
 }
 
-// Research stat bars — fill when scrolled into view
-if (!reduceMotion) {
-  document.querySelectorAll('.sv-fill').forEach(bar => {
-    const target = bar.style.width;
-    bar.style.width = '0%';
-    bar.style.transition = 'width 1.1s cubic-bezier(.22,.9,.36,1) .15s';
-    new IntersectionObserver((entries, obs) => {
-      entries.forEach(e => {
-        if (e.isIntersecting) {
-          requestAnimationFrame(() => { bar.style.width = target; });
-          obs.unobserve(bar);
-        }
-      });
-    }, { threshold: 0.5 }).observe(bar);
-  });
-}
+// Research + metric bars now grow via pure CSS (.bar-grow / @keyframes barGrow),
+// so they always render their value without depending on an observer firing.
 </script>
 <footer class="pf-footer"><div class="pf-in">
   <div class="pf-eb">Keep exploring</div>
