@@ -623,7 +623,13 @@
     letter-spacing: -0.025em;
   }
   .skill-row .name .italic { font-weight: 300; color: #888; }
-  .skill-row .yrs { color: #999; font-size: 13px; font-variant-numeric: tabular-nums; font-weight: 500; }
+  .skill-row .yrs {
+    color: #999; font-size: 13px; font-weight: 500; font-style: italic;
+    opacity: 0; transform: translateX(10px);
+    transition: opacity .35s ease, transform .35s cubic-bezier(.34,1.56,.64,1);
+    white-space: nowrap;
+  }
+  .skill-row:hover .yrs { opacity: 1; transform: translateX(0); color: var(--accent, #0D9E55); }
 
   /* ============ CONTACT ============ */
   section.contact {
@@ -927,8 +933,8 @@
 
   <div class="hero-inner">
     <div class="hero-content">
-      <span class=”role”>Product Designer · Pune, India</span>
-      <h1 class=”name”>Product design from concept to <span class=”italic”>screen.</span></h1>
+      <span class="role">Product Designer · Pune, India</span>
+      <h1 class="name">Product design from concept to <span class="italic">screen.</span></h1>
     </div>
 
     <div class="blob-wrap">
@@ -1130,19 +1136,23 @@
       <p>B.Des in Product Design, MIT School of Design (2024). Recent work: Adaara Couture, Drystech, Bio Resources, Electromotion.</p>
 
       <div class="stat-row">
-        <div class="stat"><div class="num">3<span class="italic">+</span></div><div class="lbl">Years</div></div>
-        <div class="stat"><div class="num">10<span class="italic">+</span></div><div class="lbl">Projects</div></div>
-        <div class="stat"><div class="num">8</div><div class="lbl">Brands</div></div>
+        <div class="stat"><div class="num"><span class="count" data-to="3">0</span><span class="italic">+</span></div><div class="lbl">Years</div></div>
+        <div class="stat"><div class="num"><span class="count" data-to="10">0</span><span class="italic">+</span></div><div class="lbl">Projects</div></div>
+        <div class="stat"><div class="num"><span class="count" data-to="8">0</span></div><div class="lbl">Brands</div></div>
       </div>
     </div>
 
     <div class="skill-list reveal">
-      <div class="skill-row"><span class="name">Packaging <span class="italic">design</span></span></div>
-      <div class="skill-row"><span class="name">Product <span class="italic">design</span></span></div>
-      <div class="skill-row"><span class="name">Branding</span></div>
-      <div class="skill-row"><span class="name">Typography</span></div>
-      <div class="skill-row"><span class="name">Prototyping</span></div>
-      <div class="skill-row"><span class="name">Visual <span class="italic">design</span></span></div>
+      <div class="skill-row"><span class="name">Packaging <span class="italic">design</span></span><span class="yrs">unboxing obsessed</span></div>
+      <div class="skill-row"><span class="name">Product <span class="italic">design</span></span><span class="yrs">concept → screen</span></div>
+      <div class="skill-row"><span class="name">Branding</span><span class="yrs">systems thinker</span></div>
+      <div class="skill-row"><span class="name">Typography</span><span class="yrs">recovering kerning addict</span></div>
+      <div class="skill-row"><span class="name">Prototyping</span><span class="yrs">Figma marathoner</span></div>
+      <div class="skill-row"><span class="name">Visual <span class="italic">design</span></span><span class="yrs">pixel perfectionist</span></div>
+      <div class="skill-row"><span class="name">After <span class="italic">Effects</span></span><span class="yrs">keyframe wrangler</span></div>
+      <div class="skill-row"><span class="name">Micro-<span class="italic">interactions</span></span><span class="yrs">it's in the 200ms</span></div>
+      <div class="skill-row"><span class="name">Animated <span class="italic">prototypes</span></span><span class="yrs">motion tells the story</span></div>
+      <div class="skill-row"><span class="name">VR <span class="italic">demo</span></span><span class="yrs">spatial-curious</span></div>
     </div>
 
   </div>
@@ -1214,6 +1224,45 @@
     if (!track) return;
     const slides = Array.from(track.children);
     slides.forEach(s => track.appendChild(s.cloneNode(true)));
+  })();
+
+  // Count-up stats — animate numbers when they scroll into view
+  (function initCounters() {
+    const counters = document.querySelectorAll('.count');
+    if (!counters.length) return;
+    const animate = (el) => {
+      const to = parseInt(el.dataset.to, 10) || 0;
+      const dur = 900, start = performance.now();
+      const tick = (now) => {
+        const p = Math.min((now - start) / dur, 1);
+        const eased = p === 1 ? 1 : 1 - Math.pow(2, -10 * p); // easeOutExpo
+        el.textContent = Math.round(eased * to);
+        if (p < 1) requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick);
+    };
+    const cio = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { animate(e.target); cio.unobserve(e.target); }
+      });
+    }, { threshold: 0.6 });
+    counters.forEach(c => cio.observe(c));
+  })();
+
+  // Magnetic project arrows — nudge toward the cursor on hover
+  (function initMagnetic() {
+    document.querySelectorAll('.craft-item').forEach(item => {
+      const arrow = item.querySelector('.craft-arrow');
+      if (!arrow) return;
+      item.addEventListener('mousemove', (e) => {
+        const r = item.getBoundingClientRect();
+        const mx = (e.clientX - r.left) / r.width - 0.5;
+        const my = (e.clientY - r.top) / r.height - 0.5;
+        // keep the hover rotate, add a magnetic nudge toward the cursor
+        arrow.style.transform = `translate(${mx * 8}px, ${my * 8}px) rotate(-45deg)`;
+      });
+      item.addEventListener('mouseleave', () => { arrow.style.transform = ''; });
+    });
   })();
 </script>
 </body>
