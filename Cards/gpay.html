@@ -898,9 +898,11 @@ footer a { color: rgba(255,255,255,.75); text-decoration: none; }
 .track-dots circle:nth-child(2) { animation-delay: .18s; }
 .track-dots circle:nth-child(3) { animation-delay: .36s; }
 @keyframes dotSeq { 0%,100%{opacity:.3;} 50%{opacity:1;} }
-/* research + metric bars grow from the left on load (no observer needed) */
-.sv-fill, .mbar { transform-origin: left; animation: barGrow 1.1s cubic-bezier(.22,.9,.36,1) .15s both; }
-@keyframes barGrow { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+/* research + metric bars grow from the left when scrolled into view.
+   Resting state is full (scaleX 1) so bars always show their value even if JS
+   never runs; JS adds .bar-pending to collapse them, then removes it on scroll-in. */
+.sv-fill, .mbar { transform-origin: left; transition: transform .95s cubic-bezier(.22,.9,.36,1); }
+.sv-fill.bar-pending, .mbar.bar-pending { transform: scaleX(0); }
 
 .sticky-tag { font-size: 9px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: rgba(0,0,0,.45); margin-bottom: .45rem; }
 .sticky-title { font-size: 13.5px; font-weight: 600; color: #2C2C2C; margin-bottom: .4rem; line-height: 1.35; }
@@ -1079,7 +1081,22 @@ footer a { color: rgba(255,255,255,.75); text-decoration: none; }
     </div>
 
     <div class="callout callout--yellow" style="margin-top:1.75rem;">
-      <p><strong>Three behaviors emerged:</strong> Panic Retriers (blind retry → duplicate), Bank Switchers (call the bank), Silent Churners (never return). The honest caveat: 7/12 said they'd still trust their bank over any GPay tracker — trust is earned per-incident, not per-redesign.</p>
+      <div style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-muted);margin-bottom:.75rem;">Three behaviors emerged</div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:.55rem;margin-bottom:.95rem;">
+        <div style="background:var(--white);border:1px solid var(--border);border-top:3px solid var(--red);border-radius:10px;padding:.75rem .85rem;">
+          <div style="font-size:12.5px;font-weight:700;color:var(--ink);margin-bottom:.25rem;">Panic Retriers</div>
+          <div style="font-size:11px;color:var(--ink-muted);line-height:1.45;">Blind retry &rarr; duplicate charge</div>
+        </div>
+        <div style="background:var(--white);border:1px solid var(--border);border-top:3px solid var(--orange);border-radius:10px;padding:.75rem .85rem;">
+          <div style="font-size:12.5px;font-weight:700;color:var(--ink);margin-bottom:.25rem;">Bank Switchers</div>
+          <div style="font-size:11px;color:var(--ink-muted);line-height:1.45;">Abandon GPay, call the bank</div>
+        </div>
+        <div style="background:var(--white);border:1px solid var(--border);border-top:3px solid var(--ink-muted);border-radius:10px;padding:.75rem .85rem;">
+          <div style="font-size:12.5px;font-weight:700;color:var(--ink);margin-bottom:.25rem;">Silent Churners</div>
+          <div style="font-size:11px;color:var(--ink-muted);line-height:1.45;">Never return after</div>
+        </div>
+      </div>
+      <p style="font-size:12.5px;margin:0;"><strong>Honest caveat:</strong> 7/12 said they'd still trust their bank over any GPay tracker &mdash; trust is earned per-incident, not per-redesign.</p>
     </div>
   </div>
 </section>
@@ -1547,8 +1564,24 @@ if (!reduceMotion) {
   staggerEls.forEach(el => el.classList.add('in-view'));
 }
 
-// Research + metric bars now grow via pure CSS (.bar-grow / @keyframes barGrow),
-// so they always render their value without depending on an observer firing.
+// Research + metric bars — grow on scroll-in.
+// Watch the PARENT track (always full-size) not the fill: a scaleX(0) fill has
+// zero visual area and wouldn't reliably trip the observer. If JS never runs,
+// bars stay at their resting full width (safe fallback).
+if (!reduceMotion) {
+  document.querySelectorAll('.sv-fill, .mbar').forEach(bar => {
+    bar.classList.add('bar-pending');
+    const watch = bar.parentElement || bar;
+    new IntersectionObserver((entries, obs) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          requestAnimationFrame(() => bar.classList.remove('bar-pending'));
+          obs.unobserve(watch);
+        }
+      });
+    }, { threshold: 0.3 }).observe(watch);
+  });
+}
 </script>
 <footer class="pf-footer"><div class="pf-in">
   <div class="pf-eb">Keep exploring</div>
