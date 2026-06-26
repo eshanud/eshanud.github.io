@@ -255,6 +255,22 @@ p:last-child { margin-bottom: 0; }
 .flow-arrow { font-size: 14px; color: var(--ink-muted); padding: 0 6px; flex-shrink: 0; }
 .flow-note { font-size: 11px; color: var(--ink-muted); margin-top: .6rem; font-style: italic; }
 
+/* upgraded ownership flow */
+.uflow { display: flex; align-items: flex-start; min-width: max-content; }
+.uflow-node { display: flex; flex-direction: column; align-items: center; text-align: center; width: 108px; flex-shrink: 0; }
+.uflow-ico { width: 44px; height: 44px; border-radius: 13px; display: flex; align-items: center; justify-content: center; margin-bottom: .55rem; border: 1.5px solid var(--border); background: var(--surface-2); transition: transform .25s cubic-bezier(.34,1.56,.64,1); }
+.uflow-node:hover .uflow-ico { transform: translateY(-3px); }
+.uflow-node--own .uflow-ico { background: var(--blue-pale); border-color: rgba(26,115,232,.35); }
+.uflow-name { font-size: 12px; font-weight: 700; color: var(--ink); line-height: 1.2; }
+.uflow-role { font-size: 10px; color: var(--ink-muted); margin-top: 3px; line-height: 1.3; }
+.uflow-conn { display: flex; align-items: center; padding-top: 19px; flex-shrink: 0; }
+.uflow-dash { stroke-dasharray: 3 4; animation: flowDash 1s linear infinite; }
+@keyframes flowDash { to { stroke-dashoffset: -14; } }
+.uflow-zones { display: flex; gap: 8px; margin-top: 1.25rem; }
+.uzone { border-radius: 7px; padding: .5rem .8rem; font-size: 10.5px; font-weight: 700; letter-spacing: .03em; text-transform: uppercase; text-align: center; line-height: 1.35; }
+.uzone--own { background: var(--blue-pale); color: var(--blue); flex: 0 0 116px; }
+.uzone--out { background: #FBEAE9; color: var(--red); flex: 1; }
+
 /* ── STATE TABLE ── */
 .state-table {
   width: 100%; border-collapse: collapse; border-radius: 14px;
@@ -922,6 +938,7 @@ footer a { color: rgba(255,255,255,.75); text-decoration: none; }
   .lane-row { transition: none; }
   .ship-ico svg, .track-dots circle, .sol-state-ico svg { animation: none !important; transition: none !important; }
   .sv-fill, .mbar { animation: none !important; transform: none !important; }
+  .uflow-dash { animation: none !important; }
 }
 </style>
 </head>
@@ -1114,16 +1131,40 @@ footer a { color: rgba(255,255,255,.75); text-decoration: none; }
 
     <div class="flow-box">
       <div class="flow-title">UPI Flow — Who Owns What</div>
-      <div class="flow-steps">
-        <div class="flow-node flow-node--blue">GPay (interface)</div>
-        <div class="flow-arrow">→</div>
-        <div class="flow-node">Payer's Bank</div>
-        <div class="flow-arrow">→</div>
-        <div class="flow-node flow-node--yellow">NPCI Switch</div>
-        <div class="flow-arrow">→</div>
-        <div class="flow-node">Beneficiary Bank</div>
-        <div class="flow-arrow">→</div>
-        <div class="flow-node flow-node--green">Recipient</div>
+      <div class="uflow">
+        <div class="uflow-node uflow-node--own">
+          <div class="uflow-ico"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><rect x="6" y="2.5" width="8" height="15" rx="2" stroke="#1A73E8" stroke-width="1.5"/><line x1="8.5" y1="15" x2="11.5" y2="15" stroke="#1A73E8" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+          <div class="uflow-name">GPay</div>
+          <div class="uflow-role">Interface only</div>
+        </div>
+        <div class="uflow-conn"><svg width="34" height="14" viewBox="0 0 34 14" fill="none"><line class="uflow-dash" x1="2" y1="7" x2="26" y2="7" stroke="#9AA0A6" stroke-width="1.5"/><path d="M26 3l5 4-5 4" stroke="#9AA0A6" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="uflow-node">
+          <div class="uflow-ico"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 3L3.5 7.5h13L10 3zM3 16h14M4.5 8v6.5M8 8v6.5M12 8v6.5M15.5 8v6.5" stroke="#5F6368" stroke-width="1.3" stroke-linejoin="round" stroke-linecap="round"/></svg></div>
+          <div class="uflow-name">Payer's Bank</div>
+          <div class="uflow-role">Debits money</div>
+        </div>
+        <div class="uflow-conn"><svg width="34" height="14" viewBox="0 0 34 14" fill="none"><line class="uflow-dash" x1="2" y1="7" x2="26" y2="7" stroke="#9AA0A6" stroke-width="1.5"/><path d="M26 3l5 4-5 4" stroke="#9AA0A6" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="uflow-node">
+          <div class="uflow-ico"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M3 7h11l-2.5-2.5M17 13H6l2.5 2.5" stroke="#5F6368" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="uflow-name">NPCI Switch</div>
+          <div class="uflow-role">Routes &amp; settles</div>
+        </div>
+        <div class="uflow-conn"><svg width="34" height="14" viewBox="0 0 34 14" fill="none"><line class="uflow-dash" x1="2" y1="7" x2="26" y2="7" stroke="#9AA0A6" stroke-width="1.5"/><path d="M26 3l5 4-5 4" stroke="#9AA0A6" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="uflow-node">
+          <div class="uflow-ico"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 3L3.5 7.5h13L10 3zM3 16h14M4.5 8v6.5M8 8v6.5M12 8v6.5M15.5 8v6.5" stroke="#5F6368" stroke-width="1.3" stroke-linejoin="round" stroke-linecap="round"/></svg></div>
+          <div class="uflow-name">Beneficiary Bank</div>
+          <div class="uflow-role">Credits money</div>
+        </div>
+        <div class="uflow-conn"><svg width="34" height="14" viewBox="0 0 34 14" fill="none"><line class="uflow-dash" x1="2" y1="7" x2="26" y2="7" stroke="#9AA0A6" stroke-width="1.5"/><path d="M26 3l5 4-5 4" stroke="#9AA0A6" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="uflow-node">
+          <div class="uflow-ico"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="7" r="3" stroke="#5F6368" stroke-width="1.4"/><path d="M4.5 16c0-3 2.5-4.7 5.5-4.7s5.5 1.7 5.5 4.7" stroke="#5F6368" stroke-width="1.4" stroke-linecap="round"/></svg></div>
+          <div class="uflow-name">Recipient</div>
+          <div class="uflow-role">Receives</div>
+        </div>
+      </div>
+      <div class="uflow-zones">
+        <div class="uzone uzone--own">GPay controls</div>
+        <div class="uzone uzone--out">Outside GPay's control — it can watch, never accelerate</div>
       </div>
       <div class="flow-note">GPay cannot accelerate refunds — only communicate about them. Reassurance copy must wait for debit confirmation (legal liability).</div>
     </div>
