@@ -39,7 +39,7 @@
     content: '';
     position: fixed; inset: 0;
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-    opacity: 0.035;
+    opacity: 0.02;
     pointer-events: none;
     z-index: 9999;
     mix-blend-mode: multiply;
@@ -180,11 +180,11 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: clamp(340px, 46vw, 660px);
+    width: clamp(320px, 40vw, 560px);
     aspect-ratio: 1;
-    z-index: 4;
+    z-index: 2; /* behind the headline — text stays crisp */
     pointer-events: none;
-    filter: drop-shadow(0 30px 60px rgba(0,0,0,0.08)) drop-shadow(0 10px 25px rgba(0,0,0,0.04));
+    filter: drop-shadow(0 30px 60px rgba(0,0,0,0.06));
   }
 
   .blob {
@@ -384,7 +384,7 @@
     display: flex;
     gap: 56px;
     white-space: nowrap;
-    animation: marquee 32s linear infinite;
+    animation: marquee 45s linear infinite;
     font-family: var(--sf);
     font-size: 17px;
     font-weight: 600;
@@ -892,13 +892,10 @@
         <animate attributeName="baseFrequency" dur="14s" values="0.006 0.009; 0.011 0.014; 0.005 0.008; 0.009 0.012; 0.006 0.009" repeatCount="indefinite"/>
         <animate attributeName="seed" dur="20s" values="5;8;3;6;5" repeatCount="indefinite"/>
       </feTurbulence>
-      <feDisplacementMap in="SourceGraphic" in2="noise" scale="28" xChannelSelector="R" yChannelSelector="G"/>
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="14" xChannelSelector="R" yChannelSelector="G"/>
     </filter>
   </defs>
 </svg>
-
-<!-- Grid lines -->
-<div class="grid-lines"><span></span><span></span></div>
 
 <!-- ============ NAV ============ -->
 <nav id="navbar">
@@ -910,8 +907,7 @@
     </svg>
   </a>
   <ul>
-    <li><a href="#featured" class="active">Work</a></li>
-    <li><a href="#featured">Projects</a></li>
+    <li><a href="#featured" class="active">Projects</a></li>
     <li><a href="#about">About</a></li>
     <li><a href="#cv">More</a></li>
   </ul>
@@ -933,10 +929,6 @@
 
     <div class="blob-wrap">
       <div class="blob"></div>
-      <span class="caustic c1"></span>
-      <span class="caustic c2"></span>
-      <span class="caustic c3"></span>
-      <span class="caustic c4"></span>
     </div>
   </div>
 
