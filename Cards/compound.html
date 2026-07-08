@@ -1623,6 +1623,7 @@
         <div class="overview-right">
             <p>Many financial apps treat expense tracking, savings goals, and reminders as separate flows. Compound explores what happens when these decisions are brought into one connected experience. When you see progress toward a goal, every transaction becomes a decision. not just a log entry.</p>
             <p>Designed end-to-end: from onboarding and authentication through daily tracking, goal-setting, reminders, and support chat.</p>
+            <p>This was a solo, self-initiated exploration — no client, no PM, no engineering team. Every constraint here is one I set for myself: I wanted to know whether tying spending to a visible goal actually changes behavior, not just ship a pretty flow.</p>
             <div class="pills">
                 <span class="pill">Mobile App</span>
                 <span class="pill">Fintech</span>
@@ -1786,8 +1787,8 @@
         <p style="font-size:12px; color:var(--gray); margin-top:12px; margin-bottom:48px;"></p>
 
         <!-- Before / After iteration -->
-        <h3 style="font-size:20px; font-weight:700; letter-spacing:-0.5px; margin-bottom:8px;">Iteration. goal placement</h3>
-        <p style="font-size:15px; color:var(--gray); margin-bottom:28px; max-width:560px;">The most significant structural change during the design process.</p>
+        <h3 style="font-size:20px; font-weight:700; letter-spacing:-0.5px; margin-bottom:8px;">V1 &rarr; V2: goal placement</h3>
+        <p style="font-size:15px; color:var(--gray); margin-bottom:28px; max-width:560px;">I shipped V1 with goals in their own tab, used it myself for a few days, and realized it repeated the exact fragmentation I was trying to solve.</p>
         <div class="iteration-grid reveal">
             <div class="iter-card iter-before">
                 <div class="iter-label">Before</div>
@@ -1818,11 +1819,13 @@
                 <div class="decision-tag">Decision 01</div>
                 <div class="decision-q">Reminders are unified. not split into bills vs. goals</div>
                 <p class="decision-a">A common pattern is separate "Bills" and "Savings" reminder lists. Compound merges them intentionally. a loan payment and a savings deposit are both recurring financial commitments and deserve the same mental weight.</p>
+                <p class="decision-a" style="margin-top:10px;color:var(--dark);"><strong>Tradeoff:</strong> you lose the ability to triage "must-pay" vs. "nice-to-have" at a glance — everything sits in one list, ranked only by date.</p>
             </div>
             <div class="decision-card reveal delay-2">
                 <div class="decision-tag">Decision 02</div>
                 <div class="decision-q">Progress bars over percentages only</div>
                 <p class="decision-a">Showing only "50%" feels abstract. A filled progress bar on a goal card creates a spatial sense of distance. you can see how close or far you are at a glance, without calculating anything.</p>
+                <p class="decision-a" style="margin-top:10px;color:var(--dark);"><strong>Tradeoff:</strong> bars are worse than numbers for comparing two goals precisely — fine for "am I close," bad for "which goal needs ₹500 more."</p>
             </div>
         </div>
     </section>
@@ -1915,6 +1918,7 @@
         <div class="recruit-box reveal">
             <div class="recruit-title">Recruitment criteria</div>
             <p style="font-size:14px;color:var(--gray);line-height:2;margin:12px 0 0;">Ages 22–35 · tracks expenses occasionally · no financial professionals · 3–5 participants · unmoderated via Maze or Loom, think-aloud</p>
+            <p style="font-size:13px;color:var(--dark);line-height:1.7;margin-top:14px;padding-top:14px;border-top:1px solid var(--border);"><strong>What actually happened:</strong> I didn't run the full moderated study above — that's the protocol I'd use with more time. In practice, I walked a handful of people through early builds informally and adjusted based on where they got stuck.</p>
         </div>
     </section>
 
@@ -2181,7 +2185,7 @@
             </div>
             <div class="rc reveal delay-2">
                 <h3>The honest gap</h3>
-                <p>The goal card on the dashboard is the core hypothesis. seeing a savings target should make users pause before spending. That assumption was never tested. It's the one thing I'd validate first next time.</p>
+                <p>The goal card on the dashboard is the core hypothesis. seeing a savings target should make users pause before spending. The people I walked through it liked seeing it — but I never ran a real test of whether it changes behavior over weeks, not just in a 10-minute session. That's the one thing I'd validate first next time.</p>
             </div>
         </div>
     </section>
