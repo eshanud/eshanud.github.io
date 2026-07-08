@@ -440,6 +440,7 @@ p:last-child { margin-bottom: 0; }
 .sd-block-label { font-size: 10.5px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-muted); margin-bottom: .5rem; }
 .sd-impact { background: var(--blue-pale); border-radius: 8px; padding: .75rem 1rem; font-size: 12.5px; color: var(--ink); line-height: 1.5; }
 .sd-impact strong { color: var(--blue); }
+.sd-impact-lbl { font-size: 9.5px; font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase; color: var(--blue); margin-bottom: .35rem; display: block; }
 @media (max-width: 640px) {
   .sd-body { grid-template-columns: 1fr; }
   .sd-visual { border-right: none; border-bottom: 1px solid var(--border); }
@@ -977,7 +978,7 @@ footer a { color: rgba(255,255,255,.75); text-decoration: none; }
         No clarity.
       </h1>
       <p class="hero-sub fu d2">
-        GPay knows the backend state. It just doesn't say so. This redesign makes it visible.
+        Every failed UPI payment creates the same three costs: duplicate charges, panicked support calls, and users who quietly switch apps. GPay already knows the backend state — it just doesn't say so. This redesign makes it visible.
       </p>
       <div class="hero-result-strip fu d3">
         <div class="hr-stat">
@@ -1326,7 +1327,7 @@ footer a { color: rgba(255,255,255,.75); text-decoration: none; }
           </div>
         </div>
         <div class="sd-content">
-          <div class="sd-impact"><strong>7/12 retried blind, money already out</strong> — so debit status leads and retry is hard-blocked once debited. Stops the #1 harm.</div>
+          <div class="sd-impact"><span class="sd-impact-lbl">Why this screen</span><strong>7/12 retried blind, money already out</strong> — so debit status leads and retry is hard-blocked once debited. Stops the #1 harm.</div>
         </div>
       </div>
     </div>
@@ -1350,7 +1351,7 @@ footer a { color: rgba(255,255,255,.75); text-decoration: none; }
           </div>
         </div>
         <div class="sd-content">
-          <div class="sd-impact"><strong>9/12 called their bank, not GPay</strong> — so the screen names the owner ("HDFC is processing, GPay is tracking") with a confidence-gated date, keeping them in-app.</div>
+          <div class="sd-impact"><span class="sd-impact-lbl">Why this screen</span><strong>9/12 called their bank, not GPay</strong> — so the screen names the owner ("HDFC is processing, GPay is tracking") with a confidence-gated date, keeping them in-app.</div>
         </div>
       </div>
     </div>
@@ -1374,7 +1375,7 @@ footer a { color: rgba(255,255,255,.75); text-decoration: none; }
           </div>
         </div>
         <div class="sd-content">
-          <div class="sd-impact"><strong>Users checked 6–8 times in 2 days</strong> — a live 4-stage tracker pinned to the transaction that honestly says "no update yet" instead of faking progress.</div>
+          <div class="sd-impact"><span class="sd-impact-lbl">Why this screen</span><strong>Users checked 6–8 times in 2 days</strong> — a live 4-stage tracker pinned to the transaction that honestly says "no update yet" instead of faking progress.</div>
         </div>
       </div>
     </div>
@@ -1399,7 +1400,7 @@ footer a { color: rgba(255,255,255,.75); text-decoration: none; }
           </div>
         </div>
         <div class="sd-content">
-          <div class="sd-impact"><strong>GPay already has every field</strong> — so on SLA breach the dispute surfaces pre-filled; the user just taps Submit. Consent stays with them, the typing doesn't.</div>
+          <div class="sd-impact"><span class="sd-impact-lbl">Why this screen</span><strong>GPay already has every field</strong> — so on SLA breach the dispute surfaces pre-filled; the user just taps Submit. Consent stays with them, the typing doesn't.</div>
         </div>
       </div>
     </div>
@@ -1423,7 +1424,7 @@ footer a { color: rgba(255,255,255,.75); text-decoration: none; }
           </div>
         </div>
         <div class="sd-content">
-          <div class="sd-impact"><strong>Silent churn is the invisible damage</strong> — a closing screen that confirms the money's back, with a timeline recap, signals GPay stayed with them. That's how you earn the next payment.</div>
+          <div class="sd-impact"><span class="sd-impact-lbl">Why this screen</span><strong>Silent churn is the invisible damage</strong> — a closing screen that confirms the money's back, with a timeline recap, signals GPay stayed with them. That's how you earn the next payment.</div>
         </div>
       </div>
     </div>
