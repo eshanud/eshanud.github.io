@@ -546,6 +546,18 @@
     font-size: 15px;
     margin-top: 4px;
   }
+  .craft-ps { margin-top: 12px; display: flex; flex-direction: column; gap: 7px; max-width: 480px; }
+  .craft-ps p { margin: 0; font-size: 13.5px; line-height: 1.55; color: #555; }
+  .craft-ps p strong { color: #0A0A0A; font-weight: 600; }
+  .craft-role {
+    margin-top: 12px; font-size: 11px; font-weight: 600; color: #999;
+    letter-spacing: 0.04em; text-transform: uppercase;
+  }
+  .craft-outcomes { margin-top: 11px; display: flex; flex-wrap: wrap; gap: 6px; max-width: 480px; }
+  .craft-outcomes span {
+    font-size: 11px; font-weight: 500; color: #444;
+    background: rgba(0,0,0,0.045); border-radius: 20px; padding: 4px 11px;
+  }
   .craft-arrow {
     flex-shrink: 0;
     width: 36px; height: 36px;
@@ -971,7 +983,16 @@
       <div class="craft-meta">
         <div>
           <h3>Voltfleet</h3>
-          <p>Electric fleet management, built for tomorrow's roads.</p>
+          <div class="craft-ps">
+            <p><strong>Problem —</strong> 117 EVs tracked across 5 disconnected tools; zero shared context and 33.7% fleet downtime.</p>
+            <p><strong>Solution —</strong> A unified operations dashboard that ranks urgency instead of dumping raw telemetry.</p>
+          </div>
+          <div class="craft-role">UX Research · Systems Design · IA · Dashboard UI · Prototype</div>
+          <div class="craft-outcomes">
+            <span>2.5 hrs/day saved per operator</span>
+            <span>8-screen design system</span>
+            <span>Severity-ranked triage</span>
+          </div>
         </div>
         <div class="craft-arrow">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
@@ -992,7 +1013,16 @@
       <div class="craft-meta">
         <div>
           <h3>CapiCITI</h3>
-          <p>Streamlining the CRE lending pipeline end-to-end.</p>
+          <div class="craft-ps">
+            <p><strong>Problem —</strong> Loan officers juggling 12 active deals lost 20–30 min every morning reconstructing which deal was "on fire."</p>
+            <p><strong>Solution —</strong> One dashboard with three zoom levels — portfolio, deal table, deal detail — plus an LTV risk signal competitors don't surface.</p>
+          </div>
+          <div class="craft-role">UX Research · Design System · UI Design · Prototype</div>
+          <div class="craft-outcomes">
+            <span>&lt;90s to first action (target)</span>
+            <span>↓60% doc-gap delay (target)</span>
+            <span>0-click LTV visibility</span>
+          </div>
         </div>
         <div class="craft-arrow">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
@@ -1013,7 +1043,16 @@
       <div class="craft-meta">
         <div>
           <h3>Compound</h3>
-          <p>Smart savings &amp; lending that quietly grow over time.</p>
+          <div class="craft-ps">
+            <p><strong>Problem —</strong> Expense tracking, savings goals, and reminders lived as separate tools with no link between spending and goals.</p>
+            <p><strong>Solution —</strong> Compound unifies tracking, savings, and reminders into one flow — every rupee spent ties back to a goal.</p>
+          </div>
+          <div class="craft-role">UX Research · Competitor Review · UI Design · Design System</div>
+          <div class="craft-outcomes">
+            <span>25+ screens designed</span>
+            <span>5 user interviews</span>
+            <span>1 unified system</span>
+          </div>
         </div>
         <div class="craft-arrow">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
@@ -1034,7 +1073,16 @@
       <div class="craft-meta">
         <div>
           <h3>GPay</h3>
-          <p>Redesigning the UPI payment-failure experience.</p>
+          <div class="craft-ps">
+            <p><strong>Problem —</strong> A failed UPI payment screen looks identical whether money is safe, pending reversal, or stuck.</p>
+            <p><strong>Solution —</strong> A state-aware failure layer that classifies debit status and shows the right message, retry-blocking, and a live refund tracker.</p>
+          </div>
+          <div class="craft-role">UX Research · Interaction Design · UI Design · Prototype</div>
+          <div class="craft-outcomes">
+            <span>12 user interviews</span>
+            <span>↓30% support tickets (target)</span>
+            <span>↓50% duplicate payments (target)</span>
+          </div>
         </div>
         <div class="craft-arrow">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
