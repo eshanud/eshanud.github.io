@@ -949,6 +949,8 @@
     <span>
       Product Design <i>·</i> Interface Systems <i>·</i> Prototyping <i>·</i>
       Motion <i>·</i> Research <i>·</i> Brand Direction <i>·</i> Web <i>·</i> iOS <i>·</i>
+    </span>
+    <span aria-hidden="true">
       Product Design <i>·</i> Interface Systems <i>·</i> Prototyping <i>·</i>
       Motion <i>·</i> Research <i>·</i> Brand Direction <i>·</i> Web <i>·</i> iOS <i>·</i>
     </span>
@@ -1232,12 +1234,19 @@
     });
   }
 
-  // Continuous slider — duplicate the slides once so the marquee loops seamlessly
+  // Continuous slider — duplicate the slides once so the marquee loops seamlessly.
+  // The clone is decorative (visual loop only), so it's hidden from screen
+  // readers and pulled out of tab order to avoid announcing every project twice.
   (function initMarquee() {
     const track = document.querySelector('.slider-track');
     if (!track) return;
     const slides = Array.from(track.children);
-    slides.forEach(s => track.appendChild(s.cloneNode(true)));
+    slides.forEach(s => {
+      const clone = s.cloneNode(true);
+      clone.setAttribute('aria-hidden', 'true');
+      clone.querySelectorAll('a, button, [tabindex]').forEach(el => el.setAttribute('tabindex', '-1'));
+      track.appendChild(clone);
+    });
   })();
 
   // Count-up stats — final values are hard-coded in the HTML so crawlers,
