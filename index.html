@@ -22,6 +22,11 @@
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html, body { height: 100%; overflow-x: hidden; }
+  a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
+    outline: 2px solid #0A0A0A;
+    outline-offset: 3px;
+    border-radius: 3px;
+  }
   body {
     background: #FAFAF7;
     color: #0A0A0A;
@@ -710,6 +715,7 @@
     text-underline-offset: 4px;
     font-size: 15px;
     transition: color .2s;
+    border-radius: 3px;
   }
   .socials a:hover { color: #0A0A0A; }
 
@@ -1154,12 +1160,13 @@
       <p>I'm <strong>Eshanki UD</strong> — a product designer based in Pune, India, focused on <strong>enterprise UX for complex, data-heavy systems</strong>: fintech, fleet operations, lending pipelines, and payments. I turn fragmented workflows and dense data into interfaces operators can act on with confidence.</p>
       <p>My work sits at the intersection of research and systems thinking — mapping how information actually flows through an organization, then designing the hierarchy, IA, and interaction patterns that hold up under pressure.</p>
       <p>B.Des in Product Design, MIT School of Design (2024). Recent work: Compound (fintech), Voltfleet (EV fleet operations), CapiCITI (CRE lending), GPay (UPI payments).</p>
+      <p>Day to day toolkit: <strong>Figma</strong> and <strong>Adobe XD</strong> for interface design and prototyping, <strong>Photoshop</strong> and <strong>Illustrator</strong> for image retouching, asset prep, and brand work.</p>
       <p>AI is part of how I work now — <strong>Figma AI</strong> and <strong>v0</strong> for rapid prototyping, <strong>Claude</strong> and <strong>ChatGPT</strong> for research synthesis and affinity mapping, <strong>Midjourney</strong> for early visual exploration.</p>
 
       <div class="stat-row">
-        <div class="stat"><div class="num"><span class="count" data-to="3">0</span><span class="italic">+</span></div><div class="lbl">Years</div></div>
-        <div class="stat"><div class="num"><span class="count" data-to="10">0</span><span class="italic">+</span></div><div class="lbl">Projects</div></div>
-        <div class="stat"><div class="num"><span class="count" data-to="8">0</span></div><div class="lbl">Systems</div></div>
+        <div class="stat"><div class="num"><span class="count" data-to="3">3</span><span class="italic">+</span></div><div class="lbl">Years</div></div>
+        <div class="stat"><div class="num"><span class="count" data-to="10">10</span><span class="italic">+</span></div><div class="lbl">Projects</div></div>
+        <div class="stat"><div class="num"><span class="count" data-to="8">8</span></div><div class="lbl">Systems</div></div>
       </div>
     </div>
 
@@ -1174,6 +1181,8 @@
       <div class="skill-row"><span class="name">Stakeholder <span class="italic">facilitation</span></span></div>
       <div class="skill-row"><span class="name">Prototyping</span></div>
       <div class="skill-row"><span class="name">Visual <span class="italic">design</span></span></div>
+      <div class="skill-row"><span class="name">Photoshop & <span class="italic">Illustrator</span></span></div>
+      <div class="skill-row"><span class="name">Image <span class="italic">retouching</span></span></div>
       <div class="skill-row"><span class="name">AI-assisted <span class="italic">prototyping</span></span></div>
       <div class="skill-row"><span class="name">AI research <span class="italic">synthesis</span></span></div>
     </div>
@@ -1249,18 +1258,25 @@
     slides.forEach(s => track.appendChild(s.cloneNode(true)));
   })();
 
-  // Count-up stats — animate numbers when they scroll into view
+  // Count-up stats — final values are hard-coded in the HTML so crawlers,
+  // no-JS visitors, and reduced-motion users always see real numbers;
+  // JS only animates 0 -> value as progressive enhancement.
   (function initCounters() {
     const counters = document.querySelectorAll('.count');
     if (!counters.length) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     const animate = (el) => {
       const to = parseInt(el.dataset.to, 10) || 0;
-      const dur = 900, start = performance.now();
+      // Start just below the hard-coded value, not 0 — avoids a flash down
+      // to 0 before counting back up, since the HTML already shows `to`.
+      const from = Math.max(0, to - Math.max(2, Math.round(to * 0.4)));
+      const dur = 700, start = performance.now();
       const tick = (now) => {
         const p = Math.min((now - start) / dur, 1);
         const eased = p === 1 ? 1 : 1 - Math.pow(2, -10 * p); // easeOutExpo
-        el.textContent = Math.round(eased * to);
+        el.textContent = Math.round(from + eased * (to - from));
         if (p < 1) requestAnimationFrame(tick);
+        else el.textContent = to;
       };
       requestAnimationFrame(tick);
     };
