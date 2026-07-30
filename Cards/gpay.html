@@ -805,6 +805,10 @@ footer a { color: rgba(255,255,255,.75); text-decoration: none; }
   border-top: 1px solid rgba(26,115,232,.18);
   border-bottom: 1px solid rgba(26,115,232,.18);
 }
+.hr-strip-label {
+  font-size: 10px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+  color: var(--ink-muted); margin-bottom: .6rem;
+}
 .hr-stat { display: flex; flex-direction: column; gap: 4px; }
 .hr-n {
   font-family: 'DM Serif Display', serif; font-size: 1.65rem;
@@ -984,6 +988,7 @@ footer a { color: rgba(255,255,255,.75); text-decoration: none; }
         Every failed UPI payment creates the same three costs: duplicate charges, panicked support calls, and users who quietly switch apps. GPay already knows the backend state — it just doesn't say so. This redesign makes it visible.
       </p>
       <div class="hero-result-strip fu d3">
+        <div class="hr-strip-label" style="width:100%;">Proposed success targets</div>
         <div class="hr-stat">
           <span class="hr-n">↓50%</span>
           <span class="hr-l">Duplicate<br>payments</span>
@@ -1454,9 +1459,9 @@ footer a { color: rgba(255,255,255,.75); text-decoration: none; }
     <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:var(--border);border-radius:16px;overflow:hidden;margin-bottom:1.5rem;">
       <!-- North Star -->
       <div style="background:var(--white);padding:1.5rem 1.25rem;grid-column:1;">
-        <div style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-muted);margin-bottom:.75rem;">North Star</div>
+        <div style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-muted);margin-bottom:.75rem;">North Star <span style="color:var(--ink-soft);font-weight:600;">· Target</span></div>
         <div style="font-size:2.75rem;font-family:'DM Serif Display',serif;color:var(--blue);line-height:1;">↓30<span style="font-size:1.25rem;">%</span></div>
-        <div style="font-size:12px;color:var(--ink-muted);margin:.5rem 0 .875rem;line-height:1.4;">Support tickets · failed UPI payments<br><span style="color:var(--ink-soft);">Source: Zendesk + GPay support logs</span></div>
+        <div style="font-size:12px;color:var(--ink-muted);margin:.5rem 0 .875rem;line-height:1.4;">Support tickets · failed UPI payments<br><span style="color:var(--ink-soft);">Would track via: Zendesk + GPay support logs</span></div>
         <!-- Scale bar -->
         <div style="height:5px;background:var(--surface-2);border-radius:3px;overflow:hidden;">
           <div class="mbar" style="width:30%;height:100%;background:linear-gradient(90deg,var(--blue),#4285F4);border-radius:3px;"></div>
@@ -1469,18 +1474,18 @@ footer a { color: rgba(255,255,255,.75); text-decoration: none; }
       </div>
       <!-- Stat 1 -->
       <div style="background:var(--white);padding:1.5rem 1.25rem;">
-        <div style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-muted);margin-bottom:.75rem;">Duplicate Payments</div>
+        <div style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-muted);margin-bottom:.75rem;">Duplicate Payments <span style="color:var(--ink-soft);font-weight:600;">· Target</span></div>
         <div style="font-size:2.75rem;font-family:'DM Serif Display',serif;color:var(--red);line-height:1;">↓50<span style="font-size:1.25rem;">%</span></div>
-        <div style="font-size:12px;color:var(--ink-muted);margin:.5rem 0 .875rem;line-height:1.4;">Duplicate retries · debited state<br><span style="color:var(--ink-soft);">Source: payment retry events</span></div>
+        <div style="font-size:12px;color:var(--ink-muted);margin:.5rem 0 .875rem;line-height:1.4;">Duplicate retries · debited state<br><span style="color:var(--ink-soft);">Would track via: payment retry events</span></div>
         <div style="height:5px;background:var(--surface-2);border-radius:3px;overflow:hidden;">
           <div class="mbar" style="width:50%;height:100%;background:var(--red);border-radius:3px;opacity:.7;"></div>
         </div>
       </div>
       <!-- Stat 2 -->
       <div style="background:var(--white);padding:1.5rem 1.25rem;">
-        <div style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-muted);margin-bottom:.75rem;">7-day Retention</div>
+        <div style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-muted);margin-bottom:.75rem;">7-day Retention <span style="color:var(--ink-soft);font-weight:600;">· Target</span></div>
         <div style="font-size:2.75rem;font-family:'DM Serif Display',serif;color:var(--green);line-height:1;">↑15<span style="font-size:1.25rem;">%</span></div>
-        <div style="font-size:12px;color:var(--ink-muted);margin:.5rem 0 .875rem;line-height:1.4;">Returned within 7 days · post-failure<br><span style="color:var(--ink-soft);">Source: session + transaction events</span></div>
+        <div style="font-size:12px;color:var(--ink-muted);margin:.5rem 0 .875rem;line-height:1.4;">Returned within 7 days · post-failure<br><span style="color:var(--ink-soft);">Would track via: session + transaction events</span></div>
         <div style="height:5px;background:var(--surface-2);border-radius:3px;overflow:hidden;">
           <div class="mbar" style="width:15%;height:100%;background:var(--green);border-radius:3px;"></div>
         </div>
