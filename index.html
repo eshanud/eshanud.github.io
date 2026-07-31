@@ -168,6 +168,30 @@
   h1.name .italic { font-weight: 300; color: #555; letter-spacing: -0.04em; font-style: italic; }
   h1.name .mark { color: #0A0A0A; opacity: 0.25; font-weight: 300; }
 
+  .hero-tagline {
+    max-width: 480px;
+    margin: 28px auto 0;
+    font-size: clamp(15px, 1.4vw, 18px);
+    color: #666;
+    line-height: 1.5;
+  }
+  .hero-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 32px;
+    padding: 16px 28px;
+    background: #0A0A0A;
+    color: #fff;
+    border-radius: 999px;
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    transition: transform .3s ease, background .3s ease;
+  }
+  .hero-cta:hover { transform: translateY(-2px); background: #2A2A2A; }
+
   /* Attribution below the quote */
   .attribution {
     display: block;
@@ -928,7 +952,9 @@
   <div class="hero-inner">
     <div class="hero-content">
       <span class="role">Product Designer · Pune, India</span>
-      <h1 class="name">Product design from concept to <span class="italic">screen.</span></h1>
+      <h1 class="name">Enterprise UX, from complexity to <span class="italic">clarity.</span></h1>
+      <p class="hero-tagline">I design dashboards, prototypes, and interface systems for complex, data-heavy products — fintech, fleet operations, and payments.</p>
+      <a href="#featured" class="hero-cta">View Projects</a>
     </div>
 
     <div class="blob-wrap">
@@ -937,7 +963,6 @@
   </div>
 
   <div class="aside-text">
-    <p>I simplify, I humanize.</p>
     <a href="#about">More about me →</a>
   </div>
 
@@ -1022,33 +1047,6 @@
     </article>
 
     <article class="craft-item reveal">
-      <a href="Cards/compound.html" class="card-link">
-      <div class="craft-thumb thumb-1">
-        <img class="craft-img" src="compound-cover.png" alt="Compound — daily expense & savings app" />
-        <span class="label">Fintech</span>
-        <span class="year">2026</span>
-      </div>
-      <div class="craft-meta">
-        <div>
-          <h3>Compound</h3>
-          <div class="craft-ps">
-            <p>Expense tracking, savings, and reminders lived as separate tools — Compound unifies them so every rupee spent ties back to a goal.</p>
-          </div>
-          <div class="craft-role">UX Research · Competitor Review · UI Design · Design System</div>
-          <div class="craft-outcomes">
-            <p>25+ screens designed · 5 informal user conversations</p>
-          </div>
-        </div>
-        <div class="craft-arrow">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-            <path d="M7 17L17 7M17 7H8M17 7v9"/>
-          </svg>
-        </div>
-      </div>
-      </a>
-    </article>
-
-    <article class="craft-item reveal">
       <a href="Cards/gpay.html" class="card-link">
       <div class="craft-thumb thumb-4">
         <img class="craft-img" src="gpay-cover.png" alt="GPay — UPI payment-failure redesign" />
@@ -1064,6 +1062,33 @@
           <div class="craft-role">UX Research · Interaction Design · UI Design · Prototype</div>
           <div class="craft-outcomes">
             <p>12 user interviews · ↓30% tickets (target)</p>
+          </div>
+        </div>
+        <div class="craft-arrow">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M7 17L17 7M17 7H8M17 7v9"/>
+          </svg>
+        </div>
+      </div>
+      </a>
+    </article>
+
+    <article class="craft-item reveal">
+      <a href="Cards/compound.html" class="card-link">
+      <div class="craft-thumb thumb-1">
+        <img class="craft-img" src="compound-cover.png" alt="Compound — daily expense & savings app" />
+        <span class="label">Fintech</span>
+        <span class="year">2026</span>
+      </div>
+      <div class="craft-meta">
+        <div>
+          <h3>Compound</h3>
+          <div class="craft-ps">
+            <p>Expense tracking, savings, and reminders lived as separate tools — Compound unifies them so every rupee spent ties back to a goal.</p>
+          </div>
+          <div class="craft-role">UX Research · Competitor Review · UI Design · Design System</div>
+          <div class="craft-outcomes">
+            <p>25+ screens designed · 5 informal user conversations</p>
           </div>
         </div>
         <div class="craft-arrow">
@@ -1149,7 +1174,7 @@
       <h2 class="section-h">Turning complexity into <span class="italic">clarity.</span></h2>
       <p>I'm <strong>Eshanki UD</strong> — a product designer based in Pune, India, focused on <strong>enterprise UX for complex, data-heavy systems</strong>: fintech, fleet operations, lending pipelines, and payments. I turn fragmented workflows and dense data into interfaces operators can act on with confidence.</p>
       <p>My work sits at the intersection of research and systems thinking — mapping how information actually flows through an organization, then designing the hierarchy, IA, and interaction patterns that hold up under pressure.</p>
-      <p>B.Des in Product Design, MIT School of Design (2024). Recent work: Compound (fintech), Voltfleet (EV fleet operations), CapiCITI (CRE lending), GPay (UPI payments).</p>
+      <p>B.Des in Product Design, MIT School of Design (2024). Recent work: Voltfleet (EV fleet operations), CapiCITI (CRE lending), GPay (UPI payments), Compound (fintech).</p>
       <p>Day to day toolkit: <strong>Figma</strong> and <strong>Adobe XD</strong> for interface design and prototyping, <strong>Photoshop</strong> and <strong>Illustrator</strong> for image retouching, asset prep, and brand work.</p>
       <p>AI is part of how I work now — <strong>Figma AI</strong> and <strong>v0</strong> for rapid prototyping, <strong>Claude</strong> and <strong>ChatGPT</strong> for research synthesis and affinity mapping, <strong>Midjourney</strong> for early visual exploration.</p>
 
